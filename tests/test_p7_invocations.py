@@ -181,6 +181,8 @@ def test_live() -> None:
     # 11. disable flag
     cache2 = tmp / "cache2"
     shutil.copytree("tests/gateway_cache", cache2)
+    for f in ("invocations.db", "invocations.db-wal", "invocations.db-shm"):
+        (cache2 / f).unlink(missing_ok=True)
     gw2 = ArcGateway(GatewayConfig(
         port=0, cache_dir=str(cache2), chat_url="http://127.0.0.1:8080/v1",
         embed_url="http://127.0.0.1:8081", model=None,
@@ -194,6 +196,8 @@ def test_live() -> None:
     from arc.backends import MockLM
     cache3 = tmp / "cache3"
     shutil.copytree("tests/gateway_cache", cache3)
+    for f in ("invocations.db", "invocations.db-wal", "invocations.db-shm"):
+        (cache3 / f).unlink(missing_ok=True)
     gw3 = ArcGateway(GatewayConfig(
         port=0, cache_dir=str(cache3), chat_url="http://127.0.0.1:8080/v1",
         embed_url="http://127.0.0.1:8081", model="mock",

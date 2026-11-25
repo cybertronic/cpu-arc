@@ -230,16 +230,20 @@ class WorkerPool:
             except json.JSONDecodeError:
                 log.warning("worker[%d] sent non-JSON line: %r", w.index, line[:120])
 
-    def submit(self, params: dict) -> dict:
-        """Execute solve(params) in a worker; return its result dict."""
+    def submit(self, params: dict, entry: str | None = None) -> dict:
+        """Execute in a worker; return its result dict.
+
+        entry: matched entry description — v2 modules dispatch via
+        execute(entry, params); omitted -> legacy solve(params).
+        """
         rid = self._next_id
         self._next_id += 1
         deadline = time.monotonic() + self.call_timeout_s
         w = self._acquire(deadline)
         broken = False
         try:
-            req = json.dumps({"id": rid, "kind": "call", "params": params},
-                             default=str) + "\n"
+            req = json.dumps({"id": rid, "kind": "call", "params": params,
+                              "entry": entry}, default=str) + "\n"
             w.proc.stdin.write(req.encode())
             w.proc.stdin.flush()
             msg = self._read_response(w, deadline)

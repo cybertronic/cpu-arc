@@ -274,6 +274,11 @@ Reasoning steps (for context):
   parameters via load(ctx, "<parameter description>") and returns the final
   answer dict.
 - The plan must NOT depend on the specific parameter values.
+- A named standard algorithm mentioned in the transcript (e.g. the Euclidean
+  algorithm) is ONE self-contained function — do not split it into
+  per-iteration / per-division sub-functions; the code must compute the
+  algorithm generically for any inputs, never the transcript's literal
+  intermediate values.
 JSON: {{"functions":[{{"id":"f1","description":"...","depends_on":["f2"],"is_root":false}}],
        "build_order":["f2","f1"]}}   (dependencies first)
 
@@ -308,15 +313,57 @@ Transcript:
             ctx.layers[0].add(p.description, p.value, self.arc.embedder)
         return fn(ctx)
 
+    def _loads_compatible(self, fn: dict, params: list[Param]) -> bool:
+        """True if every load(ctx, "<desc>") in fn's source resolves against
+        this entry's parameters (exact case-insensitive, or embedding cosine
+        >= 0.72 — the builder reuses functions across entries whose parameter
+        names were paraphrased). A load with no resolvable target means the
+        function reads a parameter this entry does not provide."""
+        src = fn.get("source") or ""
+        if not src:
+            return False
+        descs = [p.description for p in params]
+        load_pat = re.compile(r'load\(\s*ctx\s*,\s*r?"((?:[^"\\]|\\.)*)"')
+        queries = [m.group(1).strip().lower() for m in load_pat.finditer(src)]
+        if not queries:
+            return True
+        try:
+            import numpy as np
+            emb = self.arc.embedder
+            d_vecs = []
+            for d in descs:
+                pv = np.asarray(emb.embed(d), dtype=np.float32)
+                d_vecs.append(pv / (np.linalg.norm(pv) + 1e-12))
+            for q in queries:
+                if any(d.strip().lower() == q for d in descs):
+                    continue
+                qv = np.asarray(emb.embed(q), dtype=np.float32)
+                qn = float(np.linalg.norm(qv))
+                if qn < 1e-12:
+                    return False
+                best = max(float(qv @ dv / qn) for dv in d_vecs)
+                if best < 0.72:
+                    return False
+        except Exception:
+            # embedding unavailable: be conservative, require exact matches only
+            return all(any(d.strip().lower() == q for d in descs) for q in queries)
+        return True
+
     def _implement_one(self, spec: FnSpec, all_specs: list[FnSpec],
                        p1: dict, params: list[Param], transcript: str,
                        result: BuildResult) -> None:
-        # 1) reuse check against existing registry
+        # 1) reuse check against existing registry — but only if the reused
+        # function's load() calls are satisfiable by THIS entry's parameters.
+        # (A sibling entry's function may load params this entry doesn't have,
+        # e.g. a 3-int function reused by a 2-int entry -> KeyError at serve.)
         hits = self.arc.registry.search(spec.description, top_k=1)
         if hits and hits[0][1] >= 0.92:
-            result.reused.append(spec.id)
-            result.registered[spec.id] = hits[0][0]["id"]
-            return
+            cand = hits[0][0]
+            if self._loads_compatible(cand, params):
+                result.reused.append(spec.id)
+                result.registered[spec.id] = cand["id"]
+                return
+            # incompatible -> fall through and generate a fresh implementation
 
         name = spec.id
         dep_ctx = "\n".join(

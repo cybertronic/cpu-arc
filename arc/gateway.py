@@ -405,7 +405,7 @@ class ArcGateway:
         """Run the compiled module (in a worker subprocess) or fall back
         to runtime dispatch (builder-sandboxed, in-process)."""
         if self._worker_pool is not None:
-            return self._worker_pool.submit(params)
+            return self._worker_pool.submit(params, entry.get("description"))
 
         # Runtime path (no compiled module): use the full ARC context
         from arc.context import Context, Thresholds

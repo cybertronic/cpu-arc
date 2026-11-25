@@ -21,10 +21,12 @@ from typing import Any, Callable
 # The only names a semantic function may reference from the environment.
 # Everything else must be defined locally or imported through the allowlist.
 ALLOWED_BUILTINS = {
-    "abs": abs, "all": all, "any": any, "bool": bool, "dict": dict, "float": float,
-    "int": int, "isinstance": isinstance, "len": len, "list": list, "max": max,
-    "min": min, "range": range, "repr": repr, "round": round, "set": set,
-    "sorted": sorted, "str": str, "sum": sum, "tuple": tuple, "zip": zip,
+    "abs": abs, "all": all, "any": any, "bool": bool, "dict": dict, "divmod": divmod,
+    "enumerate": enumerate, "filter": filter, "float": float, "int": int,
+    "isinstance": isinstance, "len": len, "list": list, "map": map, "max": max,
+    "min": min, "ord": ord, "pow": pow, "range": range, "repr": repr,
+    "reversed": reversed, "round": round, "set": set, "sorted": sorted, "str": str,
+    "sum": sum, "tuple": tuple, "zip": zip,
     "True": True, "False": False, "None": None, "print": None,
     "ValueError": ValueError, "TypeError": TypeError, "KeyError": KeyError,
     "AttributeError": AttributeError, "Exception": Exception,

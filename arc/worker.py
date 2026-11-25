@@ -17,9 +17,12 @@ hostile model on this host):
 Protocol (JSON lines):
   -> {"id": 1, "kind": "ping"}
   <- {"id": 1, "ok": true, "result": "pong"}
-  -> {"id": 2, "kind": "call", "params": {...}}
+  -> {"id": 2, "kind": "call", "params": {...}, "entry": "<desc or null>"}
   <- {"id": 2, "ok": true, "result": {"answer": 15}}
   <- {"id": 2, "ok": false, "error": "CPU budget exceeded (5s)"}
+
+  "entry" (v2 multi-entry modules): dispatched via module.execute(desc, params).
+  Omitted/None -> legacy module.solve(params).
 Startup:
   <- {"ok": true, "result": "ready"}   (first line, after module load)
 
@@ -83,9 +86,10 @@ def main() -> None:
 
     try:
         mod = _load_module(args.module)
-        solve = getattr(mod, "solve")
-        if not callable(solve):
-            raise TypeError("compiled module has no callable solve(params)")
+        solve = getattr(mod, "solve", None)
+        execute = getattr(mod, "execute", None)
+        if not callable(solve) and not callable(execute):
+            raise TypeError("compiled module has no callable solve/execute")
     except Exception as e:  # noqa: BLE001 — report + exit, pool falls back
         sys.stderr.write(f"worker: failed to load module: {type(e).__name__}: {e}\n")
         sys.stdout.write(json.dumps({"ok": False, "error": f"module load failed: {e}"}) + "\n")
@@ -110,7 +114,13 @@ def main() -> None:
         elif kind == "call":
             signal.setitimer(signal.ITIMER_REAL, args.cpu_seconds)
             try:
-                result = solve(req.get("params", {}))
+                entry = req.get("entry")
+                if entry is not None and callable(execute):
+                    result = execute(entry, req.get("params", {}))
+                elif callable(solve):
+                    result = solve(req.get("params", {}))
+                else:
+                    raise TypeError("module supports neither execute nor solve")
                 if not isinstance(result, dict):
                     raise TypeError(
                         f"semantic function must return dict, got {type(result).__name__}")
