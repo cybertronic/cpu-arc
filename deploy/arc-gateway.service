@@ -1,8 +1,10 @@
 [Unit]
 Description=CPU-ARC semantic cache gateway (cache-first LLM sidecar)
 Documentation=file:__REPO__/deploy/README.md
-After=network-online.target
-Wants=network-online.target
+# Start after the local model servers when they exist (llama-server/llama-
+# embedding on this box). Absent on other hosts -> the deps are no-ops.
+After=network-online.target llama-server.service llama-embedding.service
+Wants=network-online.target llama-server.service llama-embedding.service
 
 [Service]
 Type=simple

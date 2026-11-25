@@ -41,3 +41,11 @@ def build_model() -> str:
     return (os.environ.get("ARC_BUILD_MODEL")
             or os.environ.get("ARC_MODEL")
             or LEGACY_DEFAULT_BUILD_MODEL)
+
+
+def family_candidate_min() -> int:
+    """Miss floor for flagging a new-family seed candidate region (nightly
+    curator report). Repeated misses outside every family's band that total
+    at least this many over the mining window get flagged for human review —
+    families are never auto-created (ARC_FAMILY_CANDIDATE_MIN, default 5)."""
+    return int(os.environ.get("ARC_FAMILY_CANDIDATE_MIN", "5"))

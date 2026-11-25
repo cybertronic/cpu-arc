@@ -3,6 +3,8 @@
 Offline (no servers):
   1-7  mine(): clustering, ranking, suggestions, queue attachment
   8    promote.py helpers: extract_answer / make_cases / case_query
+  9-12 family_candidates(): new-family seed signal (volume floor, in-band
+       exclusion, report-only shape)
 Live (needs embed :8081 + gateway :8083 with divisors cache):
   9-10 mine the REAL invocation log after generating repeated real misses
 
@@ -151,6 +153,51 @@ def test_offline() -> Path:
     cq = case_query("What is the greatest common divisor of 315 and 108?", [777, 888])
     check("case_query substitutes numbers in order",
           cq == "What is the greatest common divisor of 777 and 888?", cq)
+
+    # 9-12. family_candidates(): new-family seed signal (report only)
+    from curate_misses import family_candidates
+    now = time.time()
+
+    def seed_region(db: Path, n: int, qfmt, family, score) -> InvocationLog:
+        lg = InvocationLog(db)
+        for i in range(n):
+            lg.record(ts=now - (10000 - i * 600), query=qfmt(i),
+                      status="miss", phase="threshold", family=family,
+                      entry=None, score=score, reason="below band",
+                      serve_ms=5.0)
+        lg.close()
+        return InvocationLog(db)
+
+    tri = lambda i: (f"What is the area of a triangle with base {20 + i} "
+                     f"and height 10?")
+    c5 = mine(seed_region(tmp / "fam5.db", 5, tri, None, 0.42), emb,
+              dedup_cosine=0.80)
+    fc = family_candidates(c5, emb, min_misses=5, region_cosine=0.80)
+    check("5 repeated out-of-band misses -> one flagged region",
+          len(fc) == 1 and "triangle" in fc[0]["region_query"]
+          and fc[0]["total_misses"] == 5, str(fc))
+    check("region is report-only (carries a manual-seed suggestion)",
+          fc and "Not auto-created" in fc[0]["suggestion"], str(fc[:1]))
+
+    c4 = mine(seed_region(tmp / "fam4.db", 4, tri, None, 0.42), emb,
+              dedup_cosine=0.80)
+    check("below the volume floor (4 < 5) -> not flagged",
+          family_candidates(c4, emb, min_misses=5, region_cosine=0.80) == [], "")
+
+    div = lambda i: f"How many divisors does {40 + i} have?"
+    cib = mine(seed_region(tmp / "inband.db", 6, div, "divisors", 0.71), emb,
+               dedup_cosine=0.80)
+    check("in-band repeated misses (family ctx, score 0.71) are not seeds",
+          family_candidates(cib, emb, min_misses=5, region_cosine=0.80) == [],
+          str([c["query"] for c in cib]))
+
+    # far-below-band WITH family context (the production Mersenne shape)
+    far = lambda i: (f"What is a Mersenne prime number {i} about?")
+    cfar = mine(seed_region(tmp / "farband.db", 6, far, "divisors", 0.55), emb,
+                dedup_cosine=0.80)
+    ffc = family_candidates(cfar, emb, min_misses=5, region_cosine=0.80)
+    check("below-band misses with family ctx are seeds (production shape)",
+          len(ffc) == 1 and ffc[0]["total_misses"] == 6, str(ffc))
     return tmp
 
 

@@ -14,6 +14,15 @@ Usage
 
 Each candidate is a cluster of near-duplicate missed queries (cosine >=
 0.92), ranked by repeat count then recency, with a suggested action.
+
+New-family signal (family_candidates):
+    clusters that fall OUTSIDE every existing family band (no family
+    context, or best score below 0.60) are grouped into semantic
+    "regions"; a region whose missed-query volume over the window reaches
+    ARC_FAMILY_CANDIDATE_MIN is reported as a *seed candidate for a new
+    family*. Report only — the loop never auto-creates families: seeding
+    one is a deliberate, gated decision (golden map + calibrated band,
+    via eval/promote.py).
 """
 from __future__ import annotations
 
@@ -119,6 +128,63 @@ def suggest(c: dict) -> str:
     return "no family context — new-family candidate"
 
 
+def family_candidates(clusters: list[dict], embedder, min_misses: int = 5,
+                      region_cosine: float = 0.85) -> list[dict]:
+    """Flag semantic regions with enough repeated out-of-band misses to
+    justify seeding a NEW family. Report only — never auto-creates.
+
+    A cluster is a *seed* when it has no family context at all, or when its
+    best score is far below every family's band (< 0.60, the same floor
+    suggest() uses). Seeds are grouped into regions (greedy cosine at
+    region_cosine — looser than mine()'s 0.92 dedup, to merge related new
+    topics) and a region is flagged when its total miss count reaches
+    min_misses over the mining window.
+    """
+    cands = [c for c in clusters
+             if c["family"] is None
+             or (c["min_score"] is not None and c["min_score"] < 0.60)]
+    if not cands:
+        return []
+    reps = [c["query"] for c in cands]
+    vecs = np.array([embedder.embed(t) for t in reps], dtype=np.float32)
+    vecs /= (np.linalg.norm(vecs, axis=1, keepdims=True) + 1e-12)
+    assigned: list[int | None] = [None] * len(cands)
+    regions: list[dict] = []
+    for i in range(len(cands)):
+        if assigned[i] is not None:
+            continue
+        members = [i]
+        assigned[i] = len(regions)
+        if len(cands) > 1:
+            sims = vecs @ vecs[i]
+            for j in range(len(cands)):
+                if j != i and assigned[j] is None and sims[j] >= region_cosine:
+                    members.append(j)
+                    assigned[j] = len(regions)
+        scores = [cands[m]["min_score"] for m in members
+                  if cands[m]["min_score"] is not None]
+        rep = max(members, key=lambda m: cands[m]["count"])
+        regions.append({
+            "region_query": cands[rep]["query"],
+            "total_misses": sum(cands[m]["count"] for m in members),
+            "distinct_clusters": len(members),
+            "first_ts": min(cands[m]["first_ts"] for m in members),
+            "last_ts": max(cands[m]["last_ts"] for m in members),
+            "score_range": [min(scores), max(scores)] if scores else None,
+            "examples": [cands[m]["query"] for m in
+                         sorted(members, key=lambda m: -cands[m]["count"])[:5]],
+        })
+    regions = [r for r in regions if r["total_misses"] >= min_misses]
+    regions.sort(key=lambda r: -r["total_misses"])
+    for r in regions:
+        r["suggestion"] = (
+            "repeated traffic in an area no family covers — seed a new "
+            "family (deliberate, gated): pick a name, add a golden-map "
+            "expression, run eval/promote.py --family <name> with a "
+            "calibrated band. Not auto-created by the loop.")
+    return regions
+
+
 def attach_queue(clusters: list[dict], queue_dir: Path,
                  embedder, dedup_cosine: float = 0.92) -> None:
     """Attach pending lazy-build queue jobs (with transcripts) to clusters."""
@@ -157,6 +223,8 @@ def main() -> None:
     from arc import endpoints
     ap.add_argument("--embed-url", default=endpoints.embed_url())
     ap.add_argument("--embed", choices=["server", "hash"], default="server")
+    ap.add_argument("--family-candidate-min", type=int,
+                    default=endpoints.family_candidate_min())
     args = ap.parse_args()
 
     from arc import Embedder
@@ -179,11 +247,20 @@ def main() -> None:
         if c.get("queued_job"):
             print(f"    queued job: {c['queued_job']['file']} "
                   f"(transcript={c['queued_job']['has_transcript']})")
+    fam_cands = family_candidates(clusters, embedder,
+                                  min_misses=args.family_candidate_min)
+    if fam_cands:
+        print(f"\nnew-family candidate regions (miss volume >= "
+              f"{args.family_candidate_min} in window):")
+        for r in fam_cands:
+            print(f"  [x{r['total_misses']}] {r['region_query'][:60]}")
+            print(f"      {r['suggestion']}")
     if args.out:
         out = {"mined_at": time.time(), "total_miss_rows": sum(c["count"] for c in clusters),
-               "candidates": clusters}
+               "candidates": clusters, "family_candidates": fam_cands}
         Path(args.out).write_text(json.dumps(out, indent=2, default=str))
-        print(f"\n{len(clusters)} candidates -> {args.out}")
+        print(f"\n{len(clusters)} candidates, {len(fam_cands)} new-family "
+              f"regions -> {args.out}")
     log.close()
 
 

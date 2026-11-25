@@ -10,7 +10,10 @@ The "close" half of the loop, invoked by deploy/nightly_curate.sh (cron):
          - not cross-family-ambiguous, not below every family's band
     3. for each (capped per night): run eval/promote.py
        (build -> recompile -> validate vs golden -> rollback on failure)
-    4. write machine-readable report + human summary
+    4. flag NEW-FAMILY candidate regions: repeated misses outside every
+       existing family band whose volume reaches ARC_FAMILY_CANDIDATE_MIN.
+       Report only — the loop never auto-creates families.
+    5. write machine-readable report + human summary
 
 Anything not provable (no golden template, below repeat floor, ambiguous)
 goes to the report for human review. The loop only auto-promotes what it can
@@ -34,7 +37,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
-from curate_misses import attach_queue, mine  # noqa: E402
+from curate_misses import attach_queue, family_candidates, mine  # noqa: E402
 
 
 def get_embedder(backend: str, url: str, fallback: str):
@@ -137,6 +140,13 @@ def main() -> None:
           f"last {args.since_hours:.0f}h -> {len(clusters)} clusters "
           f"(embed={embed_used}, auto_promote={auto}, min_repeats={args.min_repeats})")
 
+    fam_cands = family_candidates(clusters, embedder,
+                                  min_misses=endpoints.family_candidate_min())
+    for r in fam_cands:
+        print(f"[new-family ] x{r['total_misses']} misses in region "
+              f"{r['region_query'][:56]!r} — candidate for a new family "
+              f"(report only; seed via eval/promote.py when it makes sense)")
+
     actions = []
     promotions = 0
     for c in clusters[:args.top]:
@@ -187,11 +197,13 @@ def main() -> None:
              "family": a["candidate"]["family"], "golden": a["golden"],
              "decision": a["decision"], "rc": a["rc"]}
             for a in actions],
+        "family_candidates": fam_cands,
         "promoted": promotions,
     }
     rp = Path(args.report_dir) / f"curate-{stamp}.json"
     rp.write_text(json.dumps(report, indent=2, default=str))
-    print(f"[done] {promotions} promoted, report -> {rp}")
+    print(f"[done] {promotions} promoted, {len(fam_cands)} new-family "
+          f"candidate region(s), report -> {rp}")
 
 
 if __name__ == "__main__":
