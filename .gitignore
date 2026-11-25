@@ -1,0 +1,22 @@
+# Python
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# Runtime caches (regenerable; entry vectors now persist inside these DBs)
+tests/.p2_live_cache/
+tests/.gcd_cache/
+tests/.dbg_cache/
+tests/gateway_cache/
+tests/compiled/
+tests/build_queue/
+
+# Logs
+*.log
+tests/.p2_live_invocations.jsonl
+
+# Failed/scratch downloads (P0 404'd stub)
+spike/models/
+
+# OS
+.DS_Store

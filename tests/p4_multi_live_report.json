@@ -1,0 +1,767 @@
+{
+  "divisors_C": [
+    {
+      "case_id": "div_000196:original",
+      "problem_id": "div_000196",
+      "mode": "original",
+      "source": "cache",
+      "correct": true,
+      "answer": {
+        "answer": 9
+      },
+      "golden": "9",
+      "entry_score": 1.0,
+      "ms": 83.53,
+      "error": null
+    },
+    {
+      "case_id": "div_000144:original",
+      "problem_id": "div_000144",
+      "mode": "original",
+      "source": "cache",
+      "correct": true,
+      "answer": {
+        "answer": 15
+      },
+      "golden": "15",
+      "entry_score": 0.7387,
+      "ms": 40.8,
+      "error": null
+    },
+    {
+      "case_id": "div_000360:original",
+      "problem_id": "div_000360",
+      "mode": "original",
+      "source": "cache",
+      "correct": true,
+      "answer": {
+        "answer": 24
+      },
+      "golden": "24",
+      "entry_score": 0.777,
+      "ms": 58.16,
+      "error": null
+    },
+    {
+      "case_id": "div_001000:original",
+      "problem_id": "div_001000",
+      "mode": "original",
+      "source": "cache",
+      "correct": true,
+      "answer": {
+        "answer": 16
+      },
+      "golden": "16",
+      "entry_score": 0.789,
+      "ms": 54.64,
+      "error": null
+    },
+    {
+      "case_id": "div_000001:original",
+      "problem_id": "div_000001",
+      "mode": "original",
+      "source": "cache",
+      "correct": true,
+      "answer": {
+        "answer": 1
+      },
+      "golden": "1",
+      "entry_score": 0.8987,
+      "ms": 51.41,
+      "error": null
+    },
+    {
+      "case_id": "div_000002:original",
+      "problem_id": "div_000002",
+      "mode": "original",
+      "source": "cache",
+      "correct": true,
+      "answer": {
+        "answer": 2
+      },
+      "golden": "2",
+      "entry_score": 0.8802,
+      "ms": 51.07,
+      "error": null
+    },
+    {
+      "case_id": "div_000007:original",
+      "problem_id": "div_000007",
+      "mode": "original",
+      "source": "cache",
+      "correct": true,
+      "answer": {
+        "answer": 2
+      },
+      "golden": "2",
+      "entry_score": 0.839,
+      "ms": 49.08,
+      "error": null
+    },
+    {
+      "case_id": "div_000100:original",
+      "problem_id": "div_000100",
+      "mode": "original",
+      "source": "cache",
+      "correct": true,
+      "answer": {
+        "answer": 9
+      },
+      "golden": "9",
+      "entry_score": 0.7597,
+      "ms": 55.78,
+      "error": null
+    },
+    {
+      "case_id": "div_065536:original",
+      "problem_id": "div_065536",
+      "mode": "original",
+      "source": "cache",
+      "correct": true,
+      "answer": {
+        "answer": 17
+      },
+      "golden": "17",
+      "entry_score": 0.7291,
+      "ms": 54.72,
+      "error": null
+    },
+    {
+      "case_id": "div_999983:original",
+      "problem_id": "div_999983",
+      "mode": "original",
+      "source": "cache",
+      "correct": true,
+      "answer": {
+        "answer": 2
+      },
+      "golden": "2",
+      "entry_score": 0.7566,
+      "ms": 63.23,
+      "error": null
+    },
+    {
+      "case_id": "div_000012:original",
+      "problem_id": "div_000012",
+      "mode": "original",
+      "source": "cache",
+      "correct": true,
+      "answer": {
+        "answer": 6
+      },
+      "golden": "6",
+      "entry_score": 0.8168,
+      "ms": 47.68,
+      "error": null
+    },
+    {
+      "case_id": "div_000084:original",
+      "problem_id": "div_000084",
+      "mode": "original",
+      "source": "cache",
+      "correct": true,
+      "answer": {
+        "answer": 12
+      },
+      "golden": "12",
+      "entry_score": 0.786,
+      "ms": 47.98,
+      "error": null
+    }
+  ],
+  "gcd_C": [
+    {
+      "case_id": "gcd_3339_2961:original",
+      "problem_id": "gcd_3339_2961",
+      "mode": "original",
+      "source": "llm-fallback",
+      "correct": true,
+      "answer": "To find the greatest common divisor (GCD) of 3339 and 2961, we can use the **Euclidean Algorithm**. This method involves repeated division where we replace the larger number with the remainder of the division until the remainder is zero. The last non-zero remainder is the GCD.\n\n**Step 1:** Divide 3339 by 2961.\n$$3339 \\div 2961 = 1 \\text{ with a remainder of } 378$$\n$$(3339 = 1 \\times 2961 + 378)$$\n\n**Step 2:** Divide 2961 by the remainder 378.\n$$2961 \\div 378 = 7 \\text{ with a remainder of } 315$$\n$$(2961 = 7 \\times 378 + 315)$$\n*Check: $7 \\times 378 = 2646$; $2961 - 2646 = 315$*\n\n**Step 3:** Divide 378 by the remainder 315.\n$$378 \\div 315 = 1 \\text{ with a remainder of } 63$$\n$$(378 = 1 \\times 315 + 63)$$\n\n**Step 4:** Divide 315 by the remainder 63.\n$$315 \\div 63 = 5 \\text{ with a remainder of } 0$$\n$$(315 = 5 \\times 63 + 0)$$\n\nSince the remainder is now 0, the process stops. The last non-zero remainder is 63.\n\n**Verification via Prime Factorization:**\n*   $3339$: Sum of digits is $3+3+3+9=18$, so it is divisible by 9.\n    $3339 \\div 9 = 371$.\n    $371 = 7 \\times 53$.\n    So, $3339 = 3^2 \\times 7 \\times 53$.\n*   $2961$: Sum of digits is $2+9+6+1=18$, so it is divisible by 9.\n    $2961 \\div 9 = 329$.\n    $329 \\div 7 = 47$.\n    So, $2961 = 3^2 \\times 7 \\times 47$.\n\nThe common factors are $3^2$ and $7$.\n$$\\text{GCD} = 3^2 \\times 7 = 9 \\times 7 = 63$$\n\n**Conclusion:**\nThe greatest common divisor of 3339 and 2961 is **63**.",
+      "golden": "63",
+      "entry_score": null,
+      "ms": 60.83,
+      "error": null
+    },
+    {
+      "case_id": "gcd_1491_2205:original",
+      "problem_id": "gcd_1491_2205",
+      "mode": "original",
+      "source": "llm-fallback",
+      "correct": true,
+      "answer": "To find the greatest common divisor (GCD) of 1491 and 2205, we can use the **Euclidean Algorithm**. This method involves repeated division where we replace the larger number with the remainder of the division until the remainder is zero. The last non-zero remainder is the GCD.\n\n### Step 1: Divide the larger number by the smaller number\n$$2205 \\div 1491 = 1 \\text{ with a remainder of } 714$$\n$$2205 = 1491 \\times 1 + 714$$\n\n### Step 2: Divide the previous divisor by the remainder\nNow, we divide 1491 by 714:\n$$1491 \\div 714 = 2 \\text{ with a remainder of } 63$$\n$$1491 = 714 \\times 2 + 63$$\n\n### Step 3: Divide the previous divisor by the new remainder\nNow, we divide 714 by 63:\n$$714 \\div 63 = 11 \\text{ with a remainder of } 21$$\n$$714 = 63 \\times 11 + 21$$\n\n### Step 4: Divide the previous divisor by the new remainder\nNow, we divide 63 by 21:\n$$63 \\div 21 = 3 \\text{ with a remainder of } 0$$\n$$63 = 21 \\times 3 + 0$$\n\n### Conclusion\nSince the remainder is now 0, the process stops. The last non-zero remainder is **21**.\n\nTherefore, the greatest common divisor of 1491 and 2205 is **21**.",
+      "golden": "21",
+      "entry_score": null,
+      "ms": 59.02,
+      "error": null
+    },
+    {
+      "case_id": "gcd_48_18:original",
+      "problem_id": "gcd_48_18",
+      "mode": "original",
+      "source": "llm-fallback",
+      "correct": true,
+      "answer": "To find the greatest common divisor (GCD) of 48 and 18, we can use the method of listing factors or the Euclidean algorithm.\n\n### Method 1: Listing Factors\n\n1.  **Find the factors of 48:**\n    The numbers that divide 48 evenly are:\n    $1, 2, 3, 4, 6, 8, 12, 16, 24, 48$\n\n2.  **Find the factors of 18:**\n    The numbers that divide 18 evenly are:\n    $1, 2, 3, 6, 9, 18$\n\n3.  **Identify the common factors:**\n    The numbers that appear in both lists are:\n    $1, 2, 3, 6$\n\n4.  **Determine the greatest common factor:**\n    The largest number in the list of common factors is **6**.\n\n### Method 2: Prime Factorization\n\n1.  **Prime factorization of 48:**\n    $$48 = 2 \\times 24 = 2 \\times 2 \\times 12 = 2 \\times 2 \\times 2 \\times 6 = 2 \\times 2 \\times 2 \\times 2 \\times 3 = 2^4 \\times 3^1$$\n\n2.  **Prime factorization of 18:**\n    $$18 = 2 \\times 9 = 2 \\times 3 \\times 3 = 2^1 \\times 3^2$$\n\n3.  **Multiply the lowest power of common prime factors:**\n    *   The common prime factor is 2. The lowest power is $2^1$.\n    *   The common prime factor is 3. The lowest power is $3^1$.\n    *   $\\text{GCD} = 2^1 \\times 3^1 = 2 \\times 3 = 6$\n\n### Method 3: Euclidean Algorithm\n\n1.  Divide 48 by 18:\n    $$48 = 18 \\times 2 + 12$$\n2.  Divide 18 by the remainder (12):\n    $$18 = 12 \\times 1 + 6$$\n3.  Divide 12 by the new remainder (6):\n    $$12 = 6 \\times 2 + 0$$\n4.  Since the remainder is 0, the last non-zero remainder is the GCD.\n\n### Conclusion\n\nThe greatest common divisor of 48 and 18 is **6**.",
+      "golden": "6",
+      "entry_score": null,
+      "ms": 49.63,
+      "error": null
+    },
+    {
+      "case_id": "gcd_100_75:original",
+      "problem_id": "gcd_100_75",
+      "mode": "original",
+      "source": "llm-fallback",
+      "correct": true,
+      "answer": "To find the greatest common divisor (GCD) of 100 and 75, we can use the method of prime factorization or the Euclidean algorithm.\n\n### Method 1: Prime Factorization\n\n1.  **Find the prime factors of 100:**\n    $$100 = 10 \\times 10 = (2 \\times 5) \\times (2 \\times 5) = 2^2 \\times 5^2$$\n\n2.  **Find the prime factors of 75:**\n    $$75 = 3 \\times 25 = 3 \\times 5 \\times 5 = 3^1 \\times 5^2$$\n\n3.  **Identify the common factors:**\n    The common prime factor is $5$.\n    The lowest power of $5$ present in both factorizations is $5^2$.\n\n4.  **Calculate the GCD:**\n    $$\\text{GCD}(100, 75) = 5^2 = 25$$\n\n### Method 2: Euclidean Algorithm\n\n1.  Divide the larger number by the smaller number:\n    $$100 \\div 75 = 1 \\text{ with a remainder of } 25$$\n    $$(100 = 75 \\times 1 + 25)$$\n\n2.  Now, divide the previous divisor (75) by the remainder (25):\n    $$75 \\div 25 = 3 \\text{ with a remainder of } 0$$\n    $$(75 = 25 \\times 3 + 0)$$\n\n3.  Since the remainder is 0, the last non-zero remainder is the GCD.\n    $$\\text{GCD} = 25$$\n\n### Conclusion\n\nThe greatest common divisor of 100 and 75 is **25**.",
+      "golden": "25",
+      "entry_score": null,
+      "ms": 58.37,
+      "error": null
+    },
+    {
+      "case_id": "gcd_196_42:original",
+      "problem_id": "gcd_196_42",
+      "mode": "original",
+      "source": "llm-fallback",
+      "correct": true,
+      "answer": "To find the greatest common divisor (GCD) of 196 and 42, we can use the **Euclidean Algorithm** or **Prime Factorization**. Here, I will demonstrate both methods to ensure accuracy.\n\n### Method 1: Euclidean Algorithm\n\nThe Euclidean Algorithm involves dividing the larger number by the smaller number, then replacing the larger number with the smaller number and the smaller number with the remainder, repeating until the remainder is 0. The last non-zero remainder is the GCD.\n\n1.  **Divide 196 by 42:**\n    $$196 \\div 42 = 4 \\text{ with a remainder of } 28$$\n    $$(196 = 42 \\times 4 + 28)$$\n\n2.  **Divide 42 by 28:**\n    $$42 \\div 28 = 1 \\text{ with a remainder of } 14$$\n    $$(42 = 28 \\times 1 + 14)$$\n\n3.  **Divide 28 by 14:**\n    $$28 \\div 14 = 2 \\text{ with a remainder of } 0$$\n    $$(28 = 14 \\times 2 + 0)$$\n\nSince the remainder is now 0, the last non-zero remainder is **14**.\n\n### Method 2: Prime Factorization\n\nWe break down each number into its prime factors.\n\n1.  **Prime factorization of 42:**\n    $$42 = 2 \\times 21 = 2 \\times 3 \\times 7$$\n\n2.  **Prime factorization of 196:**\n    $$196 = 2 \\times 98 = 2 \\times 2 \\times 49 = 2^2 \\times 7^2$$\n\n3.  **Identify common factors:**\n    The common prime factors are 2 and 7. We take the lowest power of each common prime factor:\n    -   For 2: The lowest power is $2^1$ (from 42).\n    -   For 7: The lowest power is $7^1$ (from 42).\n\n4.  **Calculate the GCD:**\n    $$\\text{GCD} = 2^1 \\times 7^1 = 2 \\times 7 = 14$$\n\n### Conclusion\n\nThe greatest common divisor of 196 and 42 is **14**.",
+      "golden": "14",
+      "entry_score": null,
+      "ms": 73.41,
+      "error": null
+    },
+    {
+      "case_id": "gcd_12_8:original",
+      "problem_id": "gcd_12_8",
+      "mode": "original",
+      "source": "llm-fallback",
+      "correct": true,
+      "answer": "To find the greatest common divisor (GCD) of 12 and 8, we can list the factors of each number and identify the largest one they share.\n\n**Step 1: List the factors of 12**\nThe factors of 12 are:\n$$1, 2, 3, 4, 6, 12$$\n\n**Step 2: List the factors of 8**\nThe factors of 8 are:\n$$1, 2, 4, 8$$\n\n**Step 3: Identify the common factors**\nComparing the two lists, the common factors are:\n$$1, 2, 4$$\n\n**Step 4: Determine the greatest common factor**\nThe largest number in the list of common factors is 4.\n\n**Alternative Method: Prime Factorization**\n*   $12 = 2^2 \\times 3$\n*   $8 = 2^3$\n*   The GCD is the product of the lowest power of common prime factors: $2^2 = 4$.\n\n**Conclusion**\nThe greatest common divisor of 12 and 8 is **4**.",
+      "golden": "4",
+      "entry_score": null,
+      "ms": 42.86,
+      "error": null
+    },
+    {
+      "case_id": "gcd_1001_455:original",
+      "problem_id": "gcd_1001_455",
+      "mode": "original",
+      "source": "llm-fallback",
+      "correct": true,
+      "answer": "To find the greatest common divisor (GCD) of 1001 and 455, we can use the **Euclidean Algorithm** or **Prime Factorization**. Here, we will demonstrate both methods to ensure accuracy.\n\n### Method 1: Euclidean Algorithm\n\nThe Euclidean Algorithm involves repeated division where we divide the larger number by the smaller number and replace the larger number with the remainder until the remainder is 0. The last non-zero remainder is the GCD.\n\n1.  **Divide 1001 by 455:**\n    $$1001 \\div 455 = 2 \\text{ with a remainder of } 91$$\n    $$(1001 = 455 \\times 2 + 91)$$\n\n2.  **Divide 455 by 91:**\n    $$455 \\div 91 = 5 \\text{ with a remainder of } 0$$\n    $$(455 = 91 \\times 5 + 0)$$\n\nSince the remainder is now 0, the divisor from the previous step is the GCD.\n\n**Result:** 91\n\n---\n\n### Method 2: Prime Factorization\n\nWe can also find the GCD by breaking down each number into its prime factors.\n\n1.  **Factorize 455:**\n    *   Ends in 5, so divisible by 5: $455 \\div 5 = 91$\n    *   91 is divisible by 7: $91 \\div 7 = 13$\n    *   13 is a prime number.\n    *   So, $455 = 5 \\times 7 \\times 13$\n\n2.  **Factorize 1001:**\n    *   Check small primes. Not divisible by 2, 3 (sum of digits=2), or 5.\n    *   Try 7: $1001 \\div 7 = 143$\n    *   Factorize 143. Not divisible by 7. Try 11: $143 \\div 11 = 13$\n    *   13 is a prime number.\n    *   So, $1001 = 7 \\times 11 \\times 13$\n\n3.  **Identify Common Factors:**\n    *   $455 = 5 \\times \\mathbf{7} \\times \\mathbf{13}$\n    *   $1001 = \\mathbf{7} \\times 11 \\times \\mathbf{13}$\n\n    The common prime factors are 7 and 13.\n\n4.  **Calculate GCD:**\n    $$\\text{GCD} = 7 \\times 13 = 91$$\n\n### Conclusion\n\nThe greatest common divisor of 1001 and 455 is **91**.",
+      "golden": "91",
+      "entry_score": null,
+      "ms": 48.02,
+      "error": null
+    },
+    {
+      "case_id": "gcd_65536_4096:original",
+      "problem_id": "gcd_65536_4096",
+      "mode": "original",
+      "source": "llm-fallback",
+      "correct": true,
+      "answer": "To find the greatest common divisor (GCD) of 65536 and 4096, we can use prime factorization or the Euclidean algorithm.\n\n### Method 1: Prime Factorization\n\nBoth numbers are powers of 2. Let's express them in terms of their prime factors:\n\n1.  **Factorize 4096:**\n    $$4096 = 2^{12}$$\n    (Check: $2^{10} = 1024$, $2^{11} = 2048$, $2^{12} = 4096$)\n\n2.  **Factorize 65536:**\n    $$65536 = 2^{16}$$\n    (Check: $2^{16} = 65536$)\n\nThe GCD of two numbers expressed as powers of the same prime is the power with the smaller exponent.\n\n$$ \\text{GCD}(2^{16}, 2^{12}) = 2^{\\min(16, 12)} = 2^{12} $$\n\n$$ 2^{12} = 4096 $$\n\n### Method 2: Euclidean Algorithm\n\nThe Euclidean algorithm states that $\\text{GCD}(a, b) = \\text{GCD}(b, a \\pmod b)$.\n\n1.  Let $a = 65536$ and $b = 4096$.\n2.  Calculate $65536 \\pmod{4096}$:\n    $$ 65536 \\div 4096 = 16 \\text{ with a remainder of } 0 $$\n    $$ 65536 = 16 \\times 4096 + 0 $$\n\nSince the remainder is 0, the divisor at this step is the GCD.\n\n$$ \\text{GCD}(65536, 4096) = 4096 $$\n\n### Conclusion\n\nThe greatest common divisor of 65536 and 4096 is **4096**.",
+      "golden": "4096",
+      "entry_score": null,
+      "ms": 51.8,
+      "error": null
+    },
+    {
+      "case_id": "gcd_97_101:original",
+      "problem_id": "gcd_97_101",
+      "mode": "original",
+      "source": "llm-fallback",
+      "correct": true,
+      "answer": "To find the greatest common divisor (GCD) of 97 and 101, we can analyze the properties of these numbers.\n\n### Step 1: Check for Primality\nFirst, let's determine if 97 and 101 are prime numbers. A prime number is a natural number greater than 1 that has no positive divisors other than 1 and itself.\n\n**For 97:**\nWe check for divisibility by prime numbers less than $\\sqrt{97} \\approx 9.8$. The primes to check are 2, 3, 5, and 7.\n- **2**: 97 is odd, so it is not divisible by 2.\n- **3**: The sum of the digits is $9 + 7 = 16$, which is not divisible by 3.\n- **5**: 97 does not end in 0 or 5.\n- **7**: $97 \\div 7 = 13$ with a remainder of $6$ ($7 \\times 13 = 91$).\n\nSince 97 is not divisible by any of these primes, **97 is a prime number**.\n\n**For 101:**\nWe check for divisibility by prime numbers less than $\\sqrt{101} \\approx 10.05$. The primes to check are 2, 3, 5, and 7.\n- **2**: 101 is odd.\n- **3**: The sum of the digits is $1 + 0 + 1 = 2$, which is not divisible by 3.\n- **5**: 101 does not end in 0 or 5.\n- **7**: $101 \\div 7 = 14$ with a remainder of $3$ ($7 \\times 14 = 98$).\n\nSince 101 is not divisible by any of these primes, **101 is a prime number**.\n\n### Step 2: Determine the GCD\nThe greatest common divisor of two distinct prime numbers is always 1, because prime numbers have no factors other than 1 and themselves. Since 97 and 101 are distinct primes, they share no common factors other than 1.\n\nAlternatively, using the Euclidean Algorithm:\n1. $101 = 1 \\times 97 + 4$\n2. $97 = 24 \\times 4 + 1$\n3. $4 = 4 \\times 1 + 0$\n\nThe last non-zero remainder is 1.\n\n### Conclusion\nThe greatest common divisor of 97 and 101 is **1**.",
+      "golden": "1",
+      "entry_score": null,
+      "ms": 46.41,
+      "error": null
+    },
+    {
+      "case_id": "gcd_210_132:original",
+      "problem_id": "gcd_210_132",
+      "mode": "original",
+      "source": "llm-fallback",
+      "correct": true,
+      "answer": "To find the greatest common divisor (GCD) of 210 and 132, we can use the **Euclidean Algorithm** or **Prime Factorization**. Here, I will demonstrate both methods to ensure accuracy.\n\n### Method 1: Euclidean Algorithm\n\nThe Euclidean Algorithm involves dividing the larger number by the smaller number, then replacing the larger number with the smaller number and the smaller number with the remainder, repeating until the remainder is 0. The last non-zero remainder is the GCD.\n\n1.  **Divide 210 by 132:**\n    $$210 = 132 \\times 1 + 78$$\n    (Remainder is 78)\n\n2.  **Divide 132 by 78:**\n    $$132 = 78 \\times 1 + 54$$\n    (Remainder is 54)\n\n3.  **Divide 78 by 54:**\n    $$78 = 54 \\times 1 + 24$$\n    (Remainder is 24)\n\n4.  **Divide 54 by 24:**\n    $$54 = 24 \\times 2 + 6$$\n    (Remainder is 6)\n\n5.  **Divide 24 by 6:**\n    $$24 = 6 \\times 4 + 0$$\n    (Remainder is 0)\n\nSince the remainder is now 0, the last non-zero remainder is **6**.\n\n### Method 2: Prime Factorization\n\nWe break down each number into its prime factors.\n\n1.  **Prime factorization of 210:**\n    $$210 = 10 \\times 21 = (2 \\times 5) \\times (3 \\times 7)$$\n    $$210 = 2^1 \\times 3^1 \\times 5^1 \\times 7^1$$\n\n2.  **Prime factorization of 132:**\n    $$132 = 2 \\times 66 = 2 \\times 2 \\times 33 = 2 \\times 2 \\times 3 \\times 11$$\n    $$132 = 2^2 \\times 3^1 \\times 11^1$$\n\n3.  **Identify common prime factors:**\n    The common prime factors are 2 and 3. We take the lowest exponent for each common prime factor:\n    *   For prime 2: $\\min(1, 2) = 1 \\rightarrow 2^1$\n    *   For prime 3: $\\min(1, 1) = 1 \\rightarrow 3^1$\n\n4.  **Calculate the GCD:**\n    $$\\text{GCD} = 2^1 \\times 3^1 = 2 \\times 3 = 6$$\n\n### Conclusion\n\nThe greatest common divisor of 210 and 132 is **6**.",
+      "golden": "6",
+      "entry_score": null,
+      "ms": 71.34,
+      "error": null
+    },
+    {
+      "case_id": "gcd_123456_54321:original",
+      "problem_id": "gcd_123456_54321",
+      "mode": "original",
+      "source": "llm-fallback",
+      "correct": true,
+      "answer": "To find the greatest common divisor (GCD) of 123,456 and 54,321, we can use the **Euclidean Algorithm**. This algorithm is based on the principle that the GCD of two numbers also divides their difference.\n\nThe steps are as follows:\n1.  Divide the larger number by the smaller number to find the remainder.\n2.  Replace the larger number with the smaller number and the smaller number with the remainder.\n3.  Repeat the process until the remainder is 0.\n4.  The last non-zero remainder is the GCD.\n\n### Step-by-Step Calculation\n\n**Step 1:** Divide 123,456 by 54,321.\n$$123,456 \\div 54,321 = 2 \\text{ with a remainder of } 14,814$$\n$$(123,456 = 2 \\times 54,321 + 14,814)$$\n\n**Step 2:** Divide 54,321 by 14,814.\n$$54,321 \\div 14,814 = 3 \\text{ with a remainder of } 9,879$$\n$$(54,321 = 3 \\times 14,814 + 9,879)$$\n\n**Step 3:** Divide 14,814 by 9,879.\n$$14,814 \\div 9,879 = 1 \\text{ with a remainder of } 4,935$$\n$$(14,814 = 1 \\times 9,879 + 4,935)$$\n\n**Step 4:** Divide 9,879 by 4,935.\n$$9,879 \\div 4,935 = 2 \\text{ with a remainder of } 9$$\n$$(9,879 = 2 \\times 4,935 + 9)$$\n\n**Step 5:** Divide 4,935 by 9.\n$$4,935 \\div 9 = 548 \\text{ with a remainder of } 0$$\n$$(4,935 = 548 \\times 9 + 0)$$\n\nSince the remainder is now 0, the process stops. The last non-zero remainder is 9.\n\n### Verification\nLet's verify that 9 divides both original numbers:\n*   $123,456 \\div 9 = 13,716$ (Since the sum of digits $1+2+3+4+5+6=21$, which is not divisible by 9? Wait. Let's re-check the digit sum rule.\n    *   Sum of digits for 123,456: $1+2+3+4+5+6 = 21$. 21 is not divisible by 9.\n    *   Sum of digits for 54,321: $5+4+3+2+1 = 15$. 15 is not divisible by 9.\n\n    **Correction:** My manual calculation in Step 5 implies 9 is the GCD, but the digit sum check suggests 9 does *not* divide the numbers. Let's re-evaluate the arithmetic in the Euclidean steps.\n\n    **Re-calculation:**\n\n    1.  $123,456 - 2 \\times 54,321 = 123,456 - 108,642 = 14,814$. (Correct)\n    2.  $54,321 - 3 \\times 14,814 = 54,321 - 44,442 = 9,879$. (Correct)\n    3.  $14,814 - 1 \\times 9,879 = 4,935$. (Correct)\n    4.  $9,879 - 2 \\times 4,935 = 9,879 - 9,870 = 9$. (Correct)\n    5.  $4,935 \\div 9 = 548.33...$ **Wait.**\n        $4,935 \\div 9$:\n        $49 \\div 9 = 5$ rem 4.\n        $43 \\div 9 = 4$ rem 7.\n        $75 \\div 9 = 8$ rem 3.\n        So $4,935$ is **not** divisible by 9.\n\n    Let's re-check Step 4:\n    $9,879 \\div 4,935$.\n    $4,935 \\times 2 = 9,870$.\n    $9,879 - 9,870 = 9$.\n    So the remainder is indeed 9.\n\n    Let's re-check Step 3:\n    $14,814 \\div 9,879$.\n    $9,879 \\times 1 = 9,879$.\n    $14,814 - 9,879 = 4,935$.\n    Correct.\n\n    Let's re-check Step 2:\n    $54,321 \\div 14,814$.\n    $14,814 \\times 3 = 44,442$.\n    $54,321 - 44,442 = 9,879$.\n    Correct.\n\n    Let's re-check Step 1:\n    $123,456 \\div 54,321$.\n    $54,321 \\times 2 = 108,642$.\n    $123,456 - 108,642 = 14,814$.\n    Correct.\n\n    So the remainders are: $14,814 \\rightarrow 9,879 \\rightarrow 4,935 \\rightarrow 9$.\n    The next step is $4,935 \\div 9$.\n    $4,935 / 9 = 548.33$.\n    This means the remainder is not 0.\n    $4,935 = 548 \\times 9 + 3$.\n    So the new remainder is **3**.\n\n    **Step 5 (Corrected):** Divide 4,935 by 9.\n    $$4,935 \\div 9 = 548 \\text{ with a remainder of } 3$$\n    $$(4,935 = 548 \\times 9 + 3)$$\n\n    **Step 6:** Divide 9 by 3.\n    $$9 \\div 3 = 3 \\text{ with a remainder of } 0$$\n    $$(9 = 3 \\times 3 + 0)$$\n\n    The last non-zero remainder is **3**.\n\n### Final Verification\nLet's check if 3 divides both numbers:\n*   Sum of digits of 123,456: $1+2+3+4+5+6 = 21$. 21 is divisible by 3. So 123,456 is divisible by 3.\n*   Sum of digits of 54,321: $5+4+3+2+1 = 15$. 15 is divisible by 3. So 54,321 is divisible by 3.\n\nIs it divisible by 9?\n*   21 is not divisible by 9.\n*   15 is not divisible by 9.\nSo the GCD cannot be 9.\n\nIs it divisible by any larger factor?\nSince the Euclidean algorithm ended with 3, and 3 is a prime number, the GCD must be 3.\n\n### Conclusion\nThe greatest common divisor of 123,456 and 54,321 is **3**.",
+      "golden": "3",
+      "entry_score": null,
+      "ms": 90.33,
+      "error": null
+    },
+    {
+      "case_id": "gcd_720_96:original",
+      "problem_id": "gcd_720_96",
+      "mode": "original",
+      "source": "llm-fallback",
+      "correct": true,
+      "answer": "To find the greatest common divisor (GCD) of 720 and 96, we can use the **Euclidean Algorithm** or **Prime Factorization**. Here, I will demonstrate both methods to ensure accuracy.\n\n### Method 1: The Euclidean Algorithm\n\nThe Euclidean Algorithm involves dividing the larger number by the smaller number, then replacing the larger number with the smaller number and the smaller number with the remainder, repeating until the remainder is 0. The last non-zero remainder is the GCD.\n\n1.  **Divide 720 by 96:**\n    $$720 \\div 96 = 7 \\text{ with a remainder of } 48$$\n    $$(720 = 96 \\times 7 + 48)$$\n\n2.  **Divide 96 by 48:**\n    $$96 \\div 48 = 2 \\text{ with a remainder of } 0$$\n    $$(96 = 48 \\times 2 + 0)$$\n\nSince the remainder is now 0, the process stops. The last non-zero remainder is **48**.\n\n### Method 2: Prime Factorization\n\nWe break down each number into its prime factors.\n\n1.  **Prime factorization of 720:**\n    $$720 = 72 \\times 10 = (8 \\times 9) \\times (2 \\times 5) = (2^3 \\times 3^2) \\times (2 \\times 5)$$\n    $$720 = 2^4 \\times 3^2 \\times 5^1$$\n\n2.  **Prime factorization of 96:**\n    $$96 = 32 \\times 3 = 2^5 \\times 3^1$$\n\n3.  **Identify common factors with the lowest exponents:**\n    *   For prime base 2: $\\min(4, 5) = 4 \\rightarrow 2^4$\n    *   For prime base 3: $\\min(2, 1) = 1 \\rightarrow 3^1$\n    *   For prime base 5: $\\min(1, 0) = 0 \\rightarrow 5^0$ (not common)\n\n4.  **Calculate the GCD:**\n    $$\\text{GCD} = 2^4 \\times 3^1 = 16 \\times 3 = 48$$\n\n### Conclusion\n\nThe greatest common divisor of 720 and 96 is **48**.",
+      "golden": "48",
+      "entry_score": null,
+      "ms": 68.55,
+      "error": null
+    },
+    {
+      "case_id": "gcd_63_147_105:original",
+      "problem_id": "gcd_63_147_105",
+      "mode": "original",
+      "source": "llm-fallback",
+      "correct": true,
+      "answer": "To find the greatest common divisor (GCD) of 63, 147, and 105, we can use the method of prime factorization.\n\n### Step 1: Find the prime factorization of each number\n\n**1. Factorize 63:**\n*   $63$ is divisible by $9$ and $7$.\n*   $9 = 3^2$\n*   $7$ is prime.\n*   So, $63 = 3^2 \\times 7$\n\n**2. Factorize 147:**\n*   The sum of the digits is $1+4+7=12$, which is divisible by $3$, so $147$ is divisible by $3$.\n*   $147 \\div 3 = 49$\n*   $49 = 7^2$\n*   So, $147 = 3 \\times 7^2$\n\n**3. Factorize 105:**\n*   $105$ ends in $5$, so it is divisible by $5$.\n*   $105 \\div 5 = 21$\n*   $21 = 3 \\times 7$\n*   So, $105 = 3 \\times 5 \\times 7$\n\n### Step 2: Identify the common prime factors\n\nNow, we look for the prime factors that are present in **all three** numbers:\n\n*   $63 = \\mathbf{3}^2 \\times \\mathbf{7}$\n*   $147 = \\mathbf{3} \\times \\mathbf{7}^2$\n*   $105 = \\mathbf{3} \\times 5 \\times \\mathbf{7}$\n\nThe common prime factors are $3$ and $7$.\n\n### Step 3: Determine the lowest power of each common prime factor\n\n*   For the prime factor **3**:\n    *   In 63, the power is $3^2$\n    *   In 147, the power is $3^1$\n    *   In 105, the power is $3^1$\n    *   The lowest power is $3^1$.\n\n*   For the prime factor **7**:\n    *   In 63, the power is $7^1$\n    *   In 147, the power is $7^2$\n    *   In 105, the power is $7^1$\n    *   The lowest power is $7^1$.\n\n### Step 4: Calculate the GCD\n\nMultiply the lowest powers of the common prime factors:\n$$ \\text{GCD} = 3^1 \\times 7^1 = 3 \\times 7 = 21 $$\n\n### Verification\n*   $63 \\div 21 = 3$\n*   $147 \\div 21 = 7$\n*   $105 \\div 21 = 5$\n\nSince 3, 7, and 5 share no common factors other than 1, 21 is indeed the greatest common divisor.\n\n**Answer:**\nThe greatest common divisor of 63, 147, and 105 is **21**.",
+      "golden": "21",
+      "entry_score": null,
+      "ms": 60.01,
+      "error": null
+    },
+    {
+      "case_id": "gcd_120_80_60:original",
+      "problem_id": "gcd_120_80_60",
+      "mode": "original",
+      "source": "llm-fallback",
+      "correct": true,
+      "answer": "To find the greatest common divisor (GCD) of 120, 80, and 60, we can use the method of prime factorization.\n\n### Step 1: Find the prime factorization of each number\n\n**1. Factorize 120:**\n$$120 = 12 \\times 10 = (4 \\times 3) \\times (2 \\times 5) = (2^2 \\times 3) \\times (2 \\times 5)$$\n$$120 = 2^3 \\times 3^1 \\times 5^1$$\n\n**2. Factorize 80:**\n$$80 = 8 \\times 10 = (2^3) \\times (2 \\times 5)$$\n$$80 = 2^4 \\times 5^1$$\n\n**3. Factorize 60:**\n$$60 = 6 \\times 10 = (2 \\times 3) \\times (2 \\times 5)$$\n$$60 = 2^2 \\times 3^1 \\times 5^1$$\n\n### Step 2: Identify the common prime factors with the lowest exponents\n\nTo find the GCD, we take the product of the common prime factors raised to their lowest power present in all three factorizations.\n\n*   **Prime factor 2:**\n    *   In 120: $2^3$\n    *   In 80: $2^4$\n    *   In 60: $2^2$\n    *   Lowest power: $2^2$\n\n*   **Prime factor 3:**\n    *   In 120: $3^1$\n    *   In 80: $3^0$ (not present)\n    *   In 60: $3^1$\n    *   Since 3 is not a factor of 80, it is not a common factor.\n\n*   **Prime factor 5:**\n    *   In 120: $5^1$\n    *   In 80: $5^1$\n    *   In 60: $5^1$\n    *   Lowest power: $5^1$\n\n### Step 3: Calculate the GCD\n\nMultiply the common prime factors identified in Step 2:\n$$\\text{GCD} = 2^2 \\times 5^1$$\n$$\\text{GCD} = 4 \\times 5$$\n$$\\text{GCD} = 20$$\n\n### Verification\n*   $120 \\div 20 = 6$\n*   $80 \\div 20 = 4$\n*   $60 \\div 20 = 3$\n\nSince 6, 4, and 3 share no common divisors other than 1, 20 is indeed the greatest common divisor.\n\n**Answer:**\nThe greatest common divisor of 120, 80, and 60 is **20**.",
+      "golden": "20",
+      "entry_score": null,
+      "ms": 53.5,
+      "error": null
+    },
+    {
+      "case_id": "gcd_252_180_330:original",
+      "problem_id": "gcd_252_180_330",
+      "mode": "original",
+      "source": "llm-fallback",
+      "correct": true,
+      "answer": "To find the greatest common divisor (GCD) of 252, 180, and 330, we can use the method of prime factorization.\n\n### Step 1: Prime Factorization of Each Number\n\n**1. Factorize 252:**\n$$252 \\div 2 = 126$$\n$$126 \\div 2 = 63$$\n$$63 \\div 3 = 21$$\n$$21 \\div 3 = 7$$\n$$7 \\div 7 = 1$$\nSo, $252 = 2^2 \\times 3^2 \\times 7^1$\n\n**2. Factorize 180:**\n$$180 \\div 2 = 90$$\n$$90 \\div 2 = 45$$\n$$45 \\div 3 = 15$$\n$$15 \\div 3 = 5$$\n$$5 \\div 5 = 1$$\nSo, $180 = 2^2 \\times 3^2 \\times 5^1$\n\n**3. Factorize 330:**\n$$330 \\div 2 = 165$$\n$$165 \\div 3 = 55$$\n$$55 \\div 5 = 11$$\n$$11 \\div 11 = 1$$\nSo, $330 = 2^1 \\times 3^1 \\times 5^1 \\times 11^1$\n\n### Step 2: Identify Common Prime Factors\n\nTo find the GCD, we take the lowest power of each prime factor that appears in **all** three factorizations.\n\n*   **Prime factor 2:**\n    *   In 252: $2^2$\n    *   In 180: $2^2$\n    *   In 330: $2^1$\n    *   Lowest power: $2^1$\n\n*   **Prime factor 3:**\n    *   In 252: $3^2$\n    *   In 180: $3^2$\n    *   In 330: $3^1$\n    *   Lowest power: $3^1$\n\n*   **Prime factor 5:**\n    *   In 252: Not present\n    *   In 180: $5^1$\n    *   In 330: $5^1$\n    *   Since it is not in all three, it is not part of the GCD.\n\n*   **Prime factor 7:**\n    *   Only in 252. Not part of the GCD.\n\n*   **Prime factor 11:**\n    *   Only in 330. Not part of the GCD.\n\n### Step 3: Calculate the GCD\n\nMultiply the common prime factors with their lowest powers:\n$$ \\text{GCD} = 2^1 \\times 3^1 $$\n$$ \\text{GCD} = 2 \\times 3 $$\n$$ \\text{GCD} = 6 $$\n\n### Conclusion\n\nThe greatest common divisor of 252, 180, and 330 is **6**.",
+      "golden": "6",
+      "entry_score": null,
+      "ms": 59.81,
+      "error": null
+    },
+    {
+      "case_id": "gcd_49_147_245:original",
+      "problem_id": "gcd_49_147_245",
+      "mode": "original",
+      "source": "cache",
+      "correct": true,
+      "answer": {
+        "the greatest common divisor of the three integers": 49
+      },
+      "golden": "49",
+      "entry_score": 0.7302,
+      "ms": 55.95,
+      "error": null
+    },
+    {
+      "case_id": "gcd_1000_750_500:original",
+      "problem_id": "gcd_1000_750_500",
+      "mode": "original",
+      "source": "llm-fallback",
+      "correct": true,
+      "answer": "To find the greatest common divisor (GCD) of 1000, 750, and 500, we can use prime factorization or the Euclidean algorithm. Here, we will use prime factorization as it is straightforward for these numbers.\n\n### Step 1: Prime Factorization\n\nLet's break down each number into its prime factors:\n\n1.  **1000**:\n    $$1000 = 10 \\times 100 = (2 \\times 5) \\times (10 \\times 10) = (2 \\times 5) \\times (2 \\times 5) \\times (2 \\times 5)$$\n    $$1000 = 2^3 \\times 5^3$$\n\n2.  **750**:\n    $$750 = 75 \\times 10 = (3 \\times 25) \\times (2 \\times 5) = 3 \\times 5^2 \\times 2 \\times 5$$\n    $$750 = 2^1 \\times 3^1 \\times 5^3$$\n\n3.  **500**:\n    $$500 = 5 \\times 100 = 5 \\times (10 \\times 10) = 5 \\times (2 \\times 5) \\times (2 \\times 5)$$\n    $$500 = 2^2 \\times 5^3$$\n\n### Step 2: Identify Common Factors\n\nTo find the GCD, we take the lowest power of each prime factor that appears in **all** three factorizations.\n\n*   **Prime factor 2**:\n    *   In 1000: $2^3$\n    *   In 750: $2^1$\n    *   In 500: $2^2$\n    *   Lowest power: $2^1$\n\n*   **Prime factor 3**:\n    *   In 1000: Not present ($3^0$)\n    *   In 750: $3^1$\n    *   In 500: Not present ($3^0$)\n    *   Lowest power: $3^0 = 1$ (Since it is not common to all, it is not included in the GCD).\n\n*   **Prime factor 5**:\n    *   In 1000: $5^3$\n    *   In 750: $5^3$\n    *   In 500: $5^3$\n    *   Lowest power: $5^3$\n\n### Step 3: Calculate the GCD\n\nMultiply the lowest powers of the common prime factors:\n$$ \\text{GCD} = 2^1 \\times 5^3 $$\n$$ \\text{GCD} = 2 \\times 125 $$\n$$ \\text{GCD} = 250 $$\n\n### Verification\n*   $1000 \\div 250 = 4$\n*   $750 \\div 250 = 3$\n*   $500 \\div 250 = 2$\n\nSince 4, 3, and 2 share no common divisors other than 1, 250 is indeed the greatest common divisor.\n\n**Answer:**\nThe greatest common divisor of 1000, 750, and 500 is **250**.",
+      "golden": "250",
+      "entry_score": null,
+      "ms": 62.02,
+      "error": null
+    },
+    {
+      "case_id": "gcd_91_143_187:original",
+      "problem_id": "gcd_91_143_187",
+      "mode": "original",
+      "source": "cache",
+      "correct": true,
+      "answer": {
+        "the greatest common divisor of the three integers": 1
+      },
+      "golden": "1",
+      "entry_score": 0.7329,
+      "ms": 56.12,
+      "error": null
+    }
+  ],
+  "S_baseline": [
+    {
+      "case_id": "div_000196:original",
+      "problem_id": "div_000196",
+      "mode": "original",
+      "source": "llm-fallback",
+      "correct": false,
+      "answer": "To determine the number of positive whole-number divisors of 196, we will follow these steps:\n\n### Step 1: Prime Factorization\nFirst, we find the prime factorization of 196.\n\n1.  196 is an even number, so we divide by 2:\n    $$196 \\div 2 = 98$$\n2.  98 is also even, so we divide by 2 again:\n    $$98 \\div 2 = 49$$\n3.  49 is not divisible by 2, 3, or 5. We check the next prime, 7:\n    $$49 \\div 7 = 7$$\n4.  7 is a prime number:\n    $$7 \\div 7 = 1$$\n\nSo, the prime factorization of 196 is:\n$$196 = 2 \\times 2 \\times 7 \\times 7 = 2^2 \\times 7^2$$\n\n### Step 2: Apply the Divisor Counting Formula\nIf the prime factorization of a number $n$ is given by $p_1^{e_1} \\times p_2^{e_2} \\times \\dots \\times p_k^{e_k}$, then the total number of divisors $d(n)$ is calculated by taking the product of one more than each exponent:\n$$d(n) = (e_1 + 1)(e_2 + 1)\\dots(e_k + 1)$$\n\nFor $196 = 2^2 \\times 7^2$:\n- The exponent of the prime base 2 is $2$.\n- The exponent of the prime base 7 is $2$.\n\nUsing the formula:\n$$d(196) = (2 + 1)(2 + 1)$$\n$$d(196) = 3 \\times 3$$\n$$d(196) = 9$$\n\n### Step 3: Verification (Listing the Divisors)\nLet's list the divisors to verify the count:\n1.  $1$\n2.  $2$\n3.  $4$ ($2^2$)\n4.  $7$\n5.  $14$ ($2 \\times 7",
+      "golden": "9",
+      "entry_score": null,
+      "ms": 0.0,
+      "error": null
+    },
+    {
+      "case_id": "div_000144:original",
+      "problem_id": "div_000144",
+      "mode": "original",
+      "source": "llm-fallback",
+      "correct": true,
+      "answer": "To find the number of positive whole-number divisors of 144, we can use the prime factorization method.\n\n### Step 1: Find the Prime Factorization of 144\n\nWe break down 144 into its prime factors:\n$$144 = 12 \\times 12$$\n$$12 = 4 \\times 3 = 2^2 \\times 3$$\nTherefore:\n$$144 = (2^2 \\times 3) \\times (2^2 \\times 3)$$\n$$144 = 2^{2+2} \\times 3^{1+1}$$\n$$144 = 2^4 \\times 3^2$$\n\nSo, the prime factorization of 144 is $2^4 \\times 3^2$.\n\n### Step 2: Use the Divisor Counting Formula\n\nIf the prime factorization of a number $n$ is given by $p_1^{e_1} \\times p_2^{e_2} \\times \\dots \\times p_k^{e_k}$, then the total number of divisors $d(n)$ is calculated by taking the product of one more than each exponent:\n$$d(n) = (e_1 + 1)(e_2 + 1)\\dots(e_k + 1)$$\n\nFor $144 = 2^4 \\times 3^2$:\n- The exponent of the prime base 2 is $4$.\n- The exponent of the prime base 3 is $2$.\n\nApplying the formula:\n$$d(144) = (4 + 1)(2 + 1)$$\n$$d(144) = 5 \\times 3$$\n$$d(144) = 15$$\n\n### Verification (Optional)\nLet's list the divisors to verify:\n1, 2, 3, 4, 6, 8, 9, 12, 16, 18, 24, 36, 48, 72, 144.\nCounting them, there are exactly 15 divisors.\n\n### Conclusion\nThe number 144 has **15** positive whole-number divisors.",
+      "golden": "15",
+      "entry_score": null,
+      "ms": 0.0,
+      "error": null
+    },
+    {
+      "case_id": "div_000360:original",
+      "problem_id": "div_000360",
+      "mode": "original",
+      "source": "llm-fallback",
+      "correct": true,
+      "answer": "To find the number of positive whole-number divisors of 360, we will follow these steps:\n\n### Step 1: Prime Factorization\nFirst, we determine the prime factorization of 360. We can break it down as follows:\n\n$$360 = 36 \\times 10$$\n$$36 = 6 \\times 6 = (2 \\times 3) \\times (2 \\times 3) = 2^2 \\times 3^2$$\n$$10 = 2 \\times 5$$\n\nCombining these parts:\n$$360 = (2^2 \\times 3^2) \\times (2 \\times 5)$$\n$$360 = 2^{2+1} \\times 3^2 \\times 5^1$$\n$$360 = 2^3 \\times 3^2 \\times 5^1$$\n\nSo, the prime factorization of 360 is $2^3 \\cdot 3^2 \\cdot 5^1$.\n\n### Step 2: Apply the Divisor Counting Formula\nIf the prime factorization of a number $n$ is given by $p_1^{e_1} \\cdot p_2^{e_2} \\cdots p_k^{e_k}$, then the total number of divisors $d(n)$ is calculated by taking the product of one more than each of the exponents:\n\n$$d(n) = (e_1 + 1)(e_2 + 1)\\cdots(e_k + 1)$$\n\nFor $360 = 2^3 \\cdot 3^2 \\cdot 5^1$, the exponents are:\n- For prime 2: exponent is $3$\n- For prime 3: exponent is $2$\n- For prime 5: exponent is $1$\n\n### Step 3: Calculate the Product\nSubstitute the exponents into the formula:\n\n$$d(360) = (3 + 1)(2 + 1)(1 + 1)$$\n$$d(360) = 4 \\times 3 \\times 2$$\n\nNow, perform the multiplication:\n$$4 \\times 3 = 12$$\n$$12 \\times 2 = 24$$\n\n### Conclusion",
+      "golden": "24",
+      "entry_score": null,
+      "ms": 0.0,
+      "error": null
+    },
+    {
+      "case_id": "div_001000:original",
+      "problem_id": "div_001000",
+      "mode": "original",
+      "source": "llm-fallback",
+      "correct": true,
+      "answer": "To determine the number of positive whole-number divisors of 1000, we can follow these steps:\n\n### Step 1: Prime Factorization\nFirst, we find the prime factorization of 1000.\n$$1000 = 10 \\times 10 \\times 10 = (2 \\times 5)^3 = 2^3 \\times 5^3$$\n\nSo, the prime factorization of 1000 is:\n$$1000 = 2^3 \\times 5^3$$\n\n### Step 2: Apply the Divisor Counting Formula\nIf the prime factorization of a number $n$ is given by $p_1^{e_1} \\times p_2^{e_2} \\times \\dots \\times p_k^{e_k}$, then the total number of positive divisors $d(n)$ is calculated by taking the product of one more than each of the exponents:\n$$d(n) = (e_1 + 1)(e_2 + 1)\\dots(e_k + 1)$$\n\nFor $1000 = 2^3 \\times 5^3$:\n- The exponent of the prime base 2 is $3$.\n- The exponent of the prime base 5 is $3$.\n\n### Step 3: Calculate the Number of Divisors\nUsing the formula:\n$$d(1000) = (3 + 1)(3 + 1)$$\n$$d(1000) = 4 \\times 4$$\n$$d(1000) = 16$$\n\n### Verification (Optional)\nWe can list the divisors to verify:\n1, 2, 4, 5, 8, 10, 20, 25, 40, 50, 100, 125, 200, 250, 500, 1000.\nCounting them confirms there are 16 divisors.\n\n### Conclusion\nThe number 1000 has **16** positive whole-number divisors.",
+      "golden": "16",
+      "entry_score": null,
+      "ms": 0.0,
+      "error": null
+    },
+    {
+      "case_id": "div_000001:original",
+      "problem_id": "div_000001",
+      "mode": "original",
+      "source": "llm-fallback",
+      "correct": true,
+      "answer": "To determine how many positive whole-number divisors the number 1 has, we can follow these logical steps:\n\n### 1. Definition of a Divisor\nA positive whole number $d$ is a divisor of a number $n$ if $n$ can be divided by $d$ without leaving a remainder. In other words, there exists a whole number $k$ such that:\n$$ n = d \\times k $$\n\n### 2. Applying the Definition to $n = 1$\nWe are looking for positive whole numbers $d$ such that:\n$$ 1 = d \\times k $$\nwhere $d$ and $k$ are positive whole numbers (integers $\\ge 1$).\n\nLet's test the possible values for $d$:\n*   If $d = 1$, then $1 = 1 \\times 1$. This works because $1$ is a positive whole number.\n*   If $d = 2$, then $1 = 2 \\times k \\implies k = 0.5$. Since $k$ must be a whole number, this does not work.\n*   For any $d > 1$, the product $d \\times k$ will be at least $d \\times 1 = d$, which is greater than 1. Therefore, no integer $d > 1$ can divide 1 evenly.\n\n### 3. Conclusion\nThe only positive whole number that divides 1 is 1 itself.\n\nTherefore, the number of positive whole-number divisors of 1 is **1**.",
+      "golden": "1",
+      "entry_score": null,
+      "ms": 0.0,
+      "error": null
+    },
+    {
+      "case_id": "div_000002:original",
+      "problem_id": "div_000002",
+      "mode": "original",
+      "source": "llm-fallback",
+      "correct": true,
+      "answer": "To determine the number of positive whole-number divisors of the number 2, we can follow these steps:\n\n1.  **Identify the number**: The number in question is $2$.\n2.  **Definition of a divisor**: A positive whole-number divisor of an integer $n$ is a positive integer $d$ such that $n$ divided by $d$ results in an integer (i.e., $d$ divides $n$ evenly).\n3.  **Test potential divisors**:\n    *   Does $1$ divide $2$? Yes, because $2 \\div 1 = 2$.\n    *   Does $2$ divide $2$? Yes, because $2 \\div 2 = 1$.\n    *   Any integer greater than $2$ cannot divide $2$ evenly to produce a positive whole number.\n\n4.  **List the divisors**: The positive whole-number divisors of $2$ are $1$ and $2$.\n\n5.  **Count the divisors**: There are exactly 2 such divisors.\n\n**Conclusion:**\n\nThe number 2 has **2** positive whole-number divisors.",
+      "golden": "2",
+      "entry_score": null,
+      "ms": 0.0,
+      "error": null
+    },
+    {
+      "case_id": "div_000007:original",
+      "problem_id": "div_000007",
+      "mode": "original",
+      "source": "llm-fallback",
+      "correct": false,
+      "answer": "To determine the number of positive whole-number divisors of 7, we follow these steps:\n\n1.  **Identify the number**: The number in question is 7.\n2.  **Check for primality**: A prime number is a whole number greater than 1 whose only positive divisors are 1 and itself.\n    *   7 is not divisible by 2, 3, or 4.\n    *   $\\sqrt{7} \\approx 2.64$. Since there are no prime numbers less than or equal to 2.64 (other than 2) that divide 7 evenly, 7 is a prime number.\n3.  **List the divisors**: Since 7 is a prime number, its only positive whole-number divisors are:\n    *   1\n    *   7\n\n**Conclusion:**\n\nThere are **2** positive whole-number divisors of 7.",
+      "golden": "2",
+      "entry_score": null,
+      "ms": 0.0,
+      "error": null
+    },
+    {
+      "case_id": "div_000100:original",
+      "problem_id": "div_000100",
+      "mode": "original",
+      "source": "llm-fallback",
+      "correct": true,
+      "answer": "To determine the number of positive whole-number divisors of 100, we can use the prime factorization method.\n\n### Step 1: Prime Factorization of 100\nFirst, we break down 100 into its prime factors:\n$$100 = 10 \\times 10 = (2 \\times 5) \\times (2 \\times 5) = 2^2 \\times 5^2$$\n\nSo, the prime factorization of 100 is:\n$$100 = 2^2 \\times 5^2$$\n\n### Step 2: Apply the Divisor Counting Formula\nIf the prime factorization of a number $n$ is given by $p_1^{e_1} \\times p_2^{e_2} \\times \\dots \\times p_k^{e_k}$, then the total number of positive divisors $d(n)$ is calculated by taking the product of one more than each of the exponents:\n$$d(n) = (e_1 + 1)(e_2 + 1)\\dots(e_k + 1)$$\n\nFor $100 = 2^2 \\times 5^2$:\n- The exponent of the prime base 2 is $2$.\n- The exponent of the prime base 5 is $2$.\n\nUsing the formula:\n$$d(100) = (2 + 1)(2 + 1)$$\n$$d(100) = 3 \\times 3$$\n$$d(100) = 9$$\n\n### Step 3: Verification by Listing\nLet's list the divisors to verify the result:\n1. $1 \\times 100 = 100$\n2. $2 \\times 50 = 100$\n3. $4 \\times 25 = 100$\n4. $5 \\times 20 = 100$\n5. $10 \\times 10 = 100$\n\nThe divisors are: **1, 2, 4, 5, 10, 20, 25, 50, 100**.\nCounting them, there are exactly 9 divisors.\n\n### Conclusion\nThe number of positive whole-number divisors",
+      "golden": "9",
+      "entry_score": null,
+      "ms": 0.0,
+      "error": null
+    },
+    {
+      "case_id": "div_065536:original",
+      "problem_id": "div_065536",
+      "mode": "original",
+      "source": "llm-fallback",
+      "correct": true,
+      "answer": "To determine the number of positive whole-number divisors of 65,536, we will follow these steps:\n\n### Step 1: Prime Factorization\nFirst, we need to express 65,536 as a product of prime numbers.\n\nWe recognize that 65,536 is a power of 2. Let's verify this by repeatedly dividing by 2 or recognizing powers of 2:\n$$2^{10} = 1,024$$\n$$2^{11} = 2,048$$\n$$2^{12} = 4,096$$\n$$2^{13} = 8,192$$\n$$2^{14} = 16,384$$\n$$2^{15} = 32,768$$\n$$2^{16} = 65,536$$\n\nSo, the prime factorization of 65,536 is:\n$$65,536 = 2^{16}$$\n\n### Step 2: Apply the Divisor Counting Formula\nThe number of divisors of an integer $n$ can be found using its prime factorization. If the prime factorization of $n$ is:\n$$n = p_1^{e_1} \\times p_2^{e_2} \\times \\dots \\times p_k^{e_k}$$\nthen the total number of positive divisors, denoted as $d(n)$, is given by:\n$$d(n) = (e_1 + 1)(e_2 + 1)\\dots(e_k + 1)$$\n\nIn this case, we have only one prime factor, $p_1 = 2$, with an exponent $e_1 = 16$.\n\n### Step 3: Calculate the Number of Divisors\nUsing the formula:\n$$d(65,536) = (16 + 1)$$\n$$d(65,536) = 17$$\n\nThe divisors are $2^0, 2^1, 2^2, \\dots, 2^{16}$, which corresponds to the exponents from 0 to 16 inclusive. There are $16 - 0 + 1 = 17$ such values.\n\n",
+      "golden": "17",
+      "entry_score": null,
+      "ms": 0.0,
+      "error": null
+    },
+    {
+      "case_id": "div_999983:original",
+      "problem_id": "div_999983",
+      "mode": "original",
+      "source": "llm-fallback",
+      "correct": false,
+      "answer": "To determine the number of positive whole-number divisors of 999,983, we must first find its prime factorization.\n\n### Step 1: Check for Small Prime Factors\n\nLet $N = 999,983$.\n\n1.  **Divisibility by 2**: The number ends in 3 (odd), so it is not divisible by 2.\n2.  **Divisibility by 3**: The sum of the digits is $9+9+9+9+8+3 = 47$. Since 47 is not divisible by 3, $N$ is not divisible by 3.\n3.  **Divisibility by 5**: The number does not end in 0 or 5, so it is not divisible by 5.\n4.  **Divisibility by 7**:\n    $999,983 \\div 7 = 142,854.71...$ (Not divisible)\n5.  **Divisibility by 11**:\n    Alternating sum of digits: $(9+9+8) - (9+9+3) = 26 - 21 = 5$. Since 5 is not divisible by 11, $N$ is not divisible by 11.\n6.  **Divisibility by 13**:\n    $999,983 \\div 13 = 76,921.76...$ (Not divisible)\n\nLet's look for a pattern or a specific algebraic structure.\nNotice that $999,983$ is close to $1,000,000$.\n$1,000,000 - 999,983 = 17$.\nSo, $N = 10^6 - 17$. This doesn't immediately suggest a simple factorization like difference of squares.\n\nLet's try checking primes up to $\\sqrt{999,983} \\approx 1000$.\n\nLet's test small primes systematically or look for a specific factor.\nLet's try dividing by 17:\n$999,983 \\div 17 = 58,822.52...$ (No)\n\nLet's try",
+      "golden": "2",
+      "entry_score": null,
+      "ms": 0.0,
+      "error": null
+    },
+    {
+      "case_id": "div_000012:original",
+      "problem_id": "div_000012",
+      "mode": "original",
+      "source": "llm-fallback",
+      "correct": true,
+      "answer": "To determine the number of positive whole-number divisors of 12, we can list them or use prime factorization.\n\n### Method 1: Listing the Divisors\nA divisor of 12 is a positive whole number that divides 12 evenly (with no remainder). Let's list them in pairs:\n1. $1 \\times 12 = 12$\n2. $2 \\times 6 = 12$\n3. $3 \\times 4 = 12$\n\nThe next integer is 4, which we have already listed. Therefore, the complete set of positive divisors is:\n$$1, 2, 3, 4, 6, 12$$\n\nCounting these numbers, we find there are **6** divisors.\n\n### Method 2: Prime Factorization\n1. Find the prime factorization of 12:\n   $$12 = 2^2 \\times 3^1$$\n2. Use the divisor counting formula. If the prime factorization of a number $n$ is $p_1^{e_1} \\times p_2^{e_2} \\times \\dots$, then the number of divisors $d(n)$ is given by:\n   $$d(n) = (e_1 + 1)(e_2 + 1)\\dots$$\n3. Apply the exponents from 12's factorization:\n   - The exponent of 2 is 2.\n   - The exponent of 3 is 1.\n   \n   $$d(12) = (2 + 1)(1 + 1) = 3 \\times 2 = 6$$\n\n### Conclusion\nThe number 12 has **6** positive whole-number divisors.",
+      "golden": "6",
+      "entry_score": null,
+      "ms": 0.0,
+      "error": null
+    },
+    {
+      "case_id": "div_000084:original",
+      "problem_id": "div_000084",
+      "mode": "original",
+      "source": "llm-fallback",
+      "correct": true,
+      "answer": "To find the number of positive whole-number divisors of 84, we can follow these steps:\n\n### Step 1: Prime Factorization\nFirst, we determine the prime factorization of 84.\n$$ 84 = 2 \\times 42 $$\n$$ 42 = 2 \\times 21 $$\n$$ 21 = 3 \\times 7 $$\n\nSo, the prime factorization of 84 is:\n$$ 84 = 2^2 \\times 3^1 \\times 7^1 $$\n\n### Step 2: Apply the Divisor Counting Formula\nIf the prime factorization of a number $n$ is given by $p_1^{e_1} \\times p_2^{e_2} \\times \\dots \\times p_k^{e_k}$, then the total number of divisors $d(n)$ is calculated by taking the product of one more than each of the exponents:\n$$ d(n) = (e_1 + 1)(e_2 + 1)\\dots(e_k + 1) $$\n\nFor $84 = 2^2 \\times 3^1 \\times 7^1$:\n- The exponent of 2 is $2$.\n- The exponent of 3 is $1$.\n- The exponent of 7 is $1$.\n\n### Step 3: Calculate the Product\n$$ d(84) = (2 + 1)(1 + 1)(1 + 1) $$\n$$ d(84) = 3 \\times 2 \\times 2 $$\n$$ d(84) = 12 $$\n\n### Verification (Listing the Divisors)\nLet's list them to verify:\n1. $1$\n2. $2$\n3. $3$\n4. $4$\n5. $6$\n6. $7$\n7. $12$\n8. $14$\n9. $21$\n10. $28$\n11. $42$\n12. $84$\n\nThere are exactly 12 divisors.\n\n### Conclusion\nThe number 84 has **12** positive whole-number divisors.",
+      "golden": "12",
+      "entry_score": null,
+      "ms": 0.0,
+      "error": null
+    },
+    {
+      "case_id": "gcd_3339_2961:original",
+      "problem_id": "gcd_3339_2961",
+      "mode": "original",
+      "source": "llm-fallback",
+      "correct": false,
+      "answer": "To find the greatest common divisor (GCD) of 3339 and 2961, we can use the **Euclidean Algorithm**. This method involves repeated division where we replace the larger number with the remainder of the division until the remainder is zero. The last non-zero remainder is the GCD.\n\n**Step 1:** Divide 3339 by 2961.\n$$3339 \\div 2961 = 1 \\text{ with a remainder of } 378$$\n$$(3339 = 1 \\times 2961 + 378)$$\n\n**Step 2:** Divide 2961 by the remainder 378.\n$$2961 \\div 378 = 7 \\text{ with a remainder of } 315$$\n$$(2961 = 7 \\times 378 + 315)$$\n*Check: $7 \\times 378 = 2646$; $2961 - 2646 = 315$*\n\n**Step 3:** Divide 378 by the remainder 315.\n$$378 \\div 315 = 1 \\text{ with a remainder of } 63$$\n$$(378 = 1 \\times 315 + 63)$$\n\n**Step 4:** Divide 315 by the remainder 63.\n$$315 \\div 63 = 5 \\text{ with a remainder of } 0$$\n$$(315 = 5 \\times 63 + 0)$$\n\nSince the remainder is now 0, the process stops. The last non-zero remainder is 63.\n\n**Verification via Prime Factorization:**\n*   $3339$: Sum of digits is $3+3+3+9=18$, so it is divisible by 9.\n    $3339 \\div 9 = 371$.\n    $371 = 7 \\times 53$.\n    So, $3339 = 3^2 \\times 7 \\times 53$.\n*   $2961$: Sum of digits is $2+9+6",
+      "golden": "63",
+      "entry_score": null,
+      "ms": 0.0,
+      "error": null
+    },
+    {
+      "case_id": "gcd_1491_2205:original",
+      "problem_id": "gcd_1491_2205",
+      "mode": "original",
+      "source": "llm-fallback",
+      "correct": true,
+      "answer": "To find the greatest common divisor (GCD) of 1491 and 2205, we can use the **Euclidean Algorithm**. This method involves repeated division where we replace the larger number with the remainder of the division until the remainder is zero. The last non-zero remainder is the GCD.\n\n### Step 1: Divide the larger number by the smaller number\n$$2205 \\div 1491 = 1 \\text{ with a remainder of } 714$$\n$$2205 = 1491 \\times 1 + 714$$\n\n### Step 2: Divide the previous divisor by the remainder\nNow, we divide 1491 by 714:\n$$1491 \\div 714 = 2 \\text{ with a remainder of } 63$$\n$$1491 = 714 \\times 2 + 63$$\n\n### Step 3: Divide the previous divisor by the new remainder\nNow, we divide 714 by 63:\n$$714 \\div 63 = 11 \\text{ with a remainder of } 21$$\n$$714 = 63 \\times 11 + 21$$\n\n### Step 4: Divide the previous divisor by the new remainder\nNow, we divide 63 by 21:\n$$63 \\div 21 = 3 \\text{ with a remainder of } 0$$\n$$63 = 21 \\times 3 + 0$$\n\n### Conclusion\nSince the remainder is now 0, the process stops. The last non-zero remainder is **21**.\n\nTherefore, the greatest common divisor of 1491 and 2205 is **21**.",
+      "golden": "21",
+      "entry_score": null,
+      "ms": 0.0,
+      "error": null
+    },
+    {
+      "case_id": "gcd_48_18:original",
+      "problem_id": "gcd_48_18",
+      "mode": "original",
+      "source": "llm-fallback",
+      "correct": true,
+      "answer": "To find the greatest common divisor (GCD) of 48 and 18, we can use the method of listing factors or the Euclidean algorithm.\n\n### Method 1: Listing Factors\n\n1.  **Find the factors of 48:**\n    The numbers that divide 48 evenly are:\n    $1, 2, 3, 4, 6, 8, 12, 16, 24, 48$\n\n2.  **Find the factors of 18:**\n    The numbers that divide 18 evenly are:\n    $1, 2, 3, 6, 9, 18$\n\n3.  **Identify the common factors:**\n    The numbers that appear in both lists are:\n    $1, 2, 3, 6$\n\n4.  **Determine the greatest common factor:**\n    The largest number in the list of common factors is **6**.\n\n### Method 2: Prime Factorization\n\n1.  **Prime factorization of 48:**\n    $$48 = 2 \\times 24 = 2 \\times 2 \\times 12 = 2 \\times 2 \\times 2 \\times 6 = 2 \\times 2 \\times 2 \\times 2 \\times 3 = 2^4 \\times 3^1$$\n\n2.  **Prime factorization of 18:**\n    $$18 = 2 \\times 9 = 2 \\times 3 \\times 3 = 2^1 \\times 3^2$$\n\n3.  **Multiply the lowest power of common prime factors:**\n    *   The common prime factor is 2. The lowest power is $2^1$.\n    *   The common prime factor is 3. The lowest power is $3^1$.\n    *   $\\text{GCD} = 2^1 \\times 3^1 = 2 \\times 3 = 6$\n\n### Method 3: Euclidean Algorithm\n\n1.  Divide 48 by 18:\n    $$48 = 18 \\times 2 + 12$$\n2.  Divide 18 by the remainder (12):\n    $$18 = 12 \\times 1 + 6$$",
+      "golden": "6",
+      "entry_score": null,
+      "ms": 0.0,
+      "error": null
+    },
+    {
+      "case_id": "gcd_100_75:original",
+      "problem_id": "gcd_100_75",
+      "mode": "original",
+      "source": "llm-fallback",
+      "correct": true,
+      "answer": "To find the greatest common divisor (GCD) of 100 and 75, we can use the method of prime factorization or the Euclidean algorithm.\n\n### Method 1: Prime Factorization\n\n1.  **Find the prime factors of 100:**\n    $$100 = 10 \\times 10 = (2 \\times 5) \\times (2 \\times 5) = 2^2 \\times 5^2$$\n\n2.  **Find the prime factors of 75:**\n    $$75 = 3 \\times 25 = 3 \\times 5 \\times 5 = 3^1 \\times 5^2$$\n\n3.  **Identify the common factors:**\n    The common prime factor is $5$.\n    The lowest power of $5$ present in both factorizations is $5^2$.\n\n4.  **Calculate the GCD:**\n    $$\\text{GCD}(100, 75) = 5^2 = 25$$\n\n### Method 2: Euclidean Algorithm\n\n1.  Divide the larger number by the smaller number:\n    $$100 \\div 75 = 1 \\text{ with a remainder of } 25$$\n    $$(100 = 75 \\times 1 + 25)$$\n\n2.  Now, divide the previous divisor (75) by the remainder (25):\n    $$75 \\div 25 = 3 \\text{ with a remainder of } 0$$\n    $$(75 = 25 \\times 3 + 0)$$\n\n3.  Since the remainder is 0, the last non-zero remainder is the GCD.\n    $$\\text{GCD} = 25$$\n\n### Conclusion\n\nThe greatest common divisor of 100 and 75 is **25**.",
+      "golden": "25",
+      "entry_score": null,
+      "ms": 0.0,
+      "error": null
+    },
+    {
+      "case_id": "gcd_196_42:original",
+      "problem_id": "gcd_196_42",
+      "mode": "original",
+      "source": "llm-fallback",
+      "correct": false,
+      "answer": "To find the greatest common divisor (GCD) of 196 and 42, we can use the **Euclidean Algorithm** or **Prime Factorization**. Here, I will demonstrate both methods to ensure accuracy.\n\n### Method 1: Euclidean Algorithm\n\nThe Euclidean Algorithm involves dividing the larger number by the smaller number, then replacing the larger number with the smaller number and the smaller number with the remainder, repeating until the remainder is 0. The last non-zero remainder is the GCD.\n\n1.  **Divide 196 by 42:**\n    $$196 \\div 42 = 4 \\text{ with a remainder of } 28$$\n    $$(196 = 42 \\times 4 + 28)$$\n\n2.  **Divide 42 by 28:**\n    $$42 \\div 28 = 1 \\text{ with a remainder of } 14$$\n    $$(42 = 28 \\times 1 + 14)$$\n\n3.  **Divide 28 by 14:**\n    $$28 \\div 14 = 2 \\text{ with a remainder of } 0$$\n    $$(28 = 14 \\times 2 + 0)$$\n\nSince the remainder is now 0, the last non-zero remainder is **14**.\n\n### Method 2: Prime Factorization\n\nWe break down each number into its prime factors.\n\n1.  **Prime factorization of 42:**\n    $$42 = 2 \\times 21 = 2 \\times 3 \\times 7$$\n\n2.  **Prime factorization of 196:**\n    $$196 = 2 \\times 98 = 2 \\times 2 \\times 49 = 2^2 \\times 7^2$$\n\n3.  **Identify common factors:**\n    The common prime factors are 2 and 7. We take the lowest power of each common prime factor:\n    -   For 2: The lowest power is $2^1$ (from 42).\n    -   For 7: The lowest power is $7^1$ (from 42).\n\n4.  **Calculate the GCD:**\n    $$\\text{G",
+      "golden": "14",
+      "entry_score": null,
+      "ms": 0.0,
+      "error": null
+    },
+    {
+      "case_id": "gcd_12_8:original",
+      "problem_id": "gcd_12_8",
+      "mode": "original",
+      "source": "llm-fallback",
+      "correct": true,
+      "answer": "To find the greatest common divisor (GCD) of 12 and 8, we can list the factors of each number and identify the largest one they share.\n\n**Step 1: List the factors of 12**\nThe factors of 12 are:\n$$1, 2, 3, 4, 6, 12$$\n\n**Step 2: List the factors of 8**\nThe factors of 8 are:\n$$1, 2, 4, 8$$\n\n**Step 3: Identify the common factors**\nComparing the two lists, the common factors are:\n$$1, 2, 4$$\n\n**Step 4: Determine the greatest common factor**\nThe largest number in the list of common factors is 4.\n\n**Alternative Method: Prime Factorization**\n*   $12 = 2^2 \\times 3$\n*   $8 = 2^3$\n*   The GCD is the product of the lowest power of common prime factors: $2^2 = 4$.\n\n**Conclusion**\nThe greatest common divisor of 12 and 8 is **4**.",
+      "golden": "4",
+      "entry_score": null,
+      "ms": 0.0,
+      "error": null
+    },
+    {
+      "case_id": "gcd_1001_455:original",
+      "problem_id": "gcd_1001_455",
+      "mode": "original",
+      "source": "llm-fallback",
+      "correct": false,
+      "answer": "To find the greatest common divisor (GCD) of 1001 and 455, we can use the **Euclidean Algorithm** or **Prime Factorization**. Here, we will demonstrate both methods to ensure accuracy.\n\n### Method 1: Euclidean Algorithm\n\nThe Euclidean Algorithm involves repeated division where we divide the larger number by the smaller number and replace the larger number with the remainder until the remainder is 0. The last non-zero remainder is the GCD.\n\n1.  **Divide 1001 by 455:**\n    $$1001 \\div 455 = 2 \\text{ with a remainder of } 91$$\n    $$(1001 = 455 \\times 2 + 91)$$\n\n2.  **Divide 455 by 91:**\n    $$455 \\div 91 = 5 \\text{ with a remainder of } 0$$\n    $$(455 = 91 \\times 5 + 0)$$\n\nSince the remainder is now 0, the divisor from the previous step is the GCD.\n\n**Result:** 91\n\n---\n\n### Method 2: Prime Factorization\n\nWe can also find the GCD by breaking down each number into its prime factors.\n\n1.  **Factorize 455:**\n    *   Ends in 5, so divisible by 5: $455 \\div 5 = 91$\n    *   91 is divisible by 7: $91 \\div 7 = 13$\n    *   13 is a prime number.\n    *   So, $455 = 5 \\times 7 \\times 13$\n\n2.  **Factorize 1001:**\n    *   Check small primes. Not divisible by 2, 3 (sum of digits=2), or 5.\n    *   Try 7: $1001 \\div 7 = 143$\n    *   Factorize 143. Not divisible by 7. Try 11: $143 \\div 11 = 13$\n    *   13 is a prime number.\n    *   So, $1001 = 7 \\",
+      "golden": "91",
+      "entry_score": null,
+      "ms": 0.0,
+      "error": null
+    },
+    {
+      "case_id": "gcd_65536_4096:original",
+      "problem_id": "gcd_65536_4096",
+      "mode": "original",
+      "source": "llm-fallback",
+      "correct": true,
+      "answer": "To find the greatest common divisor (GCD) of 65536 and 4096, we can use prime factorization or the Euclidean algorithm.\n\n### Method 1: Prime Factorization\n\nBoth numbers are powers of 2. Let's express them in terms of their prime factors:\n\n1.  **Factorize 4096:**\n    $$4096 = 2^{12}$$\n    (Check: $2^{10} = 1024$, $2^{11} = 2048$, $2^{12} = 4096$)\n\n2.  **Factorize 65536:**\n    $$65536 = 2^{16}$$\n    (Check: $2^{16} = 65536$)\n\nThe GCD of two numbers expressed as powers of the same prime is the power with the smaller exponent.\n\n$$ \\text{GCD}(2^{16}, 2^{12}) = 2^{\\min(16, 12)} = 2^{12} $$\n\n$$ 2^{12} = 4096 $$\n\n### Method 2: Euclidean Algorithm\n\nThe Euclidean algorithm states that $\\text{GCD}(a, b) = \\text{GCD}(b, a \\pmod b)$.\n\n1.  Let $a = 65536$ and $b = 4096$.\n2.  Calculate $65536 \\pmod{4096}$:\n    $$ 65536 \\div 4096 = 16 \\text{ with a remainder of } 0 $$\n    $$ 65536 = 16 \\times 4096 + 0 $$\n\nSince the remainder is 0, the divisor at this step is the GCD.\n\n$$ \\text{GCD}(65536, 4096) = 4096 $$\n\n### Conclusion\n\nThe greatest common divisor of 65536 and 4096 is **4096**.",
+      "golden": "4096",
+      "entry_score": null,
+      "ms": 0.0,
+      "error": null
+    },
+    {
+      "case_id": "gcd_97_101:original",
+      "problem_id": "gcd_97_101",
+      "mode": "original",
+      "source": "llm-fallback",
+      "correct": false,
+      "answer": "To find the greatest common divisor (GCD) of 97 and 101, we can analyze the properties of these numbers.\n\n### Step 1: Check for Primality\nFirst, let's determine if 97 and 101 are prime numbers. A prime number is a natural number greater than 1 that has no positive divisors other than 1 and itself.\n\n**For 97:**\nWe check for divisibility by prime numbers less than $\\sqrt{97} \\approx 9.8$. The primes to check are 2, 3, 5, and 7.\n- **2**: 97 is odd, so it is not divisible by 2.\n- **3**: The sum of the digits is $9 + 7 = 16$, which is not divisible by 3.\n- **5**: 97 does not end in 0 or 5.\n- **7**: $97 \\div 7 = 13$ with a remainder of $6$ ($7 \\times 13 = 91$).\n\nSince 97 is not divisible by any of these primes, **97 is a prime number**.\n\n**For 101:**\nWe check for divisibility by prime numbers less than $\\sqrt{101} \\approx 10.05$. The primes to check are 2, 3, 5, and 7.\n- **2**: 101 is odd.\n- **3**: The sum of the digits is $1 + 0 + 1 = 2$, which is not divisible by 3.\n- **5**: 101 does not end in 0 or 5.\n- **7**: $101 \\div 7 = 14$ with a remainder of $3$ ($7 \\times 14 = 98$).\n\nSince 101 is not divisible by any of these primes, **101 is a prime number**.\n\n### Step 2: Determine the GCD\nThe greatest common divisor of two distinct prime numbers is always 1, because prime numbers have no factors other than 1 and themselves. Since 97 and 101 are distinct primes, they share no common factors other than 1.\n\nAlternatively, using the Euclidean Algorithm:\n1. $101 =",
+      "golden": "1",
+      "entry_score": null,
+      "ms": 0.0,
+      "error": null
+    },
+    {
+      "case_id": "gcd_210_132:original",
+      "problem_id": "gcd_210_132",
+      "mode": "original",
+      "source": "llm-fallback",
+      "correct": false,
+      "answer": "To find the greatest common divisor (GCD) of 210 and 132, we can use the **Euclidean Algorithm** or **Prime Factorization**. Here, I will demonstrate both methods to ensure accuracy.\n\n### Method 1: Euclidean Algorithm\n\nThe Euclidean Algorithm involves dividing the larger number by the smaller number, then replacing the larger number with the smaller number and the smaller number with the remainder, repeating until the remainder is 0. The last non-zero remainder is the GCD.\n\n1.  **Divide 210 by 132:**\n    $$210 = 132 \\times 1 + 78$$\n    (Remainder is 78)\n\n2.  **Divide 132 by 78:**\n    $$132 = 78 \\times 1 + 54$$\n    (Remainder is 54)\n\n3.  **Divide 78 by 54:**\n    $$78 = 54 \\times 1 + 24$$\n    (Remainder is 24)\n\n4.  **Divide 54 by 24:**\n    $$54 = 24 \\times 2 + 6$$\n    (Remainder is 6)\n\n5.  **Divide 24 by 6:**\n    $$24 = 6 \\times 4 + 0$$\n    (Remainder is 0)\n\nSince the remainder is now 0, the last non-zero remainder is **6**.\n\n### Method 2: Prime Factorization\n\nWe break down each number into its prime factors.\n\n1.  **Prime factorization of 210:**\n    $$210 = 10 \\times 21 = (2 \\times 5) \\times (3 \\times 7)$$\n    $$210 = 2^1 \\times 3^1 \\times 5^1 \\times 7^1$$\n\n2.  **Prime factorization of 132:**\n    $$132 = 2 \\times 66 = 2 \\times 2 \\times 33 = 2 \\times 2 \\times 3 \\times 11$$\n    $$132 = 2^2 \\times ",
+      "golden": "6",
+      "entry_score": null,
+      "ms": 0.0,
+      "error": null
+    },
+    {
+      "case_id": "gcd_123456_54321:original",
+      "problem_id": "gcd_123456_54321",
+      "mode": "original",
+      "source": "llm-fallback",
+      "correct": false,
+      "answer": "To find the greatest common divisor (GCD) of 123,456 and 54,321, we can use the **Euclidean Algorithm**. This algorithm is based on the principle that the GCD of two numbers also divides their difference.\n\nThe steps are as follows:\n1.  Divide the larger number by the smaller number to find the remainder.\n2.  Replace the larger number with the smaller number and the smaller number with the remainder.\n3.  Repeat the process until the remainder is 0.\n4.  The last non-zero remainder is the GCD.\n\n### Step-by-Step Calculation\n\n**Step 1:** Divide 123,456 by 54,321.\n$$123,456 \\div 54,321 = 2 \\text{ with a remainder of } 14,814$$\n$$(123,456 = 2 \\times 54,321 + 14,814)$$\n\n**Step 2:** Divide 54,321 by 14,814.\n$$54,321 \\div 14,814 = 3 \\text{ with a remainder of } 9,879$$\n$$(54,321 = 3 \\times 14,814 + 9,879)$$\n\n**Step 3:** Divide 14,814 by 9,879.\n$$14,814 \\div 9,879 = 1 \\text{ with a remainder of } 4,935$$\n$$(14,814 = 1 \\times 9,879 + 4,935)$$\n\n**Step 4:** Divide 9,879 by 4,935.\n$$9,879 \\div 4,935 = 2 \\text{ with a remainder of } 9$$\n$$(9,879 = 2 \\times 4,935 + 9)$$\n\n**Step 5:** Divide 4,935 by 9.\n$$4,935 \\div 9 = 548 \\text{ with",
+      "golden": "3",
+      "entry_score": null,
+      "ms": 0.0,
+      "error": null
+    },
+    {
+      "case_id": "gcd_720_96:original",
+      "problem_id": "gcd_720_96",
+      "mode": "original",
+      "source": "llm-fallback",
+      "correct": false,
+      "answer": "To find the greatest common divisor (GCD) of 720 and 96, we can use the **Euclidean Algorithm** or **Prime Factorization**. Here, I will demonstrate both methods to ensure accuracy.\n\n### Method 1: The Euclidean Algorithm\n\nThe Euclidean Algorithm involves dividing the larger number by the smaller number, then replacing the larger number with the smaller number and the smaller number with the remainder, repeating until the remainder is 0. The last non-zero remainder is the GCD.\n\n1.  **Divide 720 by 96:**\n    $$720 \\div 96 = 7 \\text{ with a remainder of } 48$$\n    $$(720 = 96 \\times 7 + 48)$$\n\n2.  **Divide 96 by 48:**\n    $$96 \\div 48 = 2 \\text{ with a remainder of } 0$$\n    $$(96 = 48 \\times 2 + 0)$$\n\nSince the remainder is now 0, the divisor in the previous step is the GCD.\n\n**Result:** 48\n\n---\n\n### Method 2: Prime Factorization\n\nWe break down each number into its prime factors.\n\n1.  **Prime factorization of 720:**\n    $$720 = 72 \\times 10 = (8 \\times 9) \\times (2 \\times 5)$$\n    $$720 = (2^3 \\times 3^2) \\times (2 \\times 5)$$\n    $$720 = 2^4 \\times 3^2 \\times 5^1$$\n\n2.  **Prime factorization of 96:**\n    $$96 = 32 \\times 3 = 2^5 \\times 3^1$$\n\n3.  **Identify common factors with the lowest exponents:**\n    *   For prime base **2**: The lowest exponent is $\\min(4, 5) = 4$. So, $2^4$.\n    *   For prime base **3**: The lowest exponent is $\\min(2, 1) = 1$. So, $3^1$.\n    *   For prime base **5**: It only appears in 720",
+      "golden": "48",
+      "entry_score": null,
+      "ms": 0.0,
+      "error": null
+    },
+    {
+      "case_id": "gcd_63_147_105:original",
+      "problem_id": "gcd_63_147_105",
+      "mode": "original",
+      "source": "llm-fallback",
+      "correct": false,
+      "answer": "To find the greatest common divisor (GCD) of 63, 147, and 105, we can use the method of prime factorization.\n\n### Step 1: Find the prime factorization of each number\n\n**1. Factorize 63:**\n*   $63$ is divisible by $9$ and $7$.\n*   $9 = 3^2$\n*   $7$ is prime.\n*   So, $63 = 3^2 \\times 7$\n\n**2. Factorize 147:**\n*   The sum of the digits is $1+4+7=12$, which is divisible by $3$, so $147$ is divisible by $3$.\n*   $147 \\div 3 = 49$\n*   $49 = 7^2$\n*   So, $147 = 3 \\times 7^2$\n\n**3. Factorize 105:**\n*   $105$ ends in $5$, so it is divisible by $5$.\n*   $105 \\div 5 = 21$\n*   $21 = 3 \\times 7$\n*   So, $105 = 3 \\times 5 \\times 7$\n\n### Step 2: Identify the common prime factors\n\nNow, we look for the prime factors that are present in **all three** numbers:\n\n*   $63 = \\mathbf{3}^2 \\times \\mathbf{7}$\n*   $147 = \\mathbf{3} \\times \\mathbf{7}^2$\n*   $105 = \\mathbf{3} \\times 5 \\times \\mathbf{7}$\n\nThe common prime factors are $3$ and $7$.\n\n### Step 3: Determine the lowest power of each common prime factor\n\n*   For the prime factor **3**:\n    *   In 63, the power is $3^2$\n    *   In 147, the power is $3^1$\n    *   In 105, the power is $3^1$\n    *   The lowest power is $3^1$.\n\n*   For the prime factor **7**:",
+      "golden": "21",
+      "entry_score": null,
+      "ms": 0.0,
+      "error": null
+    },
+    {
+      "case_id": "gcd_120_80_60:original",
+      "problem_id": "gcd_120_80_60",
+      "mode": "original",
+      "source": "llm-fallback",
+      "correct": false,
+      "answer": "To find the greatest common divisor (GCD) of 120, 80, and 60, we can use the method of prime factorization.\n\n### Step 1: Find the prime factorization of each number\n\n**1. Factorize 120:**\n$$120 = 12 \\times 10 = (4 \\times 3) \\times (2 \\times 5) = (2^2 \\times 3) \\times (2 \\times 5)$$\n$$120 = 2^3 \\times 3^1 \\times 5^1$$\n\n**2. Factorize 80:**\n$$80 = 8 \\times 10 = (2^3) \\times (2 \\times 5)$$\n$$80 = 2^4 \\times 5^1$$\n\n**3. Factorize 60:**\n$$60 = 6 \\times 10 = (2 \\times 3) \\times (2 \\times 5)$$\n$$60 = 2^2 \\times 3^1 \\times 5^1$$\n\n### Step 2: Identify the common prime factors with the lowest exponents\n\nTo find the GCD, we take the product of the common prime factors raised to their lowest power present in all three factorizations.\n\n*   **Prime factor 2:**\n    *   In 120: $2^3$\n    *   In 80: $2^4$\n    *   In 60: $2^2$\n    *   Lowest power: $2^2$\n\n*   **Prime factor 3:**\n    *   In 120: $3^1$\n    *   In 80: $3^0$ (not present)\n    *   In 60: $3^1$\n    *   Since 3 is not a factor of 80, it is not a common factor.\n\n*   **Prime factor 5:**\n    *   In 120: $5^1$\n    *   In 80: $5^1$\n    *   In 60: $5^1$\n    *   Lowest power: $5^1$\n\n### Step 3: Calculate the GCD\n\n",
+      "golden": "20",
+      "entry_score": null,
+      "ms": 0.0,
+      "error": null
+    },
+    {
+      "case_id": "gcd_252_180_330:original",
+      "problem_id": "gcd_252_180_330",
+      "mode": "original",
+      "source": "llm-fallback",
+      "correct": false,
+      "answer": "To find the greatest common divisor (GCD) of 252, 180, and 330, we can use the method of prime factorization.\n\n### Step 1: Prime Factorization of Each Number\n\n**1. Factorize 252:**\n$$252 \\div 2 = 126$$\n$$126 \\div 2 = 63$$\n$$63 \\div 3 = 21$$\n$$21 \\div 3 = 7$$\n$$7 \\div 7 = 1$$\nSo, $252 = 2^2 \\times 3^2 \\times 7^1$\n\n**2. Factorize 180:**\n$$180 \\div 2 = 90$$\n$$90 \\div 2 = 45$$\n$$45 \\div 3 = 15$$\n$$15 \\div 3 = 5$$\n$$5 \\div 5 = 1$$\nSo, $180 = 2^2 \\times 3^2 \\times 5^1$\n\n**3. Factorize 330:**\n$$330 \\div 2 = 165$$\n$$165 \\div 3 = 55$$\n$$55 \\div 5 = 11$$\n$$11 \\div 11 = 1$$\nSo, $330 = 2^1 \\times 3^1 \\times 5^1 \\times 11^1$\n\n### Step 2: Identify Common Prime Factors\n\nTo find the GCD, we take the lowest power of each prime factor that appears in **all** three factorizations.\n\n*   **Prime factor 2:**\n    *   In 252: $2^2$\n    *   In 180: $2^2$\n    *   In 330: $2^1$\n    *   Lowest power: $2^1$\n\n*   **Prime factor 3:**\n    *   In 252: $3^2$\n    *   In 180: $3^2$\n    *   In 330: $3^1$\n    *   Lowest power: $3",
+      "golden": "6",
+      "entry_score": null,
+      "ms": 0.0,
+      "error": null
+    },
+    {
+      "case_id": "gcd_49_147_245:original",
+      "problem_id": "gcd_49_147_245",
+      "mode": "original",
+      "source": "llm-fallback",
+      "correct": true,
+      "answer": "To find the greatest common divisor (GCD) of 49, 147, and 245, we can use prime factorization.\n\n**Step 1: Find the prime factorization of each number.**\n\n1.  **For 49:**\n    $$49 = 7 \\times 7 = 7^2$$\n\n2.  **For 147:**\n    First, check for divisibility by small primes.\n    $1 + 4 + 7 = 12$, which is divisible by 3, so 147 is divisible by 3.\n    $$147 \\div 3 = 49$$\n    Since $49 = 7^2$, we have:\n    $$147 = 3 \\times 7^2$$\n\n3.  **For 245:**\n    The number ends in 5, so it is divisible by 5.\n    $$245 \\div 5 = 49$$\n    Since $49 = 7^2$, we have:\n    $$245 = 5 \\times 7^2$$\n\n**Step 2: Identify the common factors.**\n\nNow, look at the prime factorizations:\n*   $49 = 7^2$\n*   $147 = 3 \\times 7^2$\n*   $245 = 5 \\times 7^2$\n\nThe only prime factor common to all three numbers is $7$.\nThe lowest power of 7 present in all three factorizations is $7^2$ (since $7^2$ divides 49, $3 \\times 7^2$, and $5 \\times 7^2$).\n\n**Step 3: Calculate the GCD.**\n\n$$\\text{GCD}(49, 147, 245) = 7^2 = 49$$\n\n**Verification:**\n*   $49 \\div 49 = 1$\n*   $147 \\div 49 = 3$\n*   $245 \\div 49 = 5$\n\nSince 1, 3, and 5 share no common divisors other than 1, 49 is indeed the greatest common divisor.\n\n**Answer:**",
+      "golden": "49",
+      "entry_score": null,
+      "ms": 0.0,
+      "error": null
+    },
+    {
+      "case_id": "gcd_1000_750_500:original",
+      "problem_id": "gcd_1000_750_500",
+      "mode": "original",
+      "source": "llm-fallback",
+      "correct": false,
+      "answer": "To find the greatest common divisor (GCD) of 1000, 750, and 500, we can use prime factorization or the Euclidean algorithm. Here, we will use prime factorization as it is straightforward for these numbers.\n\n### Step 1: Prime Factorization\n\nLet's break down each number into its prime factors:\n\n1.  **1000**:\n    $$1000 = 10 \\times 100 = (2 \\times 5) \\times (10 \\times 10) = (2 \\times 5) \\times (2 \\times 5) \\times (2 \\times 5)$$\n    $$1000 = 2^3 \\times 5^3$$\n\n2.  **750**:\n    $$750 = 75 \\times 10 = (3 \\times 25) \\times (2 \\times 5) = 3 \\times 5^2 \\times 2 \\times 5$$\n    $$750 = 2^1 \\times 3^1 \\times 5^3$$\n\n3.  **500**:\n    $$500 = 5 \\times 100 = 5 \\times (10 \\times 10) = 5 \\times (2 \\times 5) \\times (2 \\times 5)$$\n    $$500 = 2^2 \\times 5^3$$\n\n### Step 2: Identify Common Factors\n\nTo find the GCD, we take the lowest power of each prime factor that appears in **all** three factorizations.\n\n*   **Prime factor 2**:\n    *   In 1000: $2^3$\n    *   In 750: $2^1$\n    *   In 500: $2^2$\n    *   Lowest power: $2^1$\n\n*   **Prime factor 3**:\n    *   In 1000: Not present ($3^0$)\n    *   In 750: $3^1$\n    *   In 500: Not present ($3^0$)\n    *   Lowest power: $3^0 = 1$ (Since it",
+      "golden": "250",
+      "entry_score": null,
+      "ms": 0.0,
+      "error": null
+    },
+    {
+      "case_id": "gcd_91_143_187:original",
+      "problem_id": "gcd_91_143_187",
+      "mode": "original",
+      "source": "llm-fallback",
+      "correct": false,
+      "answer": "To find the greatest common divisor (GCD) of 91, 143, and 187, we will determine the prime factorization of each number and identify the common factors.\n\n### Step 1: Prime Factorization of 91\nWe check for divisibility by small prime numbers:\n- It is not divisible by 2 (odd).\n- The sum of digits is $9+1=10$, so it is not divisible by 3.\n- It does not end in 0 or 5, so it is not divisible by 5.\n- Let's try 7: $91 \\div 7 = 13$.\n- 13 is a prime number.\n\nSo, the prime factorization of 91 is:\n$$91 = 7 \\times 13$$\n\n### Step 2: Prime Factorization of 143\nWe check for divisibility by small prime numbers:\n- It is not divisible by 2, 3 (sum of digits $1+4+3=8$), or 5.\n- Let's try 7: $143 \\div 7 \\approx 20.4$ (not an integer).\n- Let's try 11: $143 \\div 11 = 13$.\n- 13 is a prime number.\n\nSo, the prime factorization of 143 is:\n$$143 = 11 \\times 13$$\n\n### Step 3: Prime Factorization of 187\nWe check for divisibility by small prime numbers:\n- It is not divisible by 2, 3 (sum of digits $1+8+7=16$), or 5.\n- Let's try 7: $187 \\div 7 \\approx 26.7$ (not an integer).\n- Let's try 11: $187 \\div 11 = 17$.\n- 17 is a prime number.\n\nSo, the prime factorization of 187 is:\n$$187 = 11 \\times 17$$\n\n### Step 4: Identify Common Factors\nNow we compare the prime factors of all three numbers:\n- $91 = 7 \\times \\mathbf{13}$\n",
+      "golden": "1",
+      "entry_score": null,
+      "ms": 0.0,
+      "error": null
+    }
+  ],
+  "summary": {
+    "c_acc_divisors": 1.0,
+    "s_acc_divisors": 0.75,
+    "c_acc_gcd": 1.0,
+    "s_acc_gcd": 0.3333,
+    "c_acc_overall": 1.0,
+    "s_acc_overall": 0.5,
+    "gcd_build_s": 35.3,
+    "serve_avg_ms": 5029.0,
+    "total_tokens": 32195
+  }
+}

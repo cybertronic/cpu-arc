@@ -1,0 +1,17 @@
+{
+  "benchmark": "divisors-synthetic",
+  "n_cases": 12,
+  "by_mode": {
+    "original": {
+      "n": 12,
+      "correct": 12,
+      "acc": 1.0
+    }
+  },
+  "s_acc": 0.75,
+  "c_acc": 1.0,
+  "cache_hit_rate": 1.0,
+  "build_cost_tokens": 5499,
+  "serve_cost_tokens": 0,
+  "amortized_build_per_hit": 458.2
+}
