@@ -122,24 +122,33 @@ class EntryStore:
             self._load()
 
     def register(self, description: str, root_function_id: str,
-                 param_descriptions: list[str]) -> None:
+                 param_descriptions: list[str], family: str | None = None) -> None:
         self.entries.append({
             "description": description,
             "vec": self.embedder.embed(description),
             "root_function_id": root_function_id,
             "params": param_descriptions,
+            "family": family,
         })
         if self.path:
             self._save()
 
     def search(self, query: str) -> tuple[dict | None, float]:
-        if not self.entries:
+        entries, scores = self.scores_all(query)
+        if not entries:
             return None, 0.0
+        i = int(np.argmax(scores))
+        return entries[i], float(scores[i])
+
+    def scores_all(self, query: str) -> tuple[list[dict], list[float]]:
+        """Embed the query and score it against every entry (no threshold).
+        Used by the gateway for cross-family ambiguity checks."""
+        if not self.entries:
+            return [], []
         qv = self.embedder.embed(query)
         vecs = np.stack([e["vec"] for e in self.entries])
         scores = vecs @ qv
-        i = int(np.argmax(scores))
-        return self.entries[i], float(scores[i])
+        return self.entries, [float(s) for s in scores]
 
     def _save(self) -> None:
         assert self.path is not None
@@ -148,26 +157,31 @@ class EntryStore:
         try:
             conn.execute("CREATE TABLE IF NOT EXISTS entries ("
                          "rowid INTEGER PRIMARY KEY, description TEXT, root TEXT, "
-                         "params TEXT, vec BLOB)")
-            # Migrate pre-vector schema in place (old table lacks the vec column;
-            # CREATE TABLE IF NOT EXISTS above is a no-op on an existing table).
+                         "params TEXT, vec BLOB, family TEXT)")
+            # Migrate older schemas in place (CREATE TABLE IF NOT EXISTS is a
+            # no-op on an existing table, so missing columns are backfilled).
             cols = {r[1] for r in conn.execute("PRAGMA table_info(entries)")}
             if "vec" not in cols:
                 conn.execute("ALTER TABLE entries RENAME TO entries_old")
                 conn.execute("CREATE TABLE entries ("
                              "rowid INTEGER PRIMARY KEY, description TEXT, "
-                             "root TEXT, params TEXT, vec BLOB)")
+                             "root TEXT, params TEXT, vec BLOB, family TEXT)")
                 conn.execute("INSERT INTO entries (description, root, params) "
                              "SELECT description, root, params FROM entries_old")
                 conn.execute("DROP TABLE entries_old")
+                cols = {"rowid", "description", "root", "params", "vec", "family"}
+            elif "family" not in cols:
+                conn.execute("ALTER TABLE entries ADD COLUMN family TEXT")
             conn.execute("DELETE FROM entries")
             for e in self.entries:
                 vec = e.get("vec")
-                conn.execute("INSERT INTO entries (description, root, params, vec) "
-                             "VALUES (?,?,?,?)",
+                conn.execute("INSERT INTO entries "
+                             "(description, root, params, vec, family) "
+                             "VALUES (?,?,?,?,?)",
                              (e["description"], e["root_function_id"],
                               json.dumps(e["params"]),
-                              vec.tobytes() if vec is not None else None))
+                              vec.tobytes() if vec is not None else None,
+                              e.get("family")))
             conn.commit()
         finally:
             conn.close()
@@ -180,13 +194,15 @@ class EntryStore:
         conn = sqlite3.connect(self.path)
         try:
             cols = {r[1] for r in conn.execute("PRAGMA table_info(entries)")}
-            sel = "vec" if "vec" in cols else "NULL"
+            sel_vec = "vec" if "vec" in cols else "NULL"
+            sel_fam = "family" if "family" in cols else "NULL"
             rows = conn.execute(
-                f"SELECT description, root, params, {sel} FROM entries").fetchall()
+                f"SELECT description, root, params, {sel_vec}, {sel_fam} FROM entries"
+            ).fetchall()
         finally:
             conn.close()
-        need_upgrade = "vec" not in cols
-        for desc, root, params, blob in rows:
+        need_upgrade = ("vec" not in cols) or ("family" not in cols)
+        for desc, root, params, blob, fam in rows:
             vec = np.frombuffer(blob, dtype=np.float32) if blob else None
             if vec is None:
                 vec = self.embedder.embed(desc)
@@ -195,6 +211,7 @@ class EntryStore:
                 "vec": vec,
                 "root_function_id": root,
                 "params": json.loads(params),
+                "family": fam,
             })
         if need_upgrade and self.entries:
-            self._save()  # persist vectors for next cold start
+            self._save()  # persist vectors/family for next cold start

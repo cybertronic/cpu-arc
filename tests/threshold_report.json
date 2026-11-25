@@ -1,0 +1,1556 @@
+{
+  "generated_at": "2026-11-24T23:10:48-0800",
+  "stores": {
+    "divisors": 2,
+    "gcd": 4,
+    "lcm": 2
+  },
+  "global_threshold": 0.72,
+  "landscape": {
+    "divisors": {
+      "in_family_all": {
+        "n": 24,
+        "min": 0.6932,
+        "p10": 0.72693,
+        "med": 0.751,
+        "max": 1.0
+      },
+      "in_family_full": {
+        "n": 12,
+        "min": 0.7291,
+        "p10": 0.74049,
+        "med": 0.7844,
+        "max": 1.0
+      },
+      "in_family_short": {
+        "n": 12,
+        "min": 0.6932,
+        "p10": 0.6992700000000001,
+        "med": 0.73675,
+        "max": 0.9774
+      },
+      "max_cross_score": 0.6833,
+      "max_cross_from": "gcd/two-int: What is the greatest common divisor of 72 and 96?"
+    },
+    "gcd": {
+      "in_family_all": {
+        "n": 14,
+        "min": 0.579,
+        "p10": 0.60897,
+        "med": 0.6529499999999999,
+        "max": 0.7329
+      },
+      "in_family_full": {
+        "n": 0
+      },
+      "in_family_short": {
+        "n": 0
+      },
+      "max_cross_score": 0.6387,
+      "max_cross_from": "divisors/short: How many divisors does 999983 have?"
+    },
+    "lcm": {
+      "in_family_all": {
+        "n": 16,
+        "min": 0.6513,
+        "p10": 0.6782,
+        "med": 0.73045,
+        "max": 1.0
+      },
+      "in_family_full": {
+        "n": 8,
+        "min": 0.6953,
+        "p10": 0.70951,
+        "med": 0.7506,
+        "max": 1.0
+      },
+      "in_family_short": {
+        "n": 8,
+        "min": 0.6513,
+        "p10": 0.6608200000000001,
+        "med": 0.71315,
+        "max": 0.9621
+      },
+      "max_cross_score": 0.922,
+      "max_cross_from": "gcd/two-int: What is the greatest common divisor of 48 and 180?"
+    }
+  },
+  "confusion_at_T": {
+    "divisors": {
+      "divisors": 20,
+      "miss": 2,
+      "lcm": 2
+    },
+    "gcd": {
+      "miss": 10,
+      "lcm": 2,
+      "gcd": 2
+    },
+    "lcm": {
+      "lcm": 10,
+      "miss": 6
+    }
+  },
+  "sweep": {
+    "divisors": {
+      "perfect_max_threshold": 0.725,
+      "capture_style": "full",
+      "min_capture": 0.7291,
+      "min_full": 0.7291,
+      "max_cross": 0.6833,
+      "max_offtopic": 0.6765
+    },
+    "gcd": {
+      "perfect_max_threshold": null,
+      "capture_style": "all-in-family",
+      "min_capture": 0.579,
+      "min_full": null,
+      "max_cross": 0.6387,
+      "max_offtopic": 0.549
+    },
+    "lcm": {
+      "perfect_max_threshold": null,
+      "capture_style": "full",
+      "min_capture": 0.6953,
+      "min_full": 0.6953,
+      "max_cross": 0.922,
+      "max_offtopic": 0.5861
+    }
+  },
+  "queries": [
+    {
+      "family": "divisors",
+      "style": "full",
+      "q": "How many positive whole-number divisors does 196 have?",
+      "scores": {
+        "divisors": {
+          "score": 1.0,
+          "entry": "How many positive whole-number divisors does 196 have?",
+          "entry_family": "divisors"
+        },
+        "gcd": {
+          "score": 0.5788,
+          "entry": "Find the greatest common divisor of $3339$, $2961$, and $1491$.",
+          "entry_family": "gcd"
+        },
+        "lcm": {
+          "score": 0.5531,
+          "entry": "What is the least common multiple of 48 and 180?",
+          "entry_family": "lcm"
+        }
+      },
+      "top1": "divisors",
+      "top1_score": 1.0
+    },
+    {
+      "family": "divisors",
+      "style": "short",
+      "q": "How many divisors does 196 have?",
+      "scores": {
+        "divisors": {
+          "score": 0.9774,
+          "entry": "How many positive whole-number divisors does 196 have?",
+          "entry_family": "divisors"
+        },
+        "gcd": {
+          "score": 0.582,
+          "entry": "Find the greatest common divisor of $3339$, $2961$, and $1491$.",
+          "entry_family": "gcd"
+        },
+        "lcm": {
+          "score": 0.5576,
+          "entry": "What is the least common multiple of 48 and 180?",
+          "entry_family": "lcm"
+        }
+      },
+      "top1": "divisors",
+      "top1_score": 0.9774
+    },
+    {
+      "family": "divisors",
+      "style": "full",
+      "q": "How many positive whole-number divisors does 144 have?",
+      "scores": {
+        "divisors": {
+          "score": 0.7387,
+          "entry": "How many positive whole-number divisors does <NUMBER> have?",
+          "entry_family": "divisors"
+        },
+        "gcd": {
+          "score": 0.6147,
+          "entry": "Find the greatest common divisor of $3339$, $2961$, and $1491$.",
+          "entry_family": "gcd"
+        },
+        "lcm": {
+          "score": 0.5464,
+          "entry": "What is the least common multiple of 48 and 180?",
+          "entry_family": "lcm"
+        }
+      },
+      "top1": "divisors",
+      "top1_score": 0.7387
+    },
+    {
+      "family": "divisors",
+      "style": "short",
+      "q": "How many divisors does 144 have?",
+      "scores": {
+        "divisors": {
+          "score": 0.6932,
+          "entry": "How many positive whole-number divisors does <NUMBER> have?",
+          "entry_family": "divisors"
+        },
+        "gcd": {
+          "score": 0.6176,
+          "entry": "Find the greatest common divisor of $3339$, $2961$, and $1491$.",
+          "entry_family": "gcd"
+        },
+        "lcm": {
+          "score": 0.5526,
+          "entry": "What is the least common multiple of 48 and 180?",
+          "entry_family": "lcm"
+        }
+      },
+      "top1": "divisors",
+      "top1_score": 0.6932
+    },
+    {
+      "family": "divisors",
+      "style": "full",
+      "q": "How many positive whole-number divisors does 12 have?",
+      "scores": {
+        "divisors": {
+          "score": 0.8168,
+          "entry": "How many positive whole-number divisors does <NUMBER> have?",
+          "entry_family": "divisors"
+        },
+        "gcd": {
+          "score": 0.5512,
+          "entry": "Find the greatest common divisor of $3339$, $2961$, and $1491$.",
+          "entry_family": "gcd"
+        },
+        "lcm": {
+          "score": 0.5643,
+          "entry": "What is the least common multiple of <NUM1> and <NUM2>?",
+          "entry_family": "lcm"
+        }
+      },
+      "top1": "divisors",
+      "top1_score": 0.8168
+    },
+    {
+      "family": "divisors",
+      "style": "short",
+      "q": "How many divisors does 12 have?",
+      "scores": {
+        "divisors": {
+          "score": 0.7739,
+          "entry": "How many positive whole-number divisors does <NUMBER> have?",
+          "entry_family": "divisors"
+        },
+        "gcd": {
+          "score": 0.5605,
+          "entry": "Find the greatest common divisor of $3339$, $2961$, and $1491$.",
+          "entry_family": "gcd"
+        },
+        "lcm": {
+          "score": 0.5601,
+          "entry": "What is the least common multiple of <NUM1> and <NUM2>?",
+          "entry_family": "lcm"
+        }
+      },
+      "top1": "divisors",
+      "top1_score": 0.7739
+    },
+    {
+      "family": "divisors",
+      "style": "full",
+      "q": "How many positive whole-number divisors does 84 have?",
+      "scores": {
+        "divisors": {
+          "score": 0.786,
+          "entry": "How many positive whole-number divisors does <NUMBER> have?",
+          "entry_family": "divisors"
+        },
+        "gcd": {
+          "score": 0.5563,
+          "entry": "Find the greatest common divisor of $3339$, $2961$, and $1491$.",
+          "entry_family": "gcd"
+        },
+        "lcm": {
+          "score": 0.5798,
+          "entry": "What is the least common multiple of 48 and 180?",
+          "entry_family": "lcm"
+        }
+      },
+      "top1": "divisors",
+      "top1_score": 0.786
+    },
+    {
+      "family": "divisors",
+      "style": "short",
+      "q": "How many divisors does 84 have?",
+      "scores": {
+        "divisors": {
+          "score": 0.7401,
+          "entry": "How many positive whole-number divisors does <NUMBER> have?",
+          "entry_family": "divisors"
+        },
+        "gcd": {
+          "score": 0.5512,
+          "entry": "Find the greatest common divisor of $3339$, $2961$, and $1491$.",
+          "entry_family": "gcd"
+        },
+        "lcm": {
+          "score": 0.5813,
+          "entry": "What is the least common multiple of 48 and 180?",
+          "entry_family": "lcm"
+        }
+      },
+      "top1": "divisors",
+      "top1_score": 0.7401
+    },
+    {
+      "family": "divisors",
+      "style": "full",
+      "q": "How many positive whole-number divisors does 360 have?",
+      "scores": {
+        "divisors": {
+          "score": 0.777,
+          "entry": "How many positive whole-number divisors does 196 have?",
+          "entry_family": "divisors"
+        },
+        "gcd": {
+          "score": 0.552,
+          "entry": "Find the greatest common divisor of $3339$, $2961$, and $1491$.",
+          "entry_family": "gcd"
+        },
+        "lcm": {
+          "score": 0.5903,
+          "entry": "What is the least common multiple of 48 and 180?",
+          "entry_family": "lcm"
+        }
+      },
+      "top1": "divisors",
+      "top1_score": 0.777
+    },
+    {
+      "family": "divisors",
+      "style": "short",
+      "q": "How many divisors does 360 have?",
+      "scores": {
+        "divisors": {
+          "score": 0.7334,
+          "entry": "How many positive whole-number divisors does 196 have?",
+          "entry_family": "divisors"
+        },
+        "gcd": {
+          "score": 0.5465,
+          "entry": "Find the greatest common divisor of $3339$, $2961$, and $1491$.",
+          "entry_family": "gcd"
+        },
+        "lcm": {
+          "score": 0.5917,
+          "entry": "What is the least common multiple of 48 and 180?",
+          "entry_family": "lcm"
+        }
+      },
+      "top1": "divisors",
+      "top1_score": 0.7334
+    },
+    {
+      "family": "divisors",
+      "style": "full",
+      "q": "How many positive whole-number divisors does 1000 have?",
+      "scores": {
+        "divisors": {
+          "score": 0.789,
+          "entry": "How many positive whole-number divisors does <NUMBER> have?",
+          "entry_family": "divisors"
+        },
+        "gcd": {
+          "score": 0.5723,
+          "entry": "Find the greatest common divisor of $3339$, $2961$, and $1491$.",
+          "entry_family": "gcd"
+        },
+        "lcm": {
+          "score": 0.5646,
+          "entry": "What is the least common multiple of <NUM1> and <NUM2>?",
+          "entry_family": "lcm"
+        }
+      },
+      "top1": "divisors",
+      "top1_score": 0.789
+    },
+    {
+      "family": "divisors",
+      "style": "short",
+      "q": "How many divisors does 1000 have?",
+      "scores": {
+        "divisors": {
+          "score": 0.7428,
+          "entry": "How many positive whole-number divisors does <NUMBER> have?",
+          "entry_family": "divisors"
+        },
+        "gcd": {
+          "score": 0.5764,
+          "entry": "Find the greatest common divisor of $3339$, $2961$, and $1491$.",
+          "entry_family": "gcd"
+        },
+        "lcm": {
+          "score": 0.5527,
+          "entry": "What is the least common multiple of <NUM1> and <NUM2>?",
+          "entry_family": "lcm"
+        }
+      },
+      "top1": "divisors",
+      "top1_score": 0.7428
+    },
+    {
+      "family": "divisors",
+      "style": "full",
+      "q": "How many positive whole-number divisors does 65536 have?",
+      "scores": {
+        "divisors": {
+          "score": 0.7291,
+          "entry": "How many positive whole-number divisors does <NUMBER> have?",
+          "entry_family": "divisors"
+        },
+        "gcd": {
+          "score": 0.5752,
+          "entry": "Find the greatest common divisor of $3339$, $2961$, and $1491$.",
+          "entry_family": "gcd"
+        },
+        "lcm": {
+          "score": 0.5244,
+          "entry": "What is the least common multiple of <NUM1> and <NUM2>?",
+          "entry_family": "lcm"
+        }
+      },
+      "top1": "divisors",
+      "top1_score": 0.7291
+    },
+    {
+      "family": "divisors",
+      "style": "short",
+      "q": "How many divisors does 65536 have?",
+      "scores": {
+        "divisors": {
+          "score": 0.6963,
+          "entry": "How many positive whole-number divisors does <NUMBER> have?",
+          "entry_family": "divisors"
+        },
+        "gcd": {
+          "score": 0.5791,
+          "entry": "Find the greatest common divisor of $3339$, $2961$, and $1491$.",
+          "entry_family": "gcd"
+        },
+        "lcm": {
+          "score": 0.5195,
+          "entry": "What is the least common multiple of <NUM1> and <NUM2>?",
+          "entry_family": "lcm"
+        }
+      },
+      "top1": "divisors",
+      "top1_score": 0.6963
+    },
+    {
+      "family": "divisors",
+      "style": "full",
+      "q": "How many positive whole-number divisors does 999983 have?",
+      "scores": {
+        "divisors": {
+          "score": 0.7566,
+          "entry": "How many positive whole-number divisors does <NUMBER> have?",
+          "entry_family": "divisors"
+        },
+        "gcd": {
+          "score": 0.6307,
+          "entry": "Find the greatest common divisor of $3339$, $2961$, and $1491$.",
+          "entry_family": "gcd"
+        },
+        "lcm": {
+          "score": 0.5793,
+          "entry": "What is the least common multiple of <NUM1> and <NUM2>?",
+          "entry_family": "lcm"
+        }
+      },
+      "top1": "divisors",
+      "top1_score": 0.7566
+    },
+    {
+      "family": "divisors",
+      "style": "short",
+      "q": "How many divisors does 999983 have?",
+      "scores": {
+        "divisors": {
+          "score": 0.7303,
+          "entry": "How many positive whole-number divisors does <NUMBER> have?",
+          "entry_family": "divisors"
+        },
+        "gcd": {
+          "score": 0.6387,
+          "entry": "Find the greatest common divisor of $3339$, $2961$, and $1491$.",
+          "entry_family": "gcd"
+        },
+        "lcm": {
+          "score": 0.575,
+          "entry": "What is the least common multiple of <NUM1> and <NUM2>?",
+          "entry_family": "lcm"
+        }
+      },
+      "top1": "divisors",
+      "top1_score": 0.7303
+    },
+    {
+      "family": "divisors",
+      "style": "full",
+      "q": "How many positive whole-number divisors does 210 have?",
+      "scores": {
+        "divisors": {
+          "score": 0.7852,
+          "entry": "How many positive whole-number divisors does <NUMBER> have?",
+          "entry_family": "divisors"
+        },
+        "gcd": {
+          "score": 0.5555,
+          "entry": "Find the greatest common divisor of $3339$, $2961$, and $1491$.",
+          "entry_family": "gcd"
+        },
+        "lcm": {
+          "score": 0.6083,
+          "entry": "What is the least common multiple of 48 and 180?",
+          "entry_family": "lcm"
+        }
+      },
+      "top1": "divisors",
+      "top1_score": 0.7852
+    },
+    {
+      "family": "divisors",
+      "style": "short",
+      "q": "How many divisors does 210 have?",
+      "scores": {
+        "divisors": {
+          "score": 0.7454,
+          "entry": "How many positive whole-number divisors does <NUMBER> have?",
+          "entry_family": "divisors"
+        },
+        "gcd": {
+          "score": 0.5545,
+          "entry": "Find the greatest common divisor of $3339$, $2961$, and $1491$.",
+          "entry_family": "gcd"
+        },
+        "lcm": {
+          "score": 0.6091,
+          "entry": "What is the least common multiple of 48 and 180?",
+          "entry_family": "lcm"
+        }
+      },
+      "top1": "divisors",
+      "top1_score": 0.7454
+    },
+    {
+      "family": "divisors",
+      "style": "full",
+      "q": "How many positive whole-number divisors does 720 have?",
+      "scores": {
+        "divisors": {
+          "score": 0.7729,
+          "entry": "How many positive whole-number divisors does <NUMBER> have?",
+          "entry_family": "divisors"
+        },
+        "gcd": {
+          "score": 0.5309,
+          "entry": "Find the greatest common divisor of $3339$, $2961$, and $1491$.",
+          "entry_family": "gcd"
+        },
+        "lcm": {
+          "score": 0.5851,
+          "entry": "What is the least common multiple of 48 and 180?",
+          "entry_family": "lcm"
+        }
+      },
+      "top1": "divisors",
+      "top1_score": 0.7729
+    },
+    {
+      "family": "divisors",
+      "style": "short",
+      "q": "How many divisors does 720 have?",
+      "scores": {
+        "divisors": {
+          "score": 0.726,
+          "entry": "How many positive whole-number divisors does <NUMBER> have?",
+          "entry_family": "divisors"
+        },
+        "gcd": {
+          "score": 0.5234,
+          "entry": "Find the greatest common divisor of $3339$, $2961$, and $1491$.",
+          "entry_family": "gcd"
+        },
+        "lcm": {
+          "score": 0.5845,
+          "entry": "What is the least common multiple of 48 and 180?",
+          "entry_family": "lcm"
+        }
+      },
+      "top1": "divisors",
+      "top1_score": 0.726
+    },
+    {
+      "family": "divisors",
+      "style": "full",
+      "q": "How many positive whole-number divisors does 48 have?",
+      "scores": {
+        "divisors": {
+          "score": 0.7836,
+          "entry": "How many positive whole-number divisors does <NUMBER> have?",
+          "entry_family": "divisors"
+        },
+        "gcd": {
+          "score": 0.5438,
+          "entry": "Find the greatest common divisor of $3339$, $2961$, and $1491$.",
+          "entry_family": "gcd"
+        },
+        "lcm": {
+          "score": 0.7497,
+          "entry": "What is the least common multiple of 48 and 180?",
+          "entry_family": "lcm"
+        }
+      },
+      "top1": "divisors",
+      "top1_score": 0.7836
+    },
+    {
+      "family": "divisors",
+      "style": "short",
+      "q": "How many divisors does 48 have?",
+      "scores": {
+        "divisors": {
+          "score": 0.7327,
+          "entry": "How many positive whole-number divisors does <NUMBER> have?",
+          "entry_family": "divisors"
+        },
+        "gcd": {
+          "score": 0.5362,
+          "entry": "Find the greatest common divisor of $3339$, $2961$, and $1491$.",
+          "entry_family": "gcd"
+        },
+        "lcm": {
+          "score": 0.7564,
+          "entry": "What is the least common multiple of 48 and 180?",
+          "entry_family": "lcm"
+        }
+      },
+      "top1": "lcm",
+      "top1_score": 0.7564
+    },
+    {
+      "family": "divisors",
+      "style": "full",
+      "q": "How many positive whole-number divisors does 180 have?",
+      "scores": {
+        "divisors": {
+          "score": 0.7861,
+          "entry": "How many positive whole-number divisors does <NUMBER> have?",
+          "entry_family": "divisors"
+        },
+        "gcd": {
+          "score": 0.5414,
+          "entry": "Find the greatest common divisor of $3339$, $2961$, and $1491$.",
+          "entry_family": "gcd"
+        },
+        "lcm": {
+          "score": 0.7475,
+          "entry": "What is the least common multiple of 48 and 180?",
+          "entry_family": "lcm"
+        }
+      },
+      "top1": "divisors",
+      "top1_score": 0.7861
+    },
+    {
+      "family": "divisors",
+      "style": "short",
+      "q": "How many divisors does 180 have?",
+      "scores": {
+        "divisors": {
+          "score": 0.7431,
+          "entry": "How many positive whole-number divisors does <NUMBER> have?",
+          "entry_family": "divisors"
+        },
+        "gcd": {
+          "score": 0.5392,
+          "entry": "Find the greatest common divisor of $3339$, $2961$, and $1491$.",
+          "entry_family": "gcd"
+        },
+        "lcm": {
+          "score": 0.7539,
+          "entry": "What is the least common multiple of 48 and 180?",
+          "entry_family": "lcm"
+        }
+      },
+      "top1": "lcm",
+      "top1_score": 0.7539
+    },
+    {
+      "family": "gcd",
+      "style": "two-int",
+      "q": "What is the greatest common divisor of 24 and 36?",
+      "scores": {
+        "divisors": {
+          "score": 0.6474,
+          "entry": "How many positive whole-number divisors does <NUMBER> have?",
+          "entry_family": "divisors"
+        },
+        "gcd": {
+          "score": 0.6573,
+          "entry": "Find the greatest common divisor of $3339$, $2961$, and $1491$.",
+          "entry_family": "gcd"
+        },
+        "lcm": {
+          "score": 0.6612,
+          "entry": "What is the least common multiple of <NUM1> and <NUM2>?",
+          "entry_family": "lcm"
+        }
+      },
+      "top1": "lcm",
+      "top1_score": 0.6612
+    },
+    {
+      "family": "gcd",
+      "style": "two-int",
+      "q": "What is the greatest common divisor of 48 and 180?",
+      "scores": {
+        "divisors": {
+          "score": 0.6388,
+          "entry": "How many positive whole-number divisors does <NUMBER> have?",
+          "entry_family": "divisors"
+        },
+        "gcd": {
+          "score": 0.6063,
+          "entry": "Find the greatest common divisor of $3339$, $2961$, and $1491$.",
+          "entry_family": "gcd"
+        },
+        "lcm": {
+          "score": 0.922,
+          "entry": "What is the least common multiple of 48 and 180?",
+          "entry_family": "lcm"
+        }
+      },
+      "top1": "lcm",
+      "top1_score": 0.922
+    },
+    {
+      "family": "gcd",
+      "style": "two-int",
+      "q": "What is the greatest common divisor of 105 and 175?",
+      "scores": {
+        "divisors": {
+          "score": 0.6271,
+          "entry": "How many positive whole-number divisors does <NUMBER> have?",
+          "entry_family": "divisors"
+        },
+        "gcd": {
+          "score": 0.6152,
+          "entry": "Find the greatest common divisor of <NUM1>, <NUM2>, and <NUM3>.",
+          "entry_family": "gcd"
+        },
+        "lcm": {
+          "score": 0.6348,
+          "entry": "What is the least common multiple of 48 and 180?",
+          "entry_family": "lcm"
+        }
+      },
+      "top1": "lcm",
+      "top1_score": 0.6348
+    },
+    {
+      "family": "gcd",
+      "style": "two-int",
+      "q": "What is the greatest common divisor of 84 and 126?",
+      "scores": {
+        "divisors": {
+          "score": 0.6359,
+          "entry": "How many positive whole-number divisors does <NUMBER> have?",
+          "entry_family": "divisors"
+        },
+        "gcd": {
+          "score": 0.6486,
+          "entry": "Find the greatest common divisor of $3339$, $2961$, and $1491$.",
+          "entry_family": "gcd"
+        },
+        "lcm": {
+          "score": 0.6508,
+          "entry": "What is the least common multiple of 48 and 180?",
+          "entry_family": "lcm"
+        }
+      },
+      "top1": "lcm",
+      "top1_score": 0.6508
+    },
+    {
+      "family": "gcd",
+      "style": "two-int",
+      "q": "What is the greatest common divisor of 72 and 96?",
+      "scores": {
+        "divisors": {
+          "score": 0.6833,
+          "entry": "How many positive whole-number divisors does 196 have?",
+          "entry_family": "divisors"
+        },
+        "gcd": {
+          "score": 0.6433,
+          "entry": "Find the greatest common divisor of $3339$, $2961$, and $1491$.",
+          "entry_family": "gcd"
+        },
+        "lcm": {
+          "score": 0.6431,
+          "entry": "What is the least common multiple of <NUM1> and <NUM2>?",
+          "entry_family": "lcm"
+        }
+      },
+      "top1": "divisors",
+      "top1_score": 0.6833
+    },
+    {
+      "family": "gcd",
+      "style": "two-int",
+      "q": "What is the greatest common divisor of 15 and 25?",
+      "scores": {
+        "divisors": {
+          "score": 0.6275,
+          "entry": "How many positive whole-number divisors does <NUMBER> have?",
+          "entry_family": "divisors"
+        },
+        "gcd": {
+          "score": 0.6352,
+          "entry": "Find the greatest common divisor of $3339$, $2961$, and $1491$.",
+          "entry_family": "gcd"
+        },
+        "lcm": {
+          "score": 0.6419,
+          "entry": "What is the least common multiple of <NUM1> and <NUM2>?",
+          "entry_family": "lcm"
+        }
+      },
+      "top1": "lcm",
+      "top1_score": 0.6419
+    },
+    {
+      "family": "gcd",
+      "style": "two-int",
+      "q": "What is the greatest common divisor of 100 and 75?",
+      "scores": {
+        "divisors": {
+          "score": 0.5655,
+          "entry": "How many positive whole-number divisors does <NUMBER> have?",
+          "entry_family": "divisors"
+        },
+        "gcd": {
+          "score": 0.579,
+          "entry": "Find the greatest common divisor of <NUM1>, <NUM2>, and <NUM3>.",
+          "entry_family": "gcd"
+        },
+        "lcm": {
+          "score": 0.5975,
+          "entry": "What is the least common multiple of <NUM1> and <NUM2>?",
+          "entry_family": "lcm"
+        }
+      },
+      "top1": "lcm",
+      "top1_score": 0.5975
+    },
+    {
+      "family": "gcd",
+      "style": "two-int",
+      "q": "What is the greatest common divisor of 60 and 40?",
+      "scores": {
+        "divisors": {
+          "score": 0.6345,
+          "entry": "How many positive whole-number divisors does <NUMBER> have?",
+          "entry_family": "divisors"
+        },
+        "gcd": {
+          "score": 0.6169,
+          "entry": "Find the greatest common divisor of $3339$, $2961$, and $1491$.",
+          "entry_family": "gcd"
+        },
+        "lcm": {
+          "score": 0.6768,
+          "entry": "What is the least common multiple of 48 and 180?",
+          "entry_family": "lcm"
+        }
+      },
+      "top1": "lcm",
+      "top1_score": 0.6768
+    },
+    {
+      "family": "gcd",
+      "style": "three-int",
+      "q": "What is the greatest common divisor of 63, 147, and 105?",
+      "scores": {
+        "divisors": {
+          "score": 0.6325,
+          "entry": "How many positive whole-number divisors does <NUMBER> have?",
+          "entry_family": "divisors"
+        },
+        "gcd": {
+          "score": 0.7036,
+          "entry": "Find the greatest common divisor of $3339$, $2961$, and $1491$.",
+          "entry_family": "gcd"
+        },
+        "lcm": {
+          "score": 0.6192,
+          "entry": "What is the least common multiple of 48 and 180?",
+          "entry_family": "lcm"
+        }
+      },
+      "top1": "gcd",
+      "top1_score": 0.7036
+    },
+    {
+      "family": "gcd",
+      "style": "three-int",
+      "q": "What is the greatest common divisor of 120, 80, and 60?",
+      "scores": {
+        "divisors": {
+          "score": 0.6241,
+          "entry": "How many positive whole-number divisors does <NUMBER> have?",
+          "entry_family": "divisors"
+        },
+        "gcd": {
+          "score": 0.6832,
+          "entry": "Find the greatest common divisor of <NUM1>, <NUM2>, and <NUM3>.",
+          "entry_family": "gcd"
+        },
+        "lcm": {
+          "score": 0.7287,
+          "entry": "What is the least common multiple of 48 and 180?",
+          "entry_family": "lcm"
+        }
+      },
+      "top1": "lcm",
+      "top1_score": 0.7287
+    },
+    {
+      "family": "gcd",
+      "style": "three-int",
+      "q": "What is the greatest common divisor of 252, 180, and 330?",
+      "scores": {
+        "divisors": {
+          "score": 0.625,
+          "entry": "How many positive whole-number divisors does <NUMBER> have?",
+          "entry_family": "divisors"
+        },
+        "gcd": {
+          "score": 0.7102,
+          "entry": "Find the greatest common divisor of $3339$, $2961$, and $1491$.",
+          "entry_family": "gcd"
+        },
+        "lcm": {
+          "score": 0.6875,
+          "entry": "What is the least common multiple of 48 and 180?",
+          "entry_family": "lcm"
+        }
+      },
+      "top1": "gcd",
+      "top1_score": 0.7102
+    },
+    {
+      "family": "gcd",
+      "style": "three-int",
+      "q": "What is the greatest common divisor of 49, 147, and 245?",
+      "scores": {
+        "divisors": {
+          "score": 0.6264,
+          "entry": "How many positive whole-number divisors does <NUMBER> have?",
+          "entry_family": "divisors"
+        },
+        "gcd": {
+          "score": 0.7302,
+          "entry": "Find the greatest common divisor of $3339$, $2961$, and $1491$.",
+          "entry_family": "gcd"
+        },
+        "lcm": {
+          "score": 0.6685,
+          "entry": "What is the least common multiple of 48 and 180?",
+          "entry_family": "lcm"
+        }
+      },
+      "top1": "gcd",
+      "top1_score": 0.7302
+    },
+    {
+      "family": "gcd",
+      "style": "three-int",
+      "q": "What is the greatest common divisor of 1000, 750, and 500?",
+      "scores": {
+        "divisors": {
+          "score": 0.6067,
+          "entry": "How many positive whole-number divisors does <NUMBER> have?",
+          "entry_family": "divisors"
+        },
+        "gcd": {
+          "score": 0.6869,
+          "entry": "Find the greatest common divisor of <NUM1>, <NUM2>, and <NUM3>.",
+          "entry_family": "gcd"
+        },
+        "lcm": {
+          "score": 0.6098,
+          "entry": "What is the least common multiple of <NUM1> and <NUM2>?",
+          "entry_family": "lcm"
+        }
+      },
+      "top1": "gcd",
+      "top1_score": 0.6869
+    },
+    {
+      "family": "gcd",
+      "style": "three-int",
+      "q": "What is the greatest common divisor of 91, 143, and 187?",
+      "scores": {
+        "divisors": {
+          "score": 0.604,
+          "entry": "How many positive whole-number divisors does <NUMBER> have?",
+          "entry_family": "divisors"
+        },
+        "gcd": {
+          "score": 0.7329,
+          "entry": "Find the greatest common divisor of $3339$, $2961$, and $1491$.",
+          "entry_family": "gcd"
+        },
+        "lcm": {
+          "score": 0.6594,
+          "entry": "What is the least common multiple of 48 and 180?",
+          "entry_family": "lcm"
+        }
+      },
+      "top1": "gcd",
+      "top1_score": 0.7329
+    },
+    {
+      "family": "lcm",
+      "style": "full",
+      "q": "What is the least common multiple of 48 and 180?",
+      "scores": {
+        "divisors": {
+          "score": 0.5603,
+          "entry": "How many positive whole-number divisors does <NUMBER> have?",
+          "entry_family": "divisors"
+        },
+        "gcd": {
+          "score": 0.5323,
+          "entry": "Find the greatest common divisor of $3339$, $2961$, and $1491$.",
+          "entry_family": "gcd"
+        },
+        "lcm": {
+          "score": 1.0,
+          "entry": "What is the least common multiple of 48 and 180?",
+          "entry_family": "lcm"
+        }
+      },
+      "top1": "lcm",
+      "top1_score": 1.0
+    },
+    {
+      "family": "lcm",
+      "style": "short",
+      "q": "What is the LCM of 48 and 180?",
+      "scores": {
+        "divisors": {
+          "score": 0.5676,
+          "entry": "How many positive whole-number divisors does <NUMBER> have?",
+          "entry_family": "divisors"
+        },
+        "gcd": {
+          "score": 0.5248,
+          "entry": "Find the greatest common divisor of <NUM1>, <NUM2>, and <NUM3>.",
+          "entry_family": "gcd"
+        },
+        "lcm": {
+          "score": 0.9621,
+          "entry": "What is the least common multiple of 48 and 180?",
+          "entry_family": "lcm"
+        }
+      },
+      "top1": "lcm",
+      "top1_score": 0.9621
+    },
+    {
+      "family": "lcm",
+      "style": "full",
+      "q": "What is the least common multiple of 24 and 36?",
+      "scores": {
+        "divisors": {
+          "score": 0.5821,
+          "entry": "How many positive whole-number divisors does 196 have?",
+          "entry_family": "divisors"
+        },
+        "gcd": {
+          "score": 0.5879,
+          "entry": "Find the greatest common divisor of $3339$, $2961$, and $1491$.",
+          "entry_family": "gcd"
+        },
+        "lcm": {
+          "score": 0.7606,
+          "entry": "What is the least common multiple of <NUM1> and <NUM2>?",
+          "entry_family": "lcm"
+        }
+      },
+      "top1": "lcm",
+      "top1_score": 0.7606
+    },
+    {
+      "family": "lcm",
+      "style": "short",
+      "q": "What is the LCM of 24 and 36?",
+      "scores": {
+        "divisors": {
+          "score": 0.573,
+          "entry": "How many positive whole-number divisors does 196 have?",
+          "entry_family": "divisors"
+        },
+        "gcd": {
+          "score": 0.5676,
+          "entry": "Find the greatest common divisor of $3339$, $2961$, and $1491$.",
+          "entry_family": "gcd"
+        },
+        "lcm": {
+          "score": 0.7254,
+          "entry": "What is the least common multiple of <NUM1> and <NUM2>?",
+          "entry_family": "lcm"
+        }
+      },
+      "top1": "lcm",
+      "top1_score": 0.7254
+    },
+    {
+      "family": "lcm",
+      "style": "full",
+      "q": "What is the least common multiple of 12 and 18?",
+      "scores": {
+        "divisors": {
+          "score": 0.5579,
+          "entry": "How many positive whole-number divisors does <NUMBER> have?",
+          "entry_family": "divisors"
+        },
+        "gcd": {
+          "score": 0.5474,
+          "entry": "Find the greatest common divisor of $3339$, $2961$, and $1491$.",
+          "entry_family": "gcd"
+        },
+        "lcm": {
+          "score": 0.7969,
+          "entry": "What is the least common multiple of 48 and 180?",
+          "entry_family": "lcm"
+        }
+      },
+      "top1": "lcm",
+      "top1_score": 0.7969
+    },
+    {
+      "family": "lcm",
+      "style": "short",
+      "q": "What is the LCM of 12 and 18?",
+      "scores": {
+        "divisors": {
+          "score": 0.5556,
+          "entry": "How many positive whole-number divisors does <NUMBER> have?",
+          "entry_family": "divisors"
+        },
+        "gcd": {
+          "score": 0.5205,
+          "entry": "Find the greatest common divisor of $3339$, $2961$, and $1491$.",
+          "entry_family": "gcd"
+        },
+        "lcm": {
+          "score": 0.751,
+          "entry": "What is the least common multiple of 48 and 180?",
+          "entry_family": "lcm"
+        }
+      },
+      "top1": "lcm",
+      "top1_score": 0.751
+    },
+    {
+      "family": "lcm",
+      "style": "full",
+      "q": "What is the least common multiple of 10 and 15?",
+      "scores": {
+        "divisors": {
+          "score": 0.5311,
+          "entry": "How many positive whole-number divisors does <NUMBER> have?",
+          "entry_family": "divisors"
+        },
+        "gcd": {
+          "score": 0.5439,
+          "entry": "Find the greatest common divisor of $3339$, $2961$, and $1491$.",
+          "entry_family": "gcd"
+        },
+        "lcm": {
+          "score": 0.7156,
+          "entry": "What is the least common multiple of <NUM1> and <NUM2>?",
+          "entry_family": "lcm"
+        }
+      },
+      "top1": "lcm",
+      "top1_score": 0.7156
+    },
+    {
+      "family": "lcm",
+      "style": "short",
+      "q": "What is the LCM of 10 and 15?",
+      "scores": {
+        "divisors": {
+          "score": 0.5333,
+          "entry": "How many positive whole-number divisors does <NUMBER> have?",
+          "entry_family": "divisors"
+        },
+        "gcd": {
+          "score": 0.5198,
+          "entry": "Find the greatest common divisor of $3339$, $2961$, and $1491$.",
+          "entry_family": "gcd"
+        },
+        "lcm": {
+          "score": 0.6649,
+          "entry": "What is the least common multiple of <NUM1> and <NUM2>?",
+          "entry_family": "lcm"
+        }
+      },
+      "top1": "lcm",
+      "top1_score": 0.6649
+    },
+    {
+      "family": "lcm",
+      "style": "full",
+      "q": "What is the least common multiple of 72 and 96?",
+      "scores": {
+        "divisors": {
+          "score": 0.612,
+          "entry": "How many positive whole-number divisors does 196 have?",
+          "entry_family": "divisors"
+        },
+        "gcd": {
+          "score": 0.5679,
+          "entry": "Find the greatest common divisor of $3339$, $2961$, and $1491$.",
+          "entry_family": "gcd"
+        },
+        "lcm": {
+          "score": 0.7406,
+          "entry": "What is the least common multiple of <NUM1> and <NUM2>?",
+          "entry_family": "lcm"
+        }
+      },
+      "top1": "lcm",
+      "top1_score": 0.7406
+    },
+    {
+      "family": "lcm",
+      "style": "short",
+      "q": "What is the LCM of 72 and 96?",
+      "scores": {
+        "divisors": {
+          "score": 0.6113,
+          "entry": "How many positive whole-number divisors does 196 have?",
+          "entry_family": "divisors"
+        },
+        "gcd": {
+          "score": 0.5484,
+          "entry": "Find the greatest common divisor of $3339$, $2961$, and $1491$.",
+          "entry_family": "gcd"
+        },
+        "lcm": {
+          "score": 0.7009,
+          "entry": "What is the least common multiple of <NUM1> and <NUM2>?",
+          "entry_family": "lcm"
+        }
+      },
+      "top1": "lcm",
+      "top1_score": 0.7009
+    },
+    {
+      "family": "lcm",
+      "style": "full",
+      "q": "What is the least common multiple of 100 and 75?",
+      "scores": {
+        "divisors": {
+          "score": 0.4993,
+          "entry": "How many positive whole-number divisors does <NUMBER> have?",
+          "entry_family": "divisors"
+        },
+        "gcd": {
+          "score": 0.5107,
+          "entry": "Find the greatest common divisor of $3339$, $2961$, and $1491$.",
+          "entry_family": "gcd"
+        },
+        "lcm": {
+          "score": 0.6953,
+          "entry": "What is the least common multiple of <NUM1> and <NUM2>?",
+          "entry_family": "lcm"
+        }
+      },
+      "top1": "lcm",
+      "top1_score": 0.6953
+    },
+    {
+      "family": "lcm",
+      "style": "short",
+      "q": "What is the LCM of 100 and 75?",
+      "scores": {
+        "divisors": {
+          "score": 0.5001,
+          "entry": "How many positive whole-number divisors does <NUMBER> have?",
+          "entry_family": "divisors"
+        },
+        "gcd": {
+          "score": 0.4977,
+          "entry": "Find the greatest common divisor of <NUM1>, <NUM2>, and <NUM3>.",
+          "entry_family": "gcd"
+        },
+        "lcm": {
+          "score": 0.6513,
+          "entry": "What is the least common multiple of <NUM1> and <NUM2>?",
+          "entry_family": "lcm"
+        }
+      },
+      "top1": "lcm",
+      "top1_score": 0.6513
+    },
+    {
+      "family": "lcm",
+      "style": "full",
+      "q": "What is the least common multiple of 60 and 40?",
+      "scores": {
+        "divisors": {
+          "score": 0.5546,
+          "entry": "How many positive whole-number divisors does <NUMBER> have?",
+          "entry_family": "divisors"
+        },
+        "gcd": {
+          "score": 0.5463,
+          "entry": "Find the greatest common divisor of $3339$, $2961$, and $1491$.",
+          "entry_family": "gcd"
+        },
+        "lcm": {
+          "score": 0.7705,
+          "entry": "What is the least common multiple of 48 and 180?",
+          "entry_family": "lcm"
+        }
+      },
+      "top1": "lcm",
+      "top1_score": 0.7705
+    },
+    {
+      "family": "lcm",
+      "style": "short",
+      "q": "What is the LCM of 60 and 40?",
+      "scores": {
+        "divisors": {
+          "score": 0.5667,
+          "entry": "How many positive whole-number divisors does <NUMBER> have?",
+          "entry_family": "divisors"
+        },
+        "gcd": {
+          "score": 0.536,
+          "entry": "Find the greatest common divisor of $3339$, $2961$, and $1491$.",
+          "entry_family": "gcd"
+        },
+        "lcm": {
+          "score": 0.7288,
+          "entry": "What is the least common multiple of 48 and 180?",
+          "entry_family": "lcm"
+        }
+      },
+      "top1": "lcm",
+      "top1_score": 0.7288
+    },
+    {
+      "family": "lcm",
+      "style": "full",
+      "q": "What is the least common multiple of 14 and 21?",
+      "scores": {
+        "divisors": {
+          "score": 0.5391,
+          "entry": "How many positive whole-number divisors does <NUMBER> have?",
+          "entry_family": "divisors"
+        },
+        "gcd": {
+          "score": 0.632,
+          "entry": "Find the greatest common divisor of $3339$, $2961$, and $1491$.",
+          "entry_family": "gcd"
+        },
+        "lcm": {
+          "score": 0.7321,
+          "entry": "What is the least common multiple of <NUM1> and <NUM2>?",
+          "entry_family": "lcm"
+        }
+      },
+      "top1": "lcm",
+      "top1_score": 0.7321
+    },
+    {
+      "family": "lcm",
+      "style": "short",
+      "q": "What is the LCM of 14 and 21?",
+      "scores": {
+        "divisors": {
+          "score": 0.5402,
+          "entry": "How many positive whole-number divisors does <NUMBER> have?",
+          "entry_family": "divisors"
+        },
+        "gcd": {
+          "score": 0.6143,
+          "entry": "Find the greatest common divisor of $3339$, $2961$, and $1491$.",
+          "entry_family": "gcd"
+        },
+        "lcm": {
+          "score": 0.6915,
+          "entry": "What is the least common multiple of <NUM1> and <NUM2>?",
+          "entry_family": "lcm"
+        }
+      },
+      "top1": "lcm",
+      "top1_score": 0.6915
+    },
+    {
+      "family": "off-topic",
+      "style": "n/a",
+      "q": "Explain the difference between prime and composite numbers in one paragraph.",
+      "scores": {
+        "divisors": {
+          "score": 0.5783,
+          "entry": "How many positive whole-number divisors does <NUMBER> have?",
+          "entry_family": "divisors"
+        },
+        "gcd": {
+          "score": 0.5154,
+          "entry": "Find the greatest common divisor of $3339$, $2961$, and $1491$.",
+          "entry_family": "gcd"
+        },
+        "lcm": {
+          "score": 0.5394,
+          "entry": "What is the least common multiple of <NUM1> and <NUM2>?",
+          "entry_family": "lcm"
+        }
+      },
+      "top1": "divisors",
+      "top1_score": 0.5783
+    },
+    {
+      "family": "off-topic",
+      "style": "n/a",
+      "q": "What is Euler's theorem in number theory?",
+      "scores": {
+        "divisors": {
+          "score": 0.6765,
+          "entry": "How many positive whole-number divisors does <NUMBER> have?",
+          "entry_family": "divisors"
+        },
+        "gcd": {
+          "score": 0.549,
+          "entry": "Find the greatest common divisor of $3339$, $2961$, and $1491$.",
+          "entry_family": "gcd"
+        },
+        "lcm": {
+          "score": 0.5861,
+          "entry": "What is the least common multiple of <NUM1> and <NUM2>?",
+          "entry_family": "lcm"
+        }
+      },
+      "top1": "divisors",
+      "top1_score": 0.6765
+    },
+    {
+      "family": "off-topic",
+      "style": "n/a",
+      "q": "In what year did the Apollo 11 moon landing take place?",
+      "scores": {
+        "divisors": {
+          "score": 0.4158,
+          "entry": "How many positive whole-number divisors does <NUMBER> have?",
+          "entry_family": "divisors"
+        },
+        "gcd": {
+          "score": 0.3863,
+          "entry": "Find the greatest common divisor of $3339$, $2961$, and $1491$.",
+          "entry_family": "gcd"
+        },
+        "lcm": {
+          "score": 0.4425,
+          "entry": "What is the least common multiple of 48 and 180?",
+          "entry_family": "lcm"
+        }
+      },
+      "top1": "lcm",
+      "top1_score": 0.4425
+    }
+  ],
+  "live_ab_merged_cache": {
+    "setup": "merged cache (8 entries, 3 families) served by one gateway; per-family thresholds divisors=0.725,gcd=0.72,lcm=0.72; A/B on --min-separation 0.05 vs 0; runtime dispatch (no compiled module in merged cache)",
+    "results": [
+      {
+        "q": "How many positive whole-number divisors does 196 have?",
+        "guard_on": {
+          "source": "cache",
+          "answer": 9,
+          "ms": 201,
+          "score": 1.0
+        },
+        "guard_off": {
+          "source": "cache",
+          "answer": 9,
+          "ms": 142,
+          "score": 1.0
+        },
+        "verdict": "clean hit both \u2014 per-family threshold preserves in-family hits"
+      },
+      {
+        "q": "How many divisors does 48 have?",
+        "guard_on": {
+          "source": "llm-fallback",
+          "ms": 8206,
+          "reason": "ambiguous cross-family: top1 0.756 vs other family 0.733 (separation < 0.05)"
+        },
+        "guard_off": {
+          "source": "llm-fallback",
+          "ms": 9274,
+          "reason": "param extraction failed"
+        },
+        "verdict": "both fall back; guard gives the principled reason"
+      },
+      {
+        "q": "What is the greatest common divisor of 48 and 180?",
+        "guard_on": {
+          "source": "cache",
+          "answer": 720,
+          "ms": 130,
+          "score": 0.922
+        },
+        "guard_off": {
+          "source": "cache",
+          "answer": 720,
+          "ms": 101,
+          "score": 0.922
+        },
+        "verdict": "WRONG in both (LCM 720 served for a GCD question; true answer 12) \u2014 same-numbers concrete entry: similarity 0.922, separation 0.316; NOT fixable by threshold or separation; needs operation-level guard"
+      },
+      {
+        "q": "What is the greatest common divisor of 120, 80, and 60?",
+        "guard_on": {
+          "source": "llm-fallback",
+          "ms": 7557,
+          "reason": "ambiguous cross-family: top1 0.729 vs other family 0.683 (separation < 0.05)"
+        },
+        "guard_off": {
+          "source": "cache",
+          "answer": 240,
+          "ms": 601,
+          "score": 0.7287
+        },
+        "verdict": "GUARD WINS: guard-OFF confidently returned LCM 240 for a GCD question; guard-ON fell back to the LLM (correct GCD answer)"
+      }
+    ]
+  }
+}

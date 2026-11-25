@@ -448,7 +448,8 @@ Is the function output correct and consistent with the transcript reasoning?""")
         return out
 
     # -- top-level ---------------------------------------------------------------
-    def build(self, query: str, transcript: str, golden: str | None = None) -> BuildResult:
+    def build(self, query: str, transcript: str, golden: str | None = None,
+              family: str | None = None) -> BuildResult:
         t0 = time.time()
         result = BuildResult(ok=False, query=query)
         try:
@@ -472,10 +473,13 @@ Is the function output correct and consistent with the transcript reasoning?""")
             root_id = result.registered[root_spec.id]
             # register BOTH the generic template and the original input as entry
             # points (paper §2.2.1 Phase 5)
-            self.arc.entry_store.register(query, root_id, [p.description for p in params])
+            # family tag drives per-family entry thresholds at serve time
+            self.arc.entry_store.register(query, root_id, [p.description for p in params],
+                                          family=family)
             if result.template and "<" in result.template:
                 self.arc.entry_store.register(result.template, root_id,
-                                              [p.description for p in params])
+                                              [p.description for p in params],
+                                              family=family)
 
             # Root end-to-end validation (extraction round-trip xN)
             for i in range(self.roundtrips):

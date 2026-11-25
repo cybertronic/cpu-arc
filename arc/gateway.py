@@ -111,6 +111,15 @@ class GatewayConfig:
     worker_cpu_seconds: float = 5.0
     worker_mem_mb: int = 1024
     call_timeout_s: float = 10.0
+    # Per-family entry thresholds (calibrated, see eval/threshold_matrix.py).
+    # Falls back to entry_threshold for families not listed here.
+    family_thresholds: dict[str, float] = field(default_factory=dict)
+    # Cross-family separation guard: if the best entry from ANOTHER family
+    # scores within this many of the top-1 entry, the match is ambiguous
+    # (e.g. a GCD query vs a same-numbers LCM entry) and we fall back to the
+    # LLM instead of executing the wrong family's code. 0 disables. Single-
+    # family caches are unaffected (no other family to compare against).
+    min_separation: float = 0.05
 
 
 @dataclass
@@ -245,9 +254,30 @@ class ArcGateway:
         if not self.entry_store.entries:
             return self._miss(query, t0, reason="empty cache")
 
-        entry, score = self.entry_store.search(query)
-        if entry is None or score < self.config.entry_threshold:
-            return self._miss(query, t0, reason=f"score {score:.3f} < {self.config.entry_threshold}")
+        entries, scores = self.entry_store.scores_all(query)
+        if not entries:
+            return self._miss(query, t0, reason="empty cache")
+        i = int(np.argmax(scores))
+        entry, score = entries[i], scores[i]
+        # Per-family threshold (calibrated); global fallback otherwise.
+        thr = self.config.entry_threshold
+        fam = entry.get("family")
+        if fam:
+            thr = self.config.family_thresholds.get(fam, thr)
+        if score < thr:
+            return self._miss(query, t0, reason=f"score {score:.3f} < {thr:.3f}" +
+                                 (f" (family={fam})" if fam else ""))
+        # Cross-family separation guard: a near-tie with another family's
+        # entry is too ambiguous to execute (false-friend, see
+        # eval/threshold_matrix.py + tests/threshold_report.json).
+        if self.config.min_separation > 0 and fam:
+            best_other = max((s for e, s in zip(entries, scores)
+                              if e.get("family") and e.get("family") != fam),
+                             default=None)
+            if best_other is not None and score - best_other < self.config.min_separation:
+                return self._miss(query, t0, reason=(
+                    f"ambiguous cross-family: top1 {score:.3f} vs other family "
+                    f"{best_other:.3f} (separation < {self.config.min_separation})"))
 
         # 2. Parameter extraction
         params_desc = entry["params"]
@@ -464,6 +494,11 @@ def main():
                         help="virtual-memory ceiling per worker (MiB)")
     parser.add_argument("--call-timeout", type=float, default=10.0,
                         help="wall-clock budget per cached-code call")
+    parser.add_argument("--family-threshold", default="",
+                        help="comma list of family=threshold, e.g. 'divisors=0.68,gcd=0.70'")
+    parser.add_argument("--min-separation", type=float, default=0.05,
+                        help="min score gap between top-1 entry and best entry "
+                             "of another family; smaller => ambiguous, fall back (0 disables)")
     parser.add_argument("--verbose", action="store_true")
     args = parser.parse_args()
 
@@ -487,6 +522,8 @@ def main():
         worker_cpu_seconds=args.worker_cpu_seconds,
         worker_mem_mb=args.worker_mem_mb,
         call_timeout_s=args.call_timeout,
+        family_thresholds=_parse_family_thresholds(args.family_threshold),
+        min_separation=args.min_separation,
     )
 
     gateway = ArcGateway(config)
@@ -503,6 +540,19 @@ def main():
     finally:
         if gateway._worker_pool is not None:
             gateway._worker_pool.shutdown()
+
+
+def _parse_family_thresholds(s: str) -> dict[str, float]:
+    out: dict[str, float] = {}
+    for part in filter(None, (p.strip() for p in s.split(","))):
+        if "=" not in part:
+            continue
+        k, v = part.split("=", 1)
+        try:
+            out[k.strip()] = float(v)
+        except ValueError:
+            raise SystemExit(f"bad --family-threshold entry: {part!r}")
+    return out
 
 
 if __name__ == "__main__":

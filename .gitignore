@@ -6,6 +6,8 @@ __pycache__/
 # Runtime caches (regenerable; entry vectors now persist inside these DBs)
 tests/.p2_live_cache/
 tests/.gcd_cache/
+tests/.lcm_cache/
+tests/.merged_cache/
 tests/.dbg_cache/
 tests/gateway_cache/
 tests/compiled/
