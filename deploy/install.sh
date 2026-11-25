@@ -155,8 +155,11 @@ else
   cat /etc/cron.d/arc-curator 2>/dev/null | tail -1 | sed 's/^/    /' || true
   echo
   echo "next steps:"
-  echo "  1. review /etc/arc/gateway.env (ports, model, thresholds)"
-  echo "  2. build a cache into \$CACHE_DIR (tests/build_merged_cache.py or eval/promote.py)"
+  echo "  1. review /etc/arc/gateway.env (ARC_CHAT_URL/ARC_EMBED_URL/ARC_MODEL,"
+  echo "     ports, thresholds)"
+  echo "  2. build a cache into \$ARC_CACHE_DIR:"
+  echo "     ARC_MERGED_OUT=\$ARC_CACHE_DIR python3 $REPO/tests/build_merged_cache.py"
+  echo "     python3 -m arc.compiler \$ARC_CACHE_DIR   (from $REPO)"
   echo "  3. systemctl restart arc-gateway"
   echo "  4. first curator run: $REPO/deploy/nightly_curate.sh  (or wait for cron)"
 fi

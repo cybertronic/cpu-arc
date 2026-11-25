@@ -248,13 +248,19 @@ class Compiler:
                 if root_id not in funcs_by_id:
                     raise CompileError(f"root function {root_id!r} not in registry")
                 suffix = "" if n_trees == 0 else f"_{n_trees}"
-                fids = self._collect_fids(root_id, funcs_by_id)
+                # Scope = the root's id prefix ('lcm_fn_0007' -> 'lcm_fn').
+                # In a merged cache every family lives in ONE registry, so an
+                # unscoped vector match can couple trees across families
+                # (a GCD tree calling an LCM helper). Single-family caches
+                # share one prefix, so scoping is a no-op there.
+                prefix = root_id.rsplit("_", 1)[0]
+                fids, edges = self._resolve_graph(root_id, funcs_by_id, prefix)
                 name_map = {fid: f"{self._fn_name(fid)}{suffix}" for fid in fids}
 
                 compiled: dict[str, FunctionCompileResult] = {}
                 visited: set[str] = set()
                 self._compile_func(root_id, funcs_by_id, params, compiled,
-                                   visited, name_map)
+                                   visited, name_map, edges)
                 ordered = self._topo_order(compiled, funcs_by_id, root_id)
                 for fid in ordered:
                     all_funcs[name_map[fid]] = compiled[fid]
@@ -280,14 +286,29 @@ class Compiler:
         result.manifest = self._build_manifest(result)
         return result
 
-    def _collect_fids(self, root_id: str, funcs_by_id: dict) -> set[str]:
-        """DFS the do() intent graph from root; return every reachable func_id."""
-        out: set[str] = set()
+    def _resolve_graph(self, root_id: str, funcs_by_id: dict,
+                       scope_prefix: str | None = None
+                       ) -> tuple[set[str], dict[tuple, tuple | None]]:
+        """Walk the do() intent graph ONCE; every intent resolved exactly once.
+
+        Returns (fids, edges):
+          fids  = every reachable func_id (the tree's closure)
+          edges = {(func_id, intent): (dep_id, method, score) | None}
+
+        The closure and the per-function rewrites must agree on every intent
+        — resolving the same intent twice (once for the closure, once at
+        rewrite time) lets embedding near-ties flip the answer between passes,
+        producing call sites that reference names the module never defines
+        (NameError at runtime). A single resolution pass removes that class
+        of bug by construction.
+        """
+        fids: set[str] = set()
+        edges: dict[tuple, tuple | None] = {}
 
         def visit(fid: str) -> None:
-            if fid in out or fid not in funcs_by_id:
+            if fid in fids or fid not in funcs_by_id:
                 return
-            out.add(fid)
+            fids.add(fid)
             src = funcs_by_id[fid].get("source") or ""
             try:
                 tree = ast.parse(src)
@@ -297,12 +318,16 @@ class Compiler:
                 intent = _string_arg(call, 1)
                 if intent is None:
                     continue
-                resolved = self._resolve_intent(intent)
-                if resolved is not None:
-                    visit(resolved[0])
+                key = (fid, intent)
+                if key not in edges:
+                    edges[key] = self._resolve_intent(intent,
+                                                      scope_prefix=scope_prefix)
+                r = edges[key]
+                if r is not None:
+                    visit(r[0])
 
         visit(root_id)
-        return out
+        return fids, edges
 
     def _fuzzy_param_match(self, query: str, params: list[str]) -> str | None:
         """Best entry parameter by embedding cosine (>= 0.72).
@@ -338,7 +363,8 @@ class Compiler:
 
     def _compile_func(self, func_id: str, funcs_by_id: dict, params: list[str],
                       compiled: dict, visited: set,
-                      name_map: dict | None = None) -> None:
+                      name_map: dict | None = None,
+                      edges: dict | None = None) -> None:
         if func_id in visited:
             return
         visited.add(func_id)
@@ -372,8 +398,9 @@ class Compiler:
                 fr.unresolved_do.append("<dynamic>")
                 continue
 
-            # Resolve intent against registry
-            resolved = self._resolve_intent(intent)
+            # Use the single resolution pass (closure and rewrites agree)
+            resolved = (edges.get((func_id, intent)) if edges is not None
+                        else self._resolve_intent(intent))
             if resolved is None:
                 fr.unresolved_do.append(intent)
                 continue
@@ -384,7 +411,8 @@ class Compiler:
 
             # Recursively compile the dependency (ensures it's in `compiled`)
             if dep_id in funcs_by_id:
-                self._compile_func(dep_id, funcs_by_id, params, compiled, visited)
+                self._compile_func(dep_id, funcs_by_id, params, compiled,
+                                   visited, name_map, edges)
 
             # Build the replacement: <module name>(ctx)
             dep_fn_name = (name_map or {}).get(dep_id, self._fn_name(dep_id))
@@ -436,16 +464,31 @@ class Compiler:
 
         compiled[func_id] = fr
 
-    def _resolve_intent(self, intent: str) -> tuple[str, str, float] | None:
-        """Resolve a do() intent to (func_id, match_method, score)."""
-        # Exact description match first (case-insensitive)
+    def _resolve_intent(self, intent: str,
+                        scope_prefix: str | None = None
+                        ) -> tuple[str, str, float] | None:
+        """Resolve a do() intent to (func_id, match_method, score).
+
+        scope_prefix (the root's id prefix) confines the vector fallback to
+        the same family; exact description matches stay global (they are
+        unambiguous). When the family has no vector match we return None
+        rather than coupling across families — the call stays an unresolved
+        do() (loud runtime failure) and the promotion gate catches it.
+        """
+        # Exact description match first (case-insensitive, global)
         q = intent.strip().lower()
         for f in self.registry.functions:
             if f["description"].strip().lower() == q:
                 return f["id"], "exact", 1.0
 
-        # Vector fallback with the function threshold
-        hits = self.registry.search(intent, top_k=1)
+        # Vector fallback with the function threshold, family-scoped
+        hits = self.registry.search(intent, top_k=8)
+        if scope_prefix:
+            scoped = [h for h in hits
+                      if h[0]["id"].rsplit("_", 1)[0] == scope_prefix]
+            if not scoped:
+                return None  # no same-family match: do not cross families
+            hits = scoped
         if hits and hits[0][1] >= self.registry.function_threshold:
             return hits[0][0]["id"], "vector", hits[0][1]
         return None
@@ -619,6 +662,21 @@ class Compiler:
                 lines.append(src.rstrip())
                 lines.append("")
 
+        # Static guard: every COMPILED-function call target (names of the form
+        # _<fam>_fn_NNNN[_suffix]) must be a top-level def in this module. A
+        # mismatch means a call site will NameError at runtime (intent
+        # resolution diverged from the compiled closure). Only compiled names
+        # are checked so helper-stub locals (_num, _CompiledCtx, __init__) are
+        # ignored.
+        body = "\n".join(lines)
+        defined = set(re.findall(r"^def\s+(_[\w]+)\s*\(", body, re.MULTILINE))
+        called = set(re.findall(r"(?<![\w.])(_[\w]*fn_\d+(?:_\d+)?)\s*\(", body))
+        undefined = called - defined
+        if undefined:
+            raise CompileError(
+                f"module references undefined compiled names: {sorted(undefined)} "
+                f"— intent resolution diverged from the compiled closure")
+
         # Entry wrappers + dispatch table
         lines += ["# --- entry points (v2 dispatch) --------------------------------"]
         for i, ep in enumerate(result.entries):
@@ -675,10 +733,22 @@ def main() -> None:
 
     ap = argparse.ArgumentParser(description="Recompile ARC cache module (v2)")
     ap.add_argument("cache_dir")
+    ap.add_argument("--embed", choices=["server", "hash"], default="server",
+                    help="embedder for intent resolution (default: server at "
+                         "$ARC_EMBED_URL). hash resolves intents on a DIFFERENT "
+                         "similarity landscape — do not ship hash-compiled "
+                         "modules.")
+    from arc import endpoints
+    ap.add_argument("--embed-url", default=endpoints.embed_url())
     args = ap.parse_args()
     cache_dir = Path(args.cache_dir)
 
-    embedder = Embedder(backend="hash")
+    if args.embed == "hash":
+        print("[warn] compiling with HASH embeddings — the call graph may "
+              "differ from the server-embedding runtime; debug use only")
+        embedder = Embedder(backend="hash")
+    else:
+        embedder = Embedder(backend="server", url=args.embed_url)
     registry = Registry(embedder, path=cache_dir / "functions.db")
     entry_store = EntryStore(embedder, path=cache_dir / "entries.db")
     compiler = Compiler(registry, entry_store)
