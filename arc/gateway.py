@@ -120,6 +120,11 @@ class GatewayConfig:
     # LLM instead of executing the wrong family's code. 0 disables. Single-
     # family caches are unaffected (no other family to compare against).
     min_separation: float = 0.05
+    # Persistent invocation log (arc/invocations.py): one row per /query —
+    # audit trail + dataset for ongoing threshold monitoring.
+    invocation_log: bool = True
+    invocation_log_path: str | None = None  # default <cache_dir>/invocations.db
+    log_retention_days: float | None = None
 
 
 @dataclass
@@ -178,6 +183,19 @@ class ArcGateway:
         self._compiled_path: Path | None = None
         self._worker_pool = None
         self._load_compiled(cache_dir)
+
+        # Persistent invocation log (audit + threshold-monitoring dataset)
+        self.invocation_log = None
+        if config.invocation_log:
+            from arc.invocations import InvocationLog
+            inv_path = (config.invocation_log_path or
+                        str(cache_dir / "invocations.db"))
+            self.invocation_log = InvocationLog(
+                inv_path, retention_days=config.log_retention_days)
+            log.info("Invocation log: %s (retention=%s)",
+                     inv_path,
+                     f"{config.log_retention_days}d"
+                     if config.log_retention_days else "unbounded")
 
         log.info("Gateway initialized: %d entries, %d functions, compiled=%s",
                  len(self.entry_store.entries), len(self.registry.functions),
@@ -246,16 +264,65 @@ class ArcGateway:
     # ------------------------------------------------------------------ #
 
     def handle_query(self, query: str) -> dict:
-        """Process a single query. Returns a response dict."""
+        """Process a single query; persists one row to the invocation log."""
         self._stat_bump("total_requests")
         t0 = time.perf_counter()
+        inv: dict = {"query": query, "ts": time.time()}
+        tok_mark = self.lm.ledger.mark() if self.lm else None
+        try:
+            resp = self._handle_query(query, t0, inv)
+        except Exception as e:
+            log.exception("Unhandled gateway error")
+            self._stat_bump("errors")
+            inv.update(status="error", phase="unhandled",
+                       reason=f"gateway error: {e}")
+            resp = {"source": "gateway-error", "error": str(e),
+                    "ms": round((time.perf_counter() - t0) * 1000, 2)}
+        inv.setdefault("source", resp.get("source"))
+        inv["serve_ms"] = resp.get("ms")
+        if tok_mark is not None:
+            delta = self.lm.ledger.since(tok_mark)
+            inv["tokens_in"] = sum(v["in"] for v in delta["by_role"].values())
+            inv["tokens_out"] = sum(v["out"] for v in delta["by_role"].values())
+        self._record_invocation(inv)
+        return resp
+
+    def _record_invocation(self, inv: dict) -> None:
+        """Append to the invocation log; a log failure must never break serving."""
+        if self.invocation_log is None:
+            return
+        try:
+            self.invocation_log.record(
+                ts=inv.get("ts"), query=inv.get("query", ""),
+                status=inv.get("status") or "unknown", phase=inv.get("phase"),
+                source=inv.get("source"), family=inv.get("family"),
+                entry=inv.get("entry"), score=inv.get("score"),
+                params=inv.get("params"), reason=inv.get("reason"),
+                serve_ms=inv.get("serve_ms"),
+                tokens_in=inv.get("tokens_in"), tokens_out=inv.get("tokens_out"))
+        except Exception as e:
+            log.warning("Invocation log write failed: %s", e)
+
+    def _handle_query(self, query: str, t0: float, inv: dict) -> dict:
+        """Core serve logic. Every decision point marks `inv` (for the log)."""
+
+        def mark(status: str, phase: str, reason: str | None = None,
+                 family: str | None = None, entry: dict | None = None,
+                 score: float | None = None, params: dict | None = None) -> None:
+            inv.update(status=status, phase=phase, reason=reason,
+                       family=family,
+                       entry=entry["description"] if entry else None,
+                       score=None if score is None else round(score, 4),
+                       params=params)
 
         # 1. Entry search
         if not self.entry_store.entries:
+            mark("miss", "search", reason="empty cache")
             return self._miss(query, t0, reason="empty cache")
 
         entries, scores = self.entry_store.scores_all(query)
         if not entries:
+            mark("miss", "search", reason="empty cache")
             return self._miss(query, t0, reason="empty cache")
         i = int(np.argmax(scores))
         entry, score = entries[i], scores[i]
@@ -265,6 +332,9 @@ class ArcGateway:
         if fam:
             thr = self.config.family_thresholds.get(fam, thr)
         if score < thr:
+            mark("miss", "threshold", reason=f"score {score:.3f} < {thr:.3f}" +
+                                    (f" (family={fam})" if fam else ""),
+                 family=fam, entry=entry, score=score)
             return self._miss(query, t0, reason=f"score {score:.3f} < {thr:.3f}" +
                                  (f" (family={fam})" if fam else ""))
         # Cross-family separation guard: a near-tie with another family's
@@ -275,6 +345,11 @@ class ArcGateway:
                               if e.get("family") and e.get("family") != fam),
                              default=None)
             if best_other is not None and score - best_other < self.config.min_separation:
+                mark("miss", "separation",
+                     reason=(f"ambiguous cross-family: top1 {score:.3f} vs "
+                             f"other family {best_other:.3f} "
+                             f"(separation < {self.config.min_separation})"),
+                     family=fam, entry=entry, score=score)
                 return self._miss(query, t0, reason=(
                     f"ambiguous cross-family: top1 {score:.3f} vs other family "
                     f"{best_other:.3f} (separation < {self.config.min_separation})"))
@@ -290,12 +365,17 @@ class ArcGateway:
             if n_nums >= len(params_desc):
                 params = extract_params_llm(query, params_desc, self.lm)
         if params is None:
+            mark("miss", "extract", reason="param extraction failed",
+                 family=fam, entry=entry, score=score)
             return self._miss(query, t0, reason="param extraction failed")
         # Guard: compiled entries coerce numeric params. Refuse non-numeric
         # values ("" / "None" / text from a partial LLM extraction) instead of
         # executing with garbage.
         for desc, val in params.items():
             if not re.fullmatch(r"\s*-?[\d,]+(?:\.\d+)?\s*", str(val)):
+                mark("miss", "extract",
+                     reason=f"param {desc!r} not numeric: {val!r}",
+                     family=fam, entry=entry, score=score)
                 return self._miss(query, t0, reason=f"param {desc!r} not numeric: {val!r}")
 
         # 3. Execute
@@ -304,10 +384,13 @@ class ArcGateway:
         except Exception as e:
             log.warning("Execution error: %s", e)
             self._stat_bump("errors")
+            mark("error", "execute", reason=f"execution error: {e}",
+                 family=fam, entry=entry, score=score, params=params)
             return self._miss(query, t0, reason=f"execution error: {e}")
 
         elapsed_ms = (time.perf_counter() - t0) * 1000
         self._stat_bump("cache_hits", add={"total_hit_ms": elapsed_ms})
+        mark("hit", "execute", family=fam, entry=entry, score=score, params=params)
 
         return {
             "source": "cache",
@@ -451,6 +534,8 @@ class _GatewayHandler(BaseHTTPRequestHandler):
             "compiled": self.gateway._compiled_path is not None,
             "workers": self.gateway._worker_pool.n_workers if self.gateway._worker_pool else 0,
             "worker_restarts": self.gateway._worker_pool.restarts if self.gateway._worker_pool else 0,
+            "invocations": (self.gateway.invocation_log.count()
+                            if self.gateway.invocation_log else None),
         }
 
     def _json(self, code: int, data: dict):
@@ -499,6 +584,12 @@ def main():
     parser.add_argument("--min-separation", type=float, default=0.05,
                         help="min score gap between top-1 entry and best entry "
                              "of another family; smaller => ambiguous, fall back (0 disables)")
+    parser.add_argument("--invocation-log", default=None,
+                        help="path to invocations.db (default <cache-dir>/invocations.db)")
+    parser.add_argument("--no-invocation-log", action="store_true",
+                        help="disable the persistent invocation log")
+    parser.add_argument("--log-retention-days", type=float, default=None,
+                        help="prune invocation rows older than N days at startup")
     parser.add_argument("--verbose", action="store_true")
     args = parser.parse_args()
 
@@ -524,6 +615,9 @@ def main():
         call_timeout_s=args.call_timeout,
         family_thresholds=_parse_family_thresholds(args.family_threshold),
         min_separation=args.min_separation,
+        invocation_log=not args.no_invocation_log,
+        invocation_log_path=args.invocation_log,
+        log_retention_days=args.log_retention_days,
     )
 
     gateway = ArcGateway(config)
@@ -540,6 +634,8 @@ def main():
     finally:
         if gateway._worker_pool is not None:
             gateway._worker_pool.shutdown()
+        if gateway.invocation_log is not None:
+            gateway.invocation_log.close()
 
 
 def _parse_family_thresholds(s: str) -> dict[str, float]:
