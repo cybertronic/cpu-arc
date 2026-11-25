@@ -106,6 +106,11 @@ class GatewayConfig:
     load_threshold: float = 0.45
     enable_lazy_build: bool = False
     build_queue_dir: str = "./build_queue"
+    # Code-execution isolation (worker subprocesses, see arc/execution.py)
+    workers: int = 2
+    worker_cpu_seconds: float = 5.0
+    worker_mem_mb: int = 1024
+    call_timeout_s: float = 10.0
 
 
 @dataclass
@@ -159,14 +164,15 @@ class ArcGateway:
         self.entry_store = EntryStore(self.embedder, path=cache_dir / "entries.db",
                                       entry_threshold=config.entry_threshold)
 
-        # Load compiled module (if present)
-        self._compiled_mod = None
-        self._compiled_params: list[str] = []
+        # Compiled module: never exec'd in this process — the worker pool
+        # (child interpreters with rlimit budgets) owns generated code.
+        self._compiled_path: Path | None = None
+        self._worker_pool = None
         self._load_compiled(cache_dir)
 
         log.info("Gateway initialized: %d entries, %d functions, compiled=%s",
                  len(self.entry_store.entries), len(self.registry.functions),
-                 "yes" if self._compiled_mod else "no")
+                 "yes" if self._compiled_path else "no")
 
     def _stat_bump(self, *inc: str, add: dict[str, float] | None = None) -> None:
         """Atomically increment named int fields and/or add to float fields."""
@@ -177,17 +183,40 @@ class ArcGateway:
                 setattr(self.stats, f, getattr(self.stats, f) + v)
 
     def _load_compiled(self, cache_dir: Path) -> None:
-        """Load the compiled module if it exists."""
+        """Point the worker pool at the compiled module (if present).
+
+        The gateway only checks for the file; loading and executing the
+        generated code happens exclusively in worker subprocesses. A bad
+        module (syntax error, missing solve) disables the compiled path
+        instead of crashing the gateway.
+        """
         mod_path = cache_dir / "compiled" / "arc_compiled.py"
         if not mod_path.exists():
             log.info("No compiled module found at %s — will use runtime dispatch", mod_path)
+            self._compiled_path = None
+            if self._worker_pool is not None:
+                self._worker_pool.shutdown()
+                self._worker_pool = None
             return
-        import importlib.util
-        spec = importlib.util.spec_from_file_location("arc_compiled", mod_path)
-        self._compiled_mod = importlib.util.module_from_spec(spec)
-        spec.loader.exec_module(self._compiled_mod)
-        self._compiled_params = self._compiled_mod.PARAMS
-        log.info("Loaded compiled module: %s (params=%s)", mod_path, self._compiled_params)
+        from arc.execution import WorkerPool
+        try:
+            pool = WorkerPool(mod_path, n_workers=self.config.workers,
+                              cpu_seconds=self.config.worker_cpu_seconds,
+                              mem_mb=self.config.worker_mem_mb,
+                              call_timeout_s=self.config.call_timeout_s)
+        except Exception as e:  # noqa: BLE001 — bad generated module must not kill the gateway
+            log.error("Failed to start worker pool for %s: %s — falling back to runtime dispatch",
+                      mod_path, e)
+            self._compiled_path = None
+            return
+        old = self._worker_pool
+        self._worker_pool = pool
+        self._compiled_path = mod_path
+        if old is not None:
+            old.shutdown()
+        log.info("Worker pool ready: %d workers, cpu=%.0fs/call, mem=%dMB, module=%s",
+                 pool.n_workers, self.config.worker_cpu_seconds,
+                 self.config.worker_mem_mb, mod_path)
 
     def reload_cache(self) -> None:
         """Hot-reload the entry index + compiled module (called by build worker)."""
@@ -201,7 +230,7 @@ class ArcGateway:
             self._load_compiled(cache_dir)
             log.info("Cache reloaded: %d entries, compiled=%s",
                      len(self.entry_store.entries),
-                     "yes" if self._compiled_mod else "no")
+                     "yes" if self._compiled_path else "no")
 
     # ------------------------------------------------------------------ #
     # Core serve logic
@@ -260,10 +289,10 @@ class ArcGateway:
         }
 
     def _execute(self, entry: dict, params: dict) -> dict:
-        """Run the compiled module or fall back to runtime dispatch."""
-        if self._compiled_mod is not None:
-            # Compiled path: direct function calls, no vector search
-            return self._compiled_mod.solve(params)
+        """Run the compiled module (in a worker subprocess) or fall back
+        to runtime dispatch (builder-sandboxed, in-process)."""
+        if self._worker_pool is not None:
+            return self._worker_pool.submit(params)
 
         # Runtime path (no compiled module): use the full ARC context
         from arc.context import Context, Thresholds
@@ -389,6 +418,9 @@ class _GatewayHandler(BaseHTTPRequestHandler):
             "hit_rate": round(s.hit_rate(), 4),
             "avg_hit_ms": round(s.avg_hit_ms(), 2),
             "avg_miss_ms": round(s.avg_miss_ms(), 2),
+            "compiled": self.gateway._compiled_path is not None,
+            "workers": self.gateway._worker_pool.n_workers if self.gateway._worker_pool else 0,
+            "worker_restarts": self.gateway._worker_pool.restarts if self.gateway._worker_pool else 0,
         }
 
     def _json(self, code: int, data: dict):
@@ -424,6 +456,14 @@ def main():
     parser.add_argument("--load-threshold", type=float, default=0.45)
     parser.add_argument("--lazy-build", action="store_true", help="Enable lazy cache build on miss")
     parser.add_argument("--build-queue-dir", default="./build_queue")
+    parser.add_argument("--workers", type=int, default=2,
+                        help="worker subprocesses for executing generated code")
+    parser.add_argument("--worker-cpu-seconds", type=float, default=5.0,
+                        help="per-call CPU budget in each worker")
+    parser.add_argument("--worker-mem-mb", type=int, default=1024,
+                        help="virtual-memory ceiling per worker (MiB)")
+    parser.add_argument("--call-timeout", type=float, default=10.0,
+                        help="wall-clock budget per cached-code call")
     parser.add_argument("--verbose", action="store_true")
     args = parser.parse_args()
 
@@ -443,6 +483,10 @@ def main():
         load_threshold=args.load_threshold,
         enable_lazy_build=args.lazy_build,
         build_queue_dir=args.build_queue_dir,
+        workers=args.workers,
+        worker_cpu_seconds=args.worker_cpu_seconds,
+        worker_mem_mb=args.worker_mem_mb,
+        call_timeout_s=args.call_timeout,
     )
 
     gateway = ArcGateway(config)
@@ -456,6 +500,9 @@ def main():
         server.serve_forever()
     except KeyboardInterrupt:
         log.info("Shutting down. Stats: %s", json.dumps(gateway.stats.__dict__))
+    finally:
+        if gateway._worker_pool is not None:
+            gateway._worker_pool.shutdown()
 
 
 if __name__ == "__main__":
