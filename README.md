@@ -109,7 +109,7 @@ tests/            Offline + live test suites
 ### Production (systemd + nightly curator)
 
 ```bash
-git clone https://github.com/cybertronic/cybertronic.git && cd cybertronic
+git clone https://github.com/cybertronic/cpu-arc.git && cd cybertronic
 
 # dry run first — prints every action, changes nothing
 sudo ./deploy/install.sh --dry-run
