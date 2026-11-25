@@ -154,7 +154,8 @@ def main() -> None:
     ap.add_argument("--top", type=int, default=10)
     ap.add_argument("--out", default=None)
     ap.add_argument("--build-queue-dir", default=None)
-    ap.add_argument("--embed-url", default="http://127.0.0.1:8081")
+    from arc import endpoints
+    ap.add_argument("--embed-url", default=endpoints.embed_url())
     ap.add_argument("--embed", choices=["server", "hash"], default="server")
     args = ap.parse_args()
 

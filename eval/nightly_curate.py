@@ -93,7 +93,8 @@ def main() -> None:
     ap.add_argument("--db", required=True, help="invocations.db")
     ap.add_argument("--cache-dir", required=True)
     ap.add_argument("--build-queue-dir", default=None)
-    ap.add_argument("--embed-url", default="http://127.0.0.1:8081")
+    from arc import endpoints
+    ap.add_argument("--embed-url", default=endpoints.embed_url())
     ap.add_argument("--embed", choices=["server", "hash"], default="server")
     ap.add_argument("--embed-fallback", choices=["auto", "none"], default="auto")
     ap.add_argument("--golden-map", required=True,
@@ -109,8 +110,8 @@ def main() -> None:
     ap.add_argument("--report-dir", required=True)
     ap.add_argument("--family-thresholds", default="",
                     help="'fam=th,fam=th' (same format as gateway --family-threshold)")
-    ap.add_argument("--chat-url", default="http://127.0.0.1:8080/v1")
-    ap.add_argument("--model", default="unsloth/Qwen3.8-27B-GGUF:UD-Q6_K_M")
+    ap.add_argument("--chat-url", default=endpoints.chat_url())
+    ap.add_argument("--model", default=endpoints.build_model())
     args = ap.parse_args()
 
     if not Path(args.db).exists():

@@ -1,6 +1,6 @@
 [Unit]
 Description=CPU-ARC semantic cache gateway (cache-first LLM sidecar)
-Documentation=file:__REPO__/README.md
+Documentation=file:__REPO__/deploy/README.md
 After=network-online.target
 Wants=network-online.target
 
@@ -9,25 +9,26 @@ Type=simple
 User=__USER__
 Group=__USER__
 WorkingDirectory=__REPO__
+# All tunables — model names, model URLs, ports, thresholds — live in
+# /etc/arc/gateway.env (ARC_* variables). Edit that file, then:
+#   systemctl restart arc-gateway
 EnvironmentFile=-/etc/arc/gateway.env
 Environment=MALLOC_ARENA_MAX=2
 Environment=PYTHONUNBUFFERED=1
-# All tunables come from /etc/arc/gateway.env (see deploy/arc-gateway.env).
-# CACHE_DIR and BUILD_QUEUE_DIR must live outside __REPO__ for the sandbox
-# hardening below to work.
+# CACHE_DIR and BUILD_QUEUE_DIR must live outside the repo (see sandboxing).
 ExecStart=__PYTHON__ -m arc.gateway \
-    --port ${PORT} \
-    --host ${HOST} \
-    --cache-dir ${CACHE_DIR} \
-    --chat-url ${CHAT_URL} \
-    --embed-url ${EMBED_URL} \
-    --model ${MODEL} \
-    --entry-threshold ${ENTRY_THRESHOLD} \
-    --family-threshold "${FAMILY_THRESHOLDS}" \
-    --min-separation ${MIN_SEPARATION} \
+    --port ${ARC_PORT} \
+    --host ${ARC_HOST} \
+    --cache-dir ${ARC_CACHE_DIR} \
+    --chat-url ${ARC_CHAT_URL} \
+    --embed-url ${ARC_EMBED_URL} \
+    --model ${ARC_MODEL} \
+    --entry-threshold ${ARC_ENTRY_THRESHOLD} \
+    --family-threshold "${ARC_FAMILY_THRESHOLDS}" \
+    --min-separation ${ARC_MIN_SEPARATION} \
     --lazy-build \
-    --build-queue-dir ${BUILD_QUEUE_DIR} \
-    --log-retention-days ${LOG_RETENTION_DAYS}
+    --build-queue-dir ${ARC_BUILD_QUEUE_DIR} \
+    --log-retention-days ${ARC_LOG_RETENTION_DAYS}
 Restart=always
 RestartSec=5
 TimeoutStopSec=30

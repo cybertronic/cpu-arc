@@ -563,9 +563,13 @@ def main():
     parser.add_argument("--host", default="0.0.0.0",
                         help="bind address (use 127.0.0.1 unless the sidecar is exposed)")
     parser.add_argument("--cache-dir", default="./cache")
-    parser.add_argument("--chat-url", default="http://127.0.0.1:8080/v1")
-    parser.add_argument("--embed-url", default="http://127.0.0.1:8081")
-    parser.add_argument("--model", default="")
+    from arc import endpoints
+    parser.add_argument("--chat-url", default=endpoints.chat_url(),
+                        help="chat base URL (default: $ARC_CHAT_URL or 127.0.0.1:8080/v1)")
+    parser.add_argument("--embed-url", default=endpoints.embed_url(),
+                        help="embedding base URL (default: $ARC_EMBED_URL or 127.0.0.1:8081)")
+    parser.add_argument("--model", default=endpoints.model(),
+                        help="runtime LLM fallback model (default: $ARC_MODEL)")
     parser.add_argument("--entry-threshold", type=float, default=0.72)
     parser.add_argument("--function-threshold", type=float, default=0.55)
     parser.add_argument("--load-threshold", type=float, default=0.45)

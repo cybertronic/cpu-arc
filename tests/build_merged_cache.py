@@ -8,6 +8,7 @@ are remapped to match. No compiled module (runtime dispatch path).
 """
 from __future__ import annotations
 
+import os
 import shutil
 import sqlite3
 import sys
@@ -20,7 +21,8 @@ FAMILIES = [
     ("gcd", "tests/.gcd_cache"),
     ("lcm", "tests/.lcm_cache"),
 ]
-OUT = "tests/.merged_cache"
+# Override for production deployment:  ARC_MERGED_OUT=/var/lib/arc/cache
+OUT = os.environ.get("ARC_MERGED_OUT", "tests/.merged_cache")
 
 
 def main() -> None:

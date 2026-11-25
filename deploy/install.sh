@@ -139,8 +139,11 @@ rm -f /tmp/arc-curator.cron.new
 echo "    /etc/cron.d/arc-curator: nightly mine -> gated auto-promote"
 
 say "ownership"
+# State is owned by the service user. The repo is deliberately NOT
+# chowned: the gateway only reads code from it (world-readable is enough),
+# and all writes go to /var/lib/arc. If you deploy the repo under the
+# service user on a fresh host, chown it yourself.
 run chown -R "$SVC_USER":"$SVC_USER" /var/lib/arc
-run chown -R "$SVC_USER":"$SVC_USER" "$REPO"
 
 echo
 if [[ $DRY_RUN -eq 1 ]]; then

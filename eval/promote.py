@@ -148,9 +148,11 @@ def main() -> None:
     ap.add_argument("--cases", type=int, default=8)
     ap.add_argument("--threshold", type=float, default=0.72,
                     help="per-family entry threshold applied during the gate")
-    ap.add_argument("--chat-url", default="http://127.0.0.1:8080/v1")
-    ap.add_argument("--embed-url", default="http://127.0.0.1:8081")
-    ap.add_argument("--model", default="unsloth/Qwen3.8-27B-GGUF:UD-Q6_K_M")
+    from arc import endpoints
+    ap.add_argument("--chat-url", default=endpoints.chat_url())
+    ap.add_argument("--embed-url", default=endpoints.embed_url())
+    ap.add_argument("--model", default=endpoints.build_model(),
+                    help="build model (default: $ARC_BUILD_MODEL or $ARC_MODEL)")
     ap.add_argument("--no-recompile", action="store_true")
     args = ap.parse_args()
 

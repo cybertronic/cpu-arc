@@ -55,6 +55,34 @@ Run it by hand any time:
 CURATOR_AUTO_PROMOTE=0 ./deploy/nightly_curate.sh   # report only
 ```
 
+## Pointing the stack at a different model / location
+
+One file: `/etc/arc/gateway.env` (template: `deploy/arc-gateway.env`).
+Every component — the gateway service, the promotion gate, the nightly
+curator — reads these as its defaults (CLI flags still win):
+
+```
+ARC_CHAT_URL    chat/completions base URL    (llama-server :8080)
+ARC_EMBED_URL   embedding server base URL    (llama-server :8081)
+ARC_MODEL       model name for runtime LLM fallback
+ARC_BUILD_MODEL model name for cache builds/promotion
+                (empty = use ARC_MODEL; set to point builds at a
+                 stronger/slower model than the runtime fallback)
+```
+
+Example — move to a 70B build model on another host, runtime stays on 27B:
+
+```
+ARC_CHAT_URL=http://10.0.0.5:8080/v1
+ARC_MODEL=Qwen3-27B
+ARC_BUILD_MODEL=Qwen3-70B
+```
+then `systemctl restart arc-gateway` (the cron loop picks up changes on its
+next run; it sources the same file).
+
+In code this lives in `arc/endpoints.py` — `ARC_*` environment variables,
+which is also how you override any single run without touching the file.
+
 ## Operational notes
 
 - **Golden map trust**: entries in `golden-map.json` are evaluated as
