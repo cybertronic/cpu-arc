@@ -59,13 +59,36 @@ def _coerce(value: Any, d_type: type | None) -> Any:
         return bool(value)
     if d_type is list:
         if isinstance(value, (list, tuple)):
-            return list(value)
+            # normalize any string elements that are really numbers
+            out = []
+            for el in value:
+                if isinstance(el, str):
+                    m = _NUM_RE.fullmatch(el.strip())
+                    if m:
+                        el = int(m.group(0))
+                out.append(el)
+            return out
         if isinstance(value, str):
             try:
                 v = ast.literal_eval(value)
-                return list(v) if isinstance(v, (list, tuple)) else [value]
+                if isinstance(v, (list, tuple)):
+                    # recurse to normalize string-number elements
+                    return _coerce(list(v), list)
+                return [value]
             except Exception:
-                return [x.strip() for x in value.split(",") if x.strip()]
+                pass
+            # Not a valid Python literal (e.g. the raw prose phrase
+            # "126, 168, and 210"). If it looks like a run of numbers,
+            # extract them — this is the common serve-path case where the LM
+            # returns natural-language enumeration instead of a list literal.
+            nums = _NUM_RE.findall(value.replace(",", " "))
+            if len(nums) >= 2:
+                def _num(s):
+                    f = float(s)
+                    return int(f) if f.is_integer() else f
+                return [_num(n) for n in nums]
+            # otherwise fall back to comma-split strings (genuinely non-numeric)
+            return [x.strip() for x in value.split(",") if x.strip()]
     if d_type is set:
         return set(_coerce(value, list))
     if d_type is dict:

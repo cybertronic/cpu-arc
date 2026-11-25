@@ -48,13 +48,25 @@ _NUM_PATTERNS = [
 ]
 
 
-def extract_params_regex(query: str, param_descriptions: list[str]) -> dict | None:
+def _is_list_type(pt) -> bool:
+    return isinstance(pt, str) and pt.strip().lower() in ("list", "set", "tuple")
+
+
+def _num_int(v):
+    f = float(v)
+    return int(f) if f.is_integer() else f
+
+
+def extract_params_regex(query: str, param_descriptions: list[str],
+                         param_types: list[str | None] | None = None) -> dict | None:
     """Try to extract parameters via regex (zero LLM calls).
 
     Returns {description: value} or None if extraction fails.
-    Positional: the Nth number in the query maps to the Nth parameter
-    description. Requires an exact count match; anything else defers to
-    the LLM extractor (which can disambiguate extra numbers).
+    Scalar params are positional: the Nth number in the query maps to the Nth
+    parameter description, requiring an exact count match. A single list-typed
+    param (e.g. "the list of integers to find the LCM of") consumes ALL
+    candidate numbers as a list of ints — a 3-number query maps to one list
+    param. Multiple list params are ambiguous -> defer to the LLM extractor.
     """
     nums = re.findall(r"\b(\d{1,15})\b", query)
     if not nums:
@@ -63,18 +75,44 @@ def extract_params_regex(query: str, param_descriptions: list[str]) -> dict | No
     candidates = [n for n in nums if int(n) > 1]
     if not candidates:
         candidates = nums
-    if len(candidates) != len(param_descriptions):
+    n = len(param_descriptions)
+    list_idx = ([i for i, pt in enumerate(param_types or []) if _is_list_type(pt)]
+                if param_types else [])
+    if list_idx:
+        # Only the ALL-LIST shape (e.g. "LCM of a, b, c" -> one list param)
+        # is handled here, where the assignment is unambiguous: the list takes
+        # every candidate number. Multiple list params, or a scalar+list mix,
+        # are ambiguous positionally -> return None and defer to the LLM
+        # extractor (which reads semantics). Real families are all-list or
+        # all-scalar; mixed never occurs in production.
+        if len(list_idx) != 1 or n != 1 or len(candidates) < 2:
+            return None
+        return {param_descriptions[list_idx[0]]: [int(c) for c in candidates]}
+    if len(candidates) != n:
         return None
     return {desc: cand for desc, cand in zip(param_descriptions, candidates)}
 
 
-def extract_params_llm(query: str, param_descriptions: list[str], lm_backend) -> dict | None:
-    """Extract parameters via a small LLM call (fallback when regex fails)."""
+def extract_params_llm(query: str, param_descriptions: list[str], lm_backend,
+                       param_types: list[str | None] | None = None) -> dict | None:
+    """Extract parameters via a small LLM call (fallback when regex fails).
+
+    param_types declares each param's type; list-typed params get an explicit
+    instruction to return a JSON array and their values keep their JSON type
+    (not stringified) so the compiled module receives a real list.
+    """
+    ptypes = param_types if param_types else [None] * len(param_descriptions)
+    lines = []
+    for d, pt in zip(param_descriptions, ptypes):
+        if _is_list_type(pt):
+            lines.append(f'- "{d}" (return a JSON array of numbers, e.g. [126, 168, 210])')
+        else:
+            lines.append(f'- "{d}"')
     prompt = (
         f"From the following problem, extract these values. Reply as JSON.\n\n"
         f"Problem: {query}\n\n"
         f"Values to extract:\n"
-        + "\n".join(f'- "{d}"' for d in param_descriptions)
+        + "\n".join(lines)
         + "\n\nReply with ONLY a JSON object like {\"<description>\": <value>, ...}."
     )
     try:
@@ -84,7 +122,18 @@ def extract_params_llm(query: str, param_descriptions: list[str], lm_backend) ->
             out = re.sub(r"^```\w*\n?", "", out)
             out = re.sub(r"\n?```$", "", out)
         parsed = json.loads(out)
-        return {d: str(parsed.get(d, "")) for d in param_descriptions}
+        result = {}
+        for d, pt in zip(param_descriptions, ptypes):
+            v = parsed.get(d, "")
+            if _is_list_type(pt):
+                if isinstance(v, str):
+                    v = [_num_int(x) for x in re.findall(r"-?\d+(?:\.\d+)?", v)]
+                elif isinstance(v, (list, tuple)):
+                    v = [_num_int(x) if isinstance(x, (int, float, str)) else x for x in v]
+                result[d] = v
+            else:
+                result[d] = str(v)
+        return result
     except (json.JSONDecodeError, Exception) as e:
         log.warning("LLM param extraction failed: %s", e)
         return None
@@ -354,25 +403,34 @@ class ArcGateway:
                     f"ambiguous cross-family: top1 {score:.3f} vs other family "
                     f"{best_other:.3f} (separation < {self.config.min_separation})"))
 
-        # 2. Parameter extraction
+        # 2. Parameter extraction (param_types lets list-typed params group
+        # multiple numbers into one value instead of positional 1:1 mapping)
         params_desc = entry["params"]
-        params = extract_params_regex(query, params_desc)
+        param_types = entry.get("param_types")
+        params = extract_params_regex(query, params_desc, param_types)
         if params is None and self.lm:
             # Only ask the LLM to extract when the query plausibly contains a
             # number for every parameter; otherwise it will hallucinate the
             # missing ones (e.g. a 2-number query vs a 3-param GCD entry).
             n_nums = len(re.findall(r"\b\d{1,15}\b", query))
             if n_nums >= len(params_desc):
-                params = extract_params_llm(query, params_desc, self.lm)
+                params = extract_params_llm(query, params_desc, self.lm, param_types)
         if params is None:
             mark("miss", "extract", reason="param extraction failed",
                  family=fam, entry=entry, score=score)
             return self._miss(query, t0, reason="param extraction failed")
         # Guard: compiled entries coerce numeric params. Refuse non-numeric
         # values ("" / "None" / text from a partial LLM extraction) instead of
-        # executing with garbage.
+        # executing with garbage. List params are validated element-wise.
         for desc, val in params.items():
-            if not re.fullmatch(r"\s*-?[\d,]+(?:\.\d+)?\s*", str(val)):
+            if isinstance(val, (list, tuple)):
+                ok = (len(val) >= 1 and all(
+                    isinstance(x, (int, float)) or
+                    (isinstance(x, str) and re.fullmatch(r"\s*-?\d+(?:\.\d+)?\s*", x))
+                    for x in val))
+            else:
+                ok = bool(re.fullmatch(r"\s*-?[\d,]+(?:\.\d+)?\s*", str(val)))
+            if not ok:
                 mark("miss", "extract",
                      reason=f"param {desc!r} not numeric: {val!r}",
                      family=fam, entry=entry, score=score)
@@ -430,15 +488,19 @@ class ArcGateway:
         return fn(ctx)
 
     def _miss(self, query: str, t0: float, reason: str) -> dict:
-        """Handle a cache miss: proxy to LLM + optionally queue for build."""
-        elapsed_ms = (time.perf_counter() - t0) * 1000
-        self._stat_bump("cache_misses", add={"total_miss_ms": elapsed_ms})
+        """Handle a cache miss: proxy to LLM + optionally queue for build.
+
+        `ms` is the full client-visible latency (match decision + LLM
+        fallback + queue write) — that is where the wall time actually
+        goes. Measuring before the proxy would report ~50ms for a miss
+        whose client waited tens of seconds.
+        """
+        self._stat_bump("cache_misses")
 
         response = {
             "source": "llm-fallback",
             "entry_score": None,
             "reason": reason,
-            "ms": round(elapsed_ms, 2),
             "hit_rate": round(self.stats.hit_rate(), 3),
         }
 
@@ -456,6 +518,9 @@ class ArcGateway:
         if self.config.enable_lazy_build and self.lm and "answer" in response:
             self._queue_build(query, response["answer"])
 
+        elapsed_ms = (time.perf_counter() - t0) * 1000
+        self._stat_bump(add={"total_miss_ms": elapsed_ms})
+        response["ms"] = round(elapsed_ms, 2)
         return response
 
     def _queue_build(self, query: str, transcript: str) -> None:

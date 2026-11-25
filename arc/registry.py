@@ -122,12 +122,23 @@ class EntryStore:
             self._load()
 
     def register(self, description: str, root_function_id: str,
-                 param_descriptions: list[str], family: str | None = None) -> None:
+                 param_descriptions: list[str], family: str | None = None,
+                 param_types: list[str] | None = None) -> None:
+        # param_types[i] is the declared Python type name for params[i]
+        # ("list", "int", ...). Persisted so the serve path can coerce LM
+        # extraction output to the right type before dispatch — without it a
+        # list param extracted as the raw phrase "126, 168, and 210" degrades
+        # to comma-split strings at load() time.
+        n = len(param_descriptions)
+        pt = list(param_types) if param_types else [None] * n
+        while len(pt) < n:
+            pt.append(None)
         self.entries.append({
             "description": description,
             "vec": self.embedder.embed(description),
             "root_function_id": root_function_id,
             "params": param_descriptions,
+            "param_types": pt[:n],
             "family": family,
         })
         if self.path:
@@ -157,7 +168,7 @@ class EntryStore:
         try:
             conn.execute("CREATE TABLE IF NOT EXISTS entries ("
                          "rowid INTEGER PRIMARY KEY, description TEXT, root TEXT, "
-                         "params TEXT, vec BLOB, family TEXT)")
+                         "params TEXT, param_types TEXT, vec BLOB, family TEXT)")
             # Migrate older schemas in place (CREATE TABLE IF NOT EXISTS is a
             # no-op on an existing table, so missing columns are backfilled).
             cols = {r[1] for r in conn.execute("PRAGMA table_info(entries)")}
@@ -165,21 +176,24 @@ class EntryStore:
                 conn.execute("ALTER TABLE entries RENAME TO entries_old")
                 conn.execute("CREATE TABLE entries ("
                              "rowid INTEGER PRIMARY KEY, description TEXT, "
-                             "root TEXT, params TEXT, vec BLOB, family TEXT)")
+                             "root TEXT, params TEXT, param_types TEXT, vec BLOB, family TEXT)")
                 conn.execute("INSERT INTO entries (description, root, params) "
                              "SELECT description, root, params FROM entries_old")
                 conn.execute("DROP TABLE entries_old")
-                cols = {"rowid", "description", "root", "params", "vec", "family"}
+                cols = {"rowid", "description", "root", "params", "param_types", "vec", "family"}
             elif "family" not in cols:
                 conn.execute("ALTER TABLE entries ADD COLUMN family TEXT")
+            if "param_types" not in cols:
+                conn.execute("ALTER TABLE entries ADD COLUMN param_types TEXT")
             conn.execute("DELETE FROM entries")
             for e in self.entries:
                 vec = e.get("vec")
                 conn.execute("INSERT INTO entries "
-                             "(description, root, params, vec, family) "
-                             "VALUES (?,?,?,?,?)",
+                             "(description, root, params, param_types, vec, family) "
+                             "VALUES (?,?,?,?,?,?)",
                              (e["description"], e["root_function_id"],
                               json.dumps(e["params"]),
+                              json.dumps(e.get("param_types") or []),
                               vec.tobytes() if vec is not None else None,
                               e.get("family")))
             conn.commit()
@@ -196,21 +210,30 @@ class EntryStore:
             cols = {r[1] for r in conn.execute("PRAGMA table_info(entries)")}
             sel_vec = "vec" if "vec" in cols else "NULL"
             sel_fam = "family" if "family" in cols else "NULL"
+            sel_pt = "param_types" if "param_types" in cols else "NULL"
             rows = conn.execute(
-                f"SELECT description, root, params, {sel_vec}, {sel_fam} FROM entries"
+                f"SELECT description, root, params, {sel_pt}, {sel_vec}, {sel_fam} FROM entries"
             ).fetchall()
         finally:
             conn.close()
         need_upgrade = ("vec" not in cols) or ("family" not in cols)
-        for desc, root, params, blob, fam in rows:
+        for desc, root, params, pt_blob, blob, fam in rows:
             vec = np.frombuffer(blob, dtype=np.float32) if blob else None
             if vec is None:
                 vec = self.embedder.embed(desc)
+            try:
+                param_types = json.loads(pt_blob) if pt_blob else []
+            except (ValueError, TypeError):
+                param_types = []
+            nparams = len(json.loads(params))
+            while len(param_types) < nparams:
+                param_types.append(None)
             self.entries.append({
                 "description": desc,
                 "vec": vec,
                 "root_function_id": root,
                 "params": json.loads(params),
+                "param_types": param_types[:nparams],
                 "family": fam,
             })
         if need_upgrade and self.entries:

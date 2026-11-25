@@ -12,6 +12,12 @@ from .context import Context, CacheInvocationError, Thresholds
 from .primitives import bind, extract, _primitives
 from .registry import Registry, EntryStore
 
+# Declared param type name (as stored on the entry) -> Python type for coercion.
+_TYPE_MAP = {
+    "int": int, "float": float, "str": str, "string": str,
+    "list": list, "set": set, "dict": dict, "bool": bool,
+}
+
 
 @dataclass
 class InvocationRecord:
@@ -69,10 +75,13 @@ class ARC:
     # -- construction API ------------------------------------------------------
     def register_entry(self, input_text: str, root_source: str,
                        root_description: str, param_descriptions: list[str],
-                       utility_sources: list[tuple[str, str]] | None = None) -> str:
+                       utility_sources: list[tuple[str, str]] | None = None,
+                       param_types: list[str] | None = None) -> str:
         """Register a root function (from source) plus its utilities and an entry point.
 
         root_source must define a function taking (ctx). Utility sources likewise.
+        param_types[i] is the declared type name for params[i] (persisted so the
+        serve path can coerce LM extraction output before dispatch).
         Returns the root function id.
         """
         from .sandbox import exec_function_source
@@ -82,7 +91,8 @@ class ARC:
         root_id = self.registry.register(
             root_description, exec_function_source(root_source, prims),
             source=root_source, meta={"params": param_descriptions})
-        self.entry_store.register(input_text, root_id, param_descriptions)
+        self.entry_store.register(input_text, root_id, param_descriptions,
+                                  param_types=param_types)
         return root_id
 
     # -- invocation (IS1-IS4) ----------------------------------------------------
@@ -95,13 +105,30 @@ class ARC:
         bind(self.embedder, self.registry, self.lm, ctx=ctx, tools=self.tools)
         _mark = self.ledger.mark()
 
-        # IS2: parameter extraction via T, with one hinted retry for misses
+        # IS2: parameter extraction via T, with one hinted retry for misses.
+        # Each extracted value is coerced to the entry's declared param type so
+        # a list param extracted as the raw phrase "126, 168, and 210" becomes a
+        # real [126, 168, 210] before dispatch (not comma-split strings).
+        ptypes = entry.get("param_types") or []
+        params_list = entry["params"]
+        def _add(desc, val):
+            d_type = None
+            if desc in params_list:
+                ti = params_list.index(desc)
+                if ti < len(ptypes) and ptypes[ti]:
+                    d_type = _TYPE_MAP.get(ptypes[ti])
+            try:
+                from .primitives import coerce_or_convert
+                val = coerce_or_convert(ctx, val, d_type)
+            except CacheInvocationError:
+                pass  # fall back to the raw extracted value; load() will retry
+            ctx.layers[0].add(desc, val, self.embedder)
         for attempt in range(2):
             missing = []
             for desc in entry["params"]:
                 try:
                     val = extract(ctx, request, f"{desc} (as stated in the problem)")
-                    ctx.layers[0].add(desc, val, self.embedder)
+                    _add(desc, val)
                 except CacheInvocationError:
                     missing.append(desc)
             if not missing:
@@ -112,7 +139,7 @@ class ARC:
                     f"{desc} — look carefully: it is stated somewhere in the problem, "
                     f"possibly embedded in a longer phrase or sentence",
                 )
-                ctx.layers[0].add(desc, val, self.embedder)
+                _add(desc, val)
 
         # IS3: dispatch root
         fn = self._resolve_root(entry)

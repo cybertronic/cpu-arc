@@ -279,6 +279,14 @@ Reasoning steps (for context):
   per-iteration / per-division sub-functions; the code must compute the
   algorithm generically for any inputs, never the transcript's literal
   intermediate values.
+- STRONGLY prefer a SINGLE root function that computes the whole answer in one
+  coherent body (e.g. LCM of N numbers = ONE root function that factorizes each
+  input and multiplies the highest prime powers; GCD = ONE Euclidean loop). Only
+  split into multiple functions when a sub-step is itself a genuinely reusable,
+  independently-cached algorithm AND the root genuinely needs it as an input. A
+  plan where every non-root function's output is consumed by exactly one other
+  function (a linear chain) is almost always over-decomposition — collapse it
+  into the root.
 JSON: {{"functions":[{{"id":"f1","description":"...","depends_on":["f2"],"is_root":false}}],
        "build_order":["f2","f1"]}}   (dependencies first)
 
@@ -397,6 +405,17 @@ Transcript:
 
 Function id: {name}
 Its description: {spec.description}
+
+SCOPE RULE (critical): implement EXACTLY what the description above says and
+return ONLY that described output. Do NOT solve the whole original problem here
+and do NOT return the final answer unless this function IS the root. If your
+description says "return a dictionary mapping each prime factor to its
+exponent", return exactly that dict — not the LCM, not the GCD, not any other
+final value. The root function is the only one that returns the final answer.
+OUTPUT KEY: the returned dict's key is a free-form natural-language description
+of the value (e.g. "the least common multiple of the given integers"). Pick a
+clear descriptive key and keep it stable across rewrites — do not change the
+key to fix a judging complaint about its wording; only change the VALUE.
 {dep_instruction}
 
 Original problem:
@@ -444,31 +463,52 @@ Its output: {json.dumps(out, default=str)[:1500]}
 Problem: {p1['user_input']}
 Source transcript:
 {transcript}
-Is the function output correct and consistent with the transcript reasoning?""")
+OUTPUT CONTRACT: by design every semantic function returns a dict of
+{{"natural-language description": value}}. The dict wrapping is CORRECT and
+expected — never reject or critique the key wording, the dict shape, or the
+fact that the value is wrapped in a dict. Judge ONLY whether the VALUE(s) are
+numerically correct and consistent with the transcript reasoning. If the
+value is right, pass=true.""" + (
+                        "\nNOTE this function is NOT the root; its described output "
+                        "is an intermediate value, not the final answer."
+                        if not spec.is_root else ""))
                 if ok:
                     fid = self.arc.registry.register(spec.description, fn, source=src,
                                                      meta={"spec_id": spec.id})
                     result.registered[spec.id] = fid
                     return
                 failures.append(f"judge: {critique}")
-                feedback = (f"\n\nYour previous candidate FAILED judging: {critique}\n"
-                            f"Return ONLY a corrected ```python fenced block.")
+                feedback = (
+                    f"\n\nYour previous candidate FAILED judging: {critique}\n"
+                    f"CRITICAL: keep every load(ctx, \"...\") query string EXACTLY as it "
+                    f"was — do NOT reword them (rewording breaks context matching and "
+                    f"returns the wrong type). Change ONLY the computation or the "
+                    f"returned value. Return ONLY a corrected ```python fenced block.")
             except (ValueError, json.JSONDecodeError, SandboxError) as e:
                 failures.append(f"codegen/sandbox/dispatch: {e!r}")
-                feedback = (f"\n\nYour previous candidate FAILED: {e!r}\n"
-                            f"Return ONLY a corrected ```python fenced block.")
+                feedback = (
+                    f"\n\nYour previous candidate FAILED: {e!r}\n"
+                    f"CRITICAL: keep every load(ctx, \"...\") query string EXACTLY as it "
+                    f"was — do NOT reword them. Change ONLY the buggy computation. "
+                    f"Return ONLY a corrected ```python fenced block.")
             except AttributeError as e:
                 # runtime bug in the generated code (e.g. wrong value type from
                 # load()); feed it back so the model can fix its assumptions
                 failures.append(f"runtime: {e!r}")
-                feedback = (f"\n\nYour previous candidate FAILED at runtime: {e!r}\n"
-                            f"Check what each load() actually returns and fix your code. "
-                            f"Return ONLY a corrected ```python fenced block.")
+                feedback = (
+                    f"\n\nYour previous candidate FAILED at runtime: {e!r}\n"
+                    f"Check what each load() actually returns and fix your code. "
+                    f"CRITICAL: keep every load(ctx, \"...\") query string EXACTLY as it "
+                    f"was — do NOT reword them (rewording breaks context matching). "
+                    f"Return ONLY a corrected ```python fenced block.")
             except CacheInvocationError as e:
                 failures.append(f"dispatch: {e!r}")
                 # dispatch failure is usually a runtime bug in the candidate; feed back.
-                feedback = (f"\n\nYour previous candidate FAILED at runtime: {e!r}\n"
-                            f"Return ONLY a corrected ```python fenced block.")
+                feedback = (
+                    f"\n\nYour previous candidate FAILED at runtime: {e!r}\n"
+                    f"CRITICAL: keep every load(ctx, \"...\") query string EXACTLY as it "
+                    f"was — do NOT reword them. Change ONLY the buggy computation. "
+                    f"Return ONLY a corrected ```python fenced block.")
         result.errors.append(
             f"function {spec.id} failed after {self.max_rewrites + 1} attempts: "
             + " | ".join(failures))
@@ -522,11 +562,13 @@ Is the function output correct and consistent with the transcript reasoning?""")
             # points (paper §2.2.1 Phase 5)
             # family tag drives per-family entry thresholds at serve time
             self.arc.entry_store.register(query, root_id, [p.description for p in params],
-                                          family=family)
+                                          family=family,
+                                          param_types=[p.type for p in params])
             if result.template and "<" in result.template:
                 self.arc.entry_store.register(result.template, root_id,
                                               [p.description for p in params],
-                                              family=family)
+                                              family=family,
+                                              param_types=[p.type for p in params])
 
             # Root end-to-end validation (extraction round-trip xN)
             for i in range(self.roundtrips):
@@ -539,7 +581,10 @@ Is the function output correct and consistent with the transcript reasoning?""")
                     f"""Final answer candidate (from cache): {json.dumps(out['result'], default=str)[:800]}
 Correct answer: {result.final_answer}
 Problem: {query}
-Is the candidate answer correct?""")
+OUTPUT CONTRACT: the candidate is a dict of {{"description": value}} by design —
+the dict wrapping and key wording are correct; judge ONLY the numeric VALUE
+against the correct answer (which may itself be stated as a bare number).
+If the value matches, pass=true.""")
                 result.roundtrips.append({"round": i + 1, "result": out["result"],
                                           "pass": ok, "critique": critique})
                 if not ok:

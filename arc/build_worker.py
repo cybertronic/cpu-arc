@@ -1,4 +1,22 @@
-"""ARC Build Worker — consumes the lazy-build queue and grows the cache.
+"""[DEPRECATED — NOT in the production path] Legacy lazy-build consumer
+from the P0-P4 era. The production queue consumer is the nightly curator:
+eval/nightly_curate.py -> eval/promote.py --job (golden-gated build,
+merged-module recompile, rollback on failure, gateway /reload).
+
+Why this file must not be run in production:
+  * builds WITHOUT the golden-expression correctness gate (safety bypass)
+  * emits per-entry artifacts (compiled/entry_NNN/) that the gateway does
+    not load — the gateway executes the merged compiled/arc_compiled.py
+  * writes a .reload_signal file that nothing watches (no gateway watcher
+    exists; reload is HTTP GET /reload)
+  * is launched by nothing (no unit, no cron, no caller)
+
+Kept for reference only. Do not resurrect without re-architecting onto
+promote.py's gated path.
+
+---
+Original docstring:
+ARC Build Worker — consumes the lazy-build queue and grows the cache.
 
 Reads pending (query, transcript) pairs from the build queue directory,
 runs the 5-phase builder on each, registers new entries/functions into the

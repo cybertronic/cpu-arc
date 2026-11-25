@@ -5,6 +5,7 @@ Offline (no servers):
   8    promote.py helpers: extract_answer / make_cases / case_query
   9-12 family_candidates(): new-family seed signal (volume floor, in-band
        exclusion, report-only shape)
+  13-14 reload_gateway(): loop-closure hot-reload (ok + unreachable)
 Live (needs embed :8081 + gateway :8083 with divisors cache):
   9-10 mine the REAL invocation log after generating repeated real misses
 
@@ -198,6 +199,42 @@ def test_offline() -> Path:
     ffc = family_candidates(cfar, emb, min_misses=5, region_cosine=0.80)
     check("below-band misses with family ctx are seeds (production shape)",
           len(ffc) == 1 and ffc[0]["total_misses"] == 6, str(ffc))
+
+    # 13-14. reload_gateway(): loop closure — running gateway must pick up
+    # promoted entries without a manual restart
+    from nightly_curate import reload_gateway
+    import http.server, threading as _th, socket
+    hits = []
+
+    class _ReloadHandler(http.server.BaseHTTPRequestHandler):
+        # mirrors the real gateway: /reload is a POST endpoint
+        def do_POST(self):
+            hits.append(self.path)
+            body = b'{"status": "reloaded"}'
+            self.send_response(200)
+            self.send_header("Content-Type", "application/json")
+            self.end_headers()
+            self.wfile.write(body)
+
+        def do_GET(self):
+            self.send_response(404)
+            self.end_headers()
+
+        def log_message(self, *a):
+            pass
+
+    srv = http.server.ThreadingHTTPServer(("127.0.0.1", 0), _ReloadHandler)
+    _th.Thread(target=srv.serve_forever, daemon=True).start()
+    port = srv.server_address[1]
+    try:
+        res = reload_gateway(f"http://127.0.0.1:{port}")
+        check("reload_gateway ok on live /reload",
+              res == "ok" and hits == ["/reload"], f"{res!r} {hits}")
+    finally:
+        srv.shutdown()
+    check("reload_gateway reports failure on dead port (run must not die)",
+          reload_gateway("http://127.0.0.1:1", timeout=2).startswith("FAILED"),
+          "")
     return tmp
 
 

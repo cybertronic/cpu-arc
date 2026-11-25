@@ -39,6 +39,14 @@ cluster near-dup misses (embed cos ≥ 0.92) · rank by count + recency
         │        → eval/promote.py: build → recompile → validate N random
         │          cases vs golden on the production compiled path
         │          (any WRONG answer or <60% coverage → full cache rollback)
+        │        → POST /reload on the running gateway: the live serving
+        │          path picks up the new entry index + recompiled module
+        │          WITHOUT a service restart (loop closure)
+        │
+        ├─ new-family signal: repeated out-of-band misses grouped into
+        │   semantic regions; a region ≥ FAMILY_CANDIDATE_MIN misses is
+        │   flagged in the report as a family SEED CANDIDATE (report only —
+        │   families are never auto-created)
         │
         └─ everything else → nightly report for human review
 ```
@@ -68,6 +76,12 @@ ARC_MODEL       model name for runtime LLM fallback
 ARC_BUILD_MODEL model name for cache builds/promotion
                 (empty = use ARC_MODEL; set to point builds at a
                  stronger/slower model than the runtime fallback)
+
+# curator policy
+ARC_FAMILY_CANDIDATE_MIN  miss volume that flags a new-family seed
+                          candidate region (default 5)
+ARC_GATEWAY_URL           base URL the curator POSTs /reload to after a
+                          cache change (default http://127.0.0.1:$ARC_PORT)
 ```
 
 Example — move to a 70B build model on another host, runtime stays on 27B:
@@ -91,6 +105,18 @@ which is also how you override any single run without touching the file.
   wrong gates — review before adding.
 - **Cost**: each promotion is one local-model build (~2–3 min) + gate
   cases. `CURATOR_MAX_PROMOTIONS` caps nightly spend (default 2).
+- **Loop closure**: after any promotion OR rollback the curator calls
+  `POST /reload` on the running gateway (entry index + a fresh worker pool
+  importing the recompiled module). If that call fails it is loud in the
+  cron log + report (`gateway_reload` field) and the fix is
+  `systemctl restart arc-gateway`. Manual reload: `curl -X POST
+  http://127.0.0.1:8084/reload`. Note: the reload respawns the worker pool,
+  so a query in flight during the swap can error once (safe failure, logged
+  as an execution error — the client retries); reload on low traffic.
+- **Miss latency**: `avg_miss_ms` in `/stats` and `ms`/`serve_ms` in the
+  invocation log are full client-visible latency including the LLM fallback
+  (not just the match-decision time) — don't be alarmed by seconds-scale
+  miss times; hits stay single-digit ms.
 - **Embedder**: the curator prefers the local embed server and falls back to
   deterministic hash embeddings if it is down (logged as a warning).
 - **Sandbox**: the unit runs with `ProtectSystem=full`, `NoNewPrivileges`,

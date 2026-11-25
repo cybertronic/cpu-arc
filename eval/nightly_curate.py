@@ -13,7 +13,11 @@ The "close" half of the loop, invoked by deploy/nightly_curate.sh (cron):
     4. flag NEW-FAMILY candidate regions: repeated misses outside every
        existing family band whose volume reaches ARC_FAMILY_CANDIDATE_MIN.
        Report only — the loop never auto-creates families.
-    5. write machine-readable report + human summary
+    5. if the cache changed, ask the RUNNING gateway to hot-reload
+       (GET /reload): entry index + a fresh worker pool importing the
+       recompiled module. Without this the loop would only close after a
+       manual service restart.
+    6. write machine-readable report + human summary
 
 Anything not provable (no golden template, below repeat floor, ambiguous)
 goes to the report for human review. The loop only auto-promotes what it can
@@ -31,6 +35,7 @@ import re
 import subprocess
 import sys
 import time
+import urllib.request
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -69,6 +74,28 @@ def auto_promotable(c: dict, golden_map: dict, min_repeats: int) -> tuple[str | 
     if not re.search(r"\b\d{1,15}\b", c["query"]):
         return None, "no parameters in query"
     return golden_map[fam], "ok"
+
+
+def reload_gateway(url: str, timeout: float = 20.0) -> str:
+    """Ask the running gateway to hot-reload (entry index + worker pool).
+
+    Returns 'ok' or a human-readable failure reason. Called only when the
+    on-disk cache changed, so the live serving path matches disk without a
+    service restart. The gateway's POST /reload spawns a fresh worker pool
+    importing the recompiled module (see arc/gateway.py:reload_cache).
+    POST, not GET: it is a state-changing action (workers respawn).
+    """
+    try:
+        req = urllib.request.Request(url.rstrip("/") + "/reload",
+                                     method="POST", data=b"")
+        with urllib.request.urlopen(req, timeout=timeout) as r:
+            body = json.load(r)
+        if body.get("status") == "reloaded":
+            return "ok"
+        return f"unexpected response: {body}"
+    except Exception as exc:  # noqa: BLE001 — reload failure must not fail the run
+        return (f"FAILED: {exc} — the running gateway still serves the "
+                f"pre-promotion cache; run 'systemctl restart arc-gateway'")
 
 
 def run_promote(repo: Path, fam: str, cache_dir: str, seed: str, golden: str,
@@ -115,7 +142,15 @@ def main() -> None:
                     help="'fam=th,fam=th' (same format as gateway --family-threshold)")
     ap.add_argument("--chat-url", default=endpoints.chat_url())
     ap.add_argument("--model", default=endpoints.build_model())
+    ap.add_argument("--gateway-url", default=None,
+                    help="running gateway base URL for /reload after cache "
+                    "changes (default: ARC_GATEWAY_URL or "
+                    "http://127.0.0.1:$ARC_PORT)")
     args = ap.parse_args()
+
+    gateway_url = (args.gateway_url
+                   or os.environ.get("ARC_GATEWAY_URL")
+                   or f"http://127.0.0.1:{os.environ.get('ARC_PORT', '8084')}")
 
     if not Path(args.db).exists():
         print(f"[fail] invocation log not found: {args.db}")
@@ -149,6 +184,7 @@ def main() -> None:
 
     actions = []
     promotions = 0
+    rollbacks = 0
     for c in clusters[:args.top]:
         label = f"x{c['count']} {c['query'][:60]!r}"
         expr, why = auto_promotable(c, golden_map, args.min_repeats)
@@ -175,6 +211,8 @@ def main() -> None:
                                    else f"FAILED rc={rc} — inspect report")
                 if ok:
                     promotions += 1
+                elif rc == 2:
+                    rollbacks += 1
             except subprocess.TimeoutExpired:
                 rec["decision"] = "FAILED: promote timed out (30 min)"
             except Exception as exc:  # noqa: BLE001
@@ -200,10 +238,21 @@ def main() -> None:
         "family_candidates": fam_cands,
         "promoted": promotions,
     }
+    # Loop closure: sync the running gateway with the on-disk cache.
+    # Promotions AND rollbacks both change disk state vs what the live
+    # process holds (a rollback restores a backup while the gateway never
+    # saw the promotion — reloading makes both states converge on disk).
+    reload_result = "skipped (no cache changes)"
+    if promotions or rollbacks:
+        reload_result = reload_gateway(gateway_url)
+        mark = "ok" if reload_result == "ok" else "RELOAD-FAILED"
+        print(f"[{mark:12s}] gateway reload at {gateway_url} :: {reload_result}")
+    report["gateway_reload"] = reload_result
     rp = Path(args.report_dir) / f"curate-{stamp}.json"
     rp.write_text(json.dumps(report, indent=2, default=str))
-    print(f"[done] {promotions} promoted, {len(fam_cands)} new-family "
-          f"candidate region(s), report -> {rp}")
+    print(f"[done] {promotions} promoted, {rollbacks} rolled back, "
+          f"{len(fam_cands)} new-family candidate region(s), "
+          f"reload={reload_result[:20]}, report -> {rp}")
 
 
 if __name__ == "__main__":
