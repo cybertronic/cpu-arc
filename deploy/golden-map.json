@@ -1,0 +1,6 @@
+{
+  "_comment": "Family -> golden expression used by the promotion gate. The expression is evaluated with stdlib math, a `numdiv(n)` helper, p0..pN and a `params` list. Only families listed here are ever AUTO-promoted; all other mined candidates go to the nightly report for human review.",
+  "gcd": "math.gcd(*params)",
+  "lcm": "math.lcm(*params)",
+  "divisors": "numdiv(*params)"
+}

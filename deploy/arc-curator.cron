@@ -1,0 +1,5 @@
+# CPU-ARC nightly curator (installed by deploy/install.sh — do not hand-edit,
+# re-run the installer instead).
+SHELL=/bin/bash
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+__SCHEDULE__ __USER__ __REPO__/deploy/nightly_curate.sh >> /var/log/arc/curate-cron.log 2>&1

@@ -89,6 +89,18 @@ def case_query(seed: str, nums: list[int]) -> str:
 MIN_HIT_RATE = 0.6  # floor for the FIRST entry of a new parameter shape
 
 
+def _numdiv(n: int) -> int:
+    """Number of positive divisors (golden helper for the 'divisors' family)."""
+    c, i = 0, 1
+    while i * i <= n:
+        if n % i == 0:
+            c += 1
+            if i != n // i:
+                c += 1
+        i += 1
+    return c
+
+
 def run_gate(cache_dir: Path, family: str, seed: str, golden_expr: str,
              n_cases: int, threshold: float,
              embed_url: str) -> tuple[bool, bool, float, list[dict]]:
@@ -103,8 +115,12 @@ def run_gate(cache_dir: Path, family: str, seed: str, golden_expr: str,
     results = []
     for nums in make_cases(seed, n_cases, rng):
         q = case_query(seed, nums)
+        # trusted CLI arg; namespace = stdlib math + p0..pN + params list
+        # (family-level templates in deploy/golden-map.json use ``*params``)
         ns = {f"p{i}": v for i, v in enumerate(nums)}
-        golden = float(eval(golden_expr, {"math": math, **ns}))  # trusted CLI arg
+        ns["params"] = nums  # family templates use ``math.gcd(*params)``
+        golden = float(eval(golden_expr,
+                            {"math": math, "numdiv": _numdiv, **ns}))
         t0 = time.perf_counter()
         r = gw.handle_query(q)
         ms = (time.perf_counter() - t0) * 1000
